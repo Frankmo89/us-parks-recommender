@@ -1,0 +1,100 @@
+{
+  "profiles": [
+    {
+      "id": "desert_weekend_from_sd",
+      "profile": {
+        "biomes": ["desert"],
+        "tags": ["hiking", "stargazing", "family"],
+        "difficulty": "easy",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 11,
+        "origin_lat": 32.72,
+        "origin_lon": -117.16,
+        "max_drive_hours": 8,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": ["jotr", "deva", "sagu", "pefo"]
+    },
+    {
+      "id": "quiet_canyon",
+      "profile": {
+        "biomes": ["canyon"],
+        "tags": ["hiking", "photography", "stargazing"],
+        "difficulty": "easy",
+        "days_needed": "1",
+        "crowd_pref": "low",
+        "budget_tier": "low",
+        "month": 10,
+        "allow_remote": true,
+        "allow_permits": true
+      },
+      "relevant": ["blca", "care", "cany", "whsa"]
+    },
+    {
+      "id": "alaska_wildlife",
+      "profile": {
+        "biomes": ["tundra", "coast"],
+        "tags": ["wildlife", "photography", "boat"],
+        "difficulty": "moderate",
+        "days_needed": "2-3",
+        "crowd_pref": "low",
+        "budget_tier": "high",
+        "month": 7,
+        "allow_remote": true,
+        "allow_permits": true
+      },
+      "relevant": ["katm", "kefj", "glba", "dena"]
+    },
+    {
+      "id": "beginner_family_east",
+      "profile": {
+        "biomes": ["forest"],
+        "tags": ["family", "hiking", "scenic_drive"],
+        "difficulty": "easy",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "low",
+        "month": 5,
+        "origin_lat": 40.71,
+        "origin_lon": -74.01,
+        "max_drive_hours": 10,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": ["shen", "cuva", "neri", "acad"]
+    },
+    {
+      "id": "big_trip_yellowstone_axis",
+      "profile": {
+        "biomes": ["alpine"],
+        "tags": ["wildlife", "scenic_drive", "family"],
+        "difficulty": "easy",
+        "days_needed": "4-7",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 7,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": ["yell", "grte", "glac", "romo"]
+    },
+    {
+      "id": "avoid_permits_and_flights",
+      "profile": {
+        "biomes": ["desert", "canyon", "forest"],
+        "tags": ["hiking", "scenic_drive"],
+        "difficulty": "easy",
+        "days_needed": "1",
+        "crowd_pref": "low",
+        "budget_tier": "low",
+        "month": 4,
+        "allow_remote": false,
+        "allow_permits": false
+      },
+      "relevant": ["sagu", "pefo", "care", "whsa", "badl"]
+    }
+  ]
+}
