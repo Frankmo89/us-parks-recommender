@@ -9,9 +9,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from app.breakdown import PART_ORDER, match_percent, nps_url, score_breakdown, why_sentence
-from src.features import UserProfile
+from src.evaluate import run as run_evaluation
+from src.features import DRIVE_DETOUR, DRIVE_MPH, UserProfile
 from src.origins import ORIGINS
-from src.recommender import ParkRecommender
+from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, ParkRecommender
 
 st.set_page_config(page_title="Find your park", page_icon="🌲", layout="wide", initial_sidebar_state="collapsed")
 
@@ -106,6 +107,11 @@ def load_model() -> ParkRecommender:
     return ParkRecommender()
 
 
+@st.cache_data
+def load_evaluation() -> dict:
+    return run_evaluation(k=5)
+
+
 def inject_base_css() -> None:
     st.html(
         """
@@ -151,6 +157,10 @@ def inject_base_css() -> None:
             border-radius: 999px; margin-right: .5rem; vertical-align: middle;
           }
           .why-sentence { color: #d7cbb3; font-size: .88rem; margin-top: .6rem; }
+          .how-h { color: #e8d9b8; font-weight: 700; font-size: 1.05rem; margin: 1.5rem 0 .5rem; }
+          .how-list { color: #d7cbb3; font-size: .9rem; line-height: 1.55; padding-left: 1.2rem; margin: 0 0 .5rem; }
+          .how-list li { margin-bottom: .4rem; }
+          .how-note { color: #8fa393; font-size: .8rem; margin: .4rem 0 0; }
         </style>
         """
     )
@@ -201,6 +211,11 @@ def start_over() -> None:
     for key, value in DEFAULT_ANSWERS.items():
         st.session_state[key] = value
     go("welcome")
+
+
+def open_how_it_works() -> None:
+    st.session_state.how_it_works_from = st.session_state.step
+    go("how_it_works")
 
 
 def dots(step: str) -> None:
@@ -294,6 +309,99 @@ def render_small_card(row: pd.Series) -> None:
         _why_expander(row)
 
 
+def render_how_it_works(model: ParkRecommender) -> None:
+    back_target = st.session_state.get("how_it_works_from", "welcome")
+    if st.button("← Back", width="content"):
+        go(back_target)
+
+    st.markdown('<p class="quiz-title">How it works</p>', unsafe_allow_html=True)
+
+    st.markdown('<p class="how-h">The idea</p>', unsafe_allow_html=True)
+    st.markdown(
+        "<p class=\"quiz-sub\">Parks and trips share one feature space of biome and activity "
+        "tags. The score blends a content match in that space with closeness on days, effort "
+        "and budget, minus a penalty for crowds above what you asked for.</p>",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown('<p class="how-h">The formula</p>', unsafe_allow_html=True)
+    st.code(
+        f"score = {W_CONTENT:.2f} * content_match\n"
+        f"      + {W_DAYS:.2f} * days_closeness\n"
+        f"      + {W_DIFF:.2f} * difficulty_closeness\n"
+        f"      + {W_BUDGET:.2f} * budget_closeness\n"
+        f"      - {CROWD_PENALTY:.2f} * crowd_excess",
+        language=None,
+    )
+    st.markdown(
+        '<p class="how-note">Weights read live from src/recommender.py '
+        "(W_CONTENT, W_DAYS, W_DIFF, W_BUDGET, CROWD_PENALTY) — not typed by hand.</p>",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown('<p class="how-h">Filters</p>', unsafe_allow_html=True)
+    st.markdown(
+        '<ul class="how-list">'
+        "<li><b>Month</b> keeps only parks whose best months include the one you picked.</li>"
+        "<li><b>Remote</b> drops parks that need a flight or ferry (Alaska, Hawaii, island parks) "
+        "unless you allow them.</li>"
+        "<li><b>Permits</b> drops parks with timed entry or a permit likely needed, unless you "
+        "allow them.</li>"
+        f"<li><b>Drive hours</b> drops parks outside your radius. Drive time is estimated as "
+        f"straight-line distance &times; {DRIVE_DETOUR:g} detour factor, at {DRIVE_MPH:g} mph "
+        "&mdash; a highway sketch, not turn-by-turn directions.</li>"
+        "</ul>",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown('<p class="how-h">Evaluation</p>', unsafe_allow_html=True)
+    result = load_evaluation()
+    summary = pd.DataFrame(
+        [
+            {
+                "Split": label,
+                "n": result[key]["n"],
+                "R-Precision": f'{result[key]["mean_r_precision"]:.3f}',
+                "nDCG@5": f'{result[key]["mean_ndcg_at_k"]:.3f}',
+            }
+            for key, label in [("train", "Train"), ("holdout", "Holdout"), ("all", "Overall")]
+        ]
+    )
+    st.dataframe(summary, hide_index=True, width="stretch")
+
+    code_to_name = dict(zip(model.parks["park_code"], model.parks["name"]))
+    for profile_row in result["all"]["profiles"]:
+        relevant_codes = profile_row["relevant"]
+        relevant_set = set(relevant_codes)
+        label = (
+            f'{profile_row["id"]} ({profile_row["split"]}) — '
+            f'R-Prec {profile_row["r_precision"]:.2f} · nDCG {profile_row["ndcg_at_k"]:.2f}'
+        )
+        with st.expander(label):
+            relevant_text = ", ".join(code_to_name.get(code, code) for code in relevant_codes)
+            st.markdown(f"**Relevant:** {relevant_text}")
+            top5_bits = []
+            for code in profile_row["recommended"]:
+                name = code_to_name.get(code, code)
+                top5_bits.append(f"✓ **{name}**" if code in relevant_set else name)
+            st.markdown("**Model's top 5:** " + " · ".join(top5_bits))
+
+    st.markdown('<p class="how-h">Known limits</p>', unsafe_allow_html=True)
+    st.markdown(
+        '<ul class="how-list">'
+        "<li>18 hand-written profiles &mdash; a regression check, not a user study or a blind "
+        "holdout.</li>"
+        "<li>The holdout split was seen during development; labels were revised once.</li>"
+        "<li>Smoothed IDF down-weights common tags, so parks with extra rare tags the user did "
+        "not ask for score a lower cosine.</li>"
+        "<li>Drive times are a highway sketch (great-circle distance &times; detour &times; "
+        "speed), not routed directions.</li>"
+        "<li>Permit likelihood is a 2026-09 snapshot and will go stale.</li>"
+        "</ul>",
+        unsafe_allow_html=True,
+    )
+
+
 init_state()
 model = load_model()
 step = st.session_state.step
@@ -302,7 +410,8 @@ paint_background(step)
 
 with st.container(key="app_shell"):
     with st.container(key="quiz_panel"):
-        dots(step)
+        if step != "how_it_works":
+            dots(step)
 
         if step == "welcome":
             st.markdown('<p class="quiz-title">Find the park that fits this trip.</p>', unsafe_allow_html=True)
@@ -312,6 +421,8 @@ with st.container(key="app_shell"):
             )
             if st.button("Start", type="primary", width="stretch"):
                 go("terrain")
+            if st.button("How it works", type="tertiary", width="stretch"):
+                open_how_it_works()
 
         elif step == "terrain":
             st.markdown(
@@ -437,7 +548,7 @@ with st.container(key="app_shell"):
             if c2.button("See parks", type="primary", width="stretch"):
                 go("results")
 
-        else:
+        elif step == "results":
             st.markdown('<p class="quiz-title">These parks fit the trip.</p>', unsafe_allow_html=True)
             origin_label = st.session_state.origin_label
             origin_lat = origin_lon = drive = None
@@ -474,8 +585,13 @@ with st.container(key="app_shell"):
                         for col, (_, row) in zip(cols, rest_rows[start : start + 2]):
                             with col:
                                 render_small_card(row)
-            c1, c2 = st.columns(2)
+            c1, c2, c3 = st.columns(3)
             if c1.button("Change answers", width="stretch"):
                 go("terrain")
-            if c2.button("Start over", width="stretch"):
+            if c2.button("How it works", type="tertiary", width="stretch"):
+                open_how_it_works()
+            if c3.button("Start over", width="stretch"):
                 start_over()
+
+        else:
+            render_how_it_works(model)
