@@ -1,0 +1,518 @@
+{
+  "notes": [
+    "Acceptance / regression fixtures, not a user study and not a blind holdout.",
+    "Holdout was seen during development. Labels were revised once on 2026-09-21.",
+    "Do not edit relevant lists to chase metrics after this revision."
+  ],
+  "profiles": [
+    {
+      "id": "quiet_canyon",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "canyon"
+        ],
+        "tags": [
+          "hiking",
+          "photography",
+          "stargazing"
+        ],
+        "difficulty": "easy",
+        "days_needed": "1",
+        "crowd_pref": "low",
+        "budget_tier": "low",
+        "month": 10,
+        "allow_remote": true,
+        "allow_permits": true
+      },
+      "relevant": [
+        "blca",
+        "care",
+        "cany"
+      ]
+    },
+    {
+      "id": "big_trip_yellowstone_axis",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "alpine"
+        ],
+        "tags": [
+          "wildlife",
+          "scenic_drive",
+          "family"
+        ],
+        "difficulty": "easy",
+        "days_needed": "4-7",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 7,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "yell",
+        "grte",
+        "glac",
+        "romo"
+      ]
+    },
+    {
+      "id": "avoid_permits_and_flights",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "desert",
+          "canyon",
+          "forest"
+        ],
+        "tags": [
+          "hiking",
+          "scenic_drive"
+        ],
+        "difficulty": "easy",
+        "days_needed": "1",
+        "crowd_pref": "low",
+        "budget_tier": "low",
+        "month": 4,
+        "allow_remote": false,
+        "allow_permits": false
+      },
+      "relevant": [
+        "sagu",
+        "pefo",
+        "care",
+        "whsa",
+        "badl"
+      ]
+    },
+    {
+      "id": "volcano_family",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "volcano"
+        ],
+        "tags": [
+          "hiking",
+          "family",
+          "scenic_drive"
+        ],
+        "difficulty": "easy",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "high",
+        "month": 7,
+        "allow_remote": true,
+        "allow_permits": true
+      },
+      "relevant": [
+        "havo",
+        "hale",
+        "lavo"
+      ]
+    },
+    {
+      "id": "cave_daytrip",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "cave"
+        ],
+        "tags": [
+          "family",
+          "easy_walk",
+          "history"
+        ],
+        "difficulty": "easy",
+        "days_needed": "1",
+        "crowd_pref": "medium",
+        "budget_tier": "low",
+        "month": 4,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "cave",
+        "maca",
+        "wica"
+      ]
+    },
+    {
+      "id": "pacific_rainforest",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "rainforest",
+          "coast"
+        ],
+        "tags": [
+          "hiking",
+          "family",
+          "scenic_drive"
+        ],
+        "difficulty": "easy",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 7,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "redw",
+        "olym"
+      ]
+    },
+    {
+      "id": "utah_canyon_circuit",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "canyon",
+          "desert"
+        ],
+        "tags": [
+          "hiking",
+          "photography",
+          "scenic_drive"
+        ],
+        "difficulty": "moderate",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 10,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "zion",
+        "cany",
+        "care",
+        "brca",
+        "arch"
+      ]
+    },
+    {
+      "id": "remote_alaska_backpack",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "tundra",
+          "alpine"
+        ],
+        "tags": [
+          "backpacking",
+          "wilderness",
+          "wildlife"
+        ],
+        "difficulty": "challenging",
+        "days_needed": "7+",
+        "crowd_pref": "low",
+        "budget_tier": "high",
+        "month": 7,
+        "allow_remote": true,
+        "allow_permits": true
+      },
+      "relevant": [
+        "gaar",
+        "kova",
+        "wrst",
+        "lacl"
+      ]
+    },
+    {
+      "id": "florida_water",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "wetland",
+          "coast",
+          "island"
+        ],
+        "tags": [
+          "wildlife",
+          "water",
+          "boat"
+        ],
+        "difficulty": "easy",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 1,
+        "allow_remote": true,
+        "allow_permits": true
+      },
+      "relevant": [
+        "ever",
+        "bisc",
+        "drto"
+      ]
+    },
+    {
+      "id": "midwest_easy",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "forest",
+          "prairie",
+          "coast"
+        ],
+        "tags": [
+          "family",
+          "hiking",
+          "easy_walk"
+        ],
+        "difficulty": "easy",
+        "days_needed": "1",
+        "crowd_pref": "medium",
+        "budget_tier": "low",
+        "month": 6,
+        "origin_lat": 41.88,
+        "origin_lon": -87.63,
+        "max_drive_hours": 8,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "indu",
+        "cuva"
+      ]
+    },
+    {
+      "id": "sierra_weekend_from_la",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "forest",
+          "alpine"
+        ],
+        "tags": [
+          "hiking",
+          "family",
+          "scenic_drive"
+        ],
+        "difficulty": "easy",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 7,
+        "origin_lat": 34.05,
+        "origin_lon": -118.24,
+        "max_drive_hours": 8,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "seki",
+        "kica",
+        "yose"
+      ]
+    },
+    {
+      "id": "stargazing_desert",
+      "split": "train",
+      "profile": {
+        "biomes": [
+          "desert"
+        ],
+        "tags": [
+          "stargazing",
+          "hiking",
+          "photography"
+        ],
+        "difficulty": "easy",
+        "days_needed": "2-3",
+        "crowd_pref": "low",
+        "budget_tier": "low",
+        "month": 11,
+        "allow_remote": false,
+        "allow_permits": false
+      },
+      "relevant": [
+        "sagu",
+        "deva",
+        "jotr",
+        "whsa"
+      ]
+    },
+    {
+      "id": "desert_weekend_from_sd",
+      "split": "holdout",
+      "profile": {
+        "biomes": [
+          "desert"
+        ],
+        "tags": [
+          "hiking",
+          "stargazing",
+          "family"
+        ],
+        "difficulty": "easy",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 11,
+        "origin_lat": 32.72,
+        "origin_lon": -117.16,
+        "max_drive_hours": 8,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "jotr",
+        "deva",
+        "sagu",
+        "pefo"
+      ]
+    },
+    {
+      "id": "alaska_wildlife",
+      "split": "holdout",
+      "profile": {
+        "biomes": [
+          "tundra",
+          "coast"
+        ],
+        "tags": [
+          "wildlife",
+          "photography",
+          "boat"
+        ],
+        "difficulty": "moderate",
+        "days_needed": "2-3",
+        "crowd_pref": "low",
+        "budget_tier": "high",
+        "month": 7,
+        "allow_remote": true,
+        "allow_permits": true
+      },
+      "relevant": [
+        "katm",
+        "kefj",
+        "glba",
+        "dena"
+      ]
+    },
+    {
+      "id": "beginner_family_east",
+      "split": "holdout",
+      "profile": {
+        "biomes": [
+          "forest"
+        ],
+        "tags": [
+          "family",
+          "hiking",
+          "scenic_drive"
+        ],
+        "difficulty": "easy",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "low",
+        "month": 5,
+        "origin_lat": 40.71,
+        "origin_lon": -74.01,
+        "max_drive_hours": 10,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "shen",
+        "neri",
+        "acad",
+        "cuva"
+      ]
+    },
+    {
+      "id": "canyon_from_phoenix",
+      "split": "holdout",
+      "profile": {
+        "biomes": [
+          "canyon",
+          "desert"
+        ],
+        "tags": [
+          "hiking",
+          "family",
+          "scenic_drive"
+        ],
+        "difficulty": "moderate",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 4,
+        "origin_lat": 33.45,
+        "origin_lon": -112.07,
+        "max_drive_hours": 8,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "grca",
+        "zion",
+        "pefo",
+        "care",
+        "sagu"
+      ]
+    },
+    {
+      "id": "washington_alpine",
+      "split": "holdout",
+      "profile": {
+        "biomes": [
+          "alpine",
+          "rainforest"
+        ],
+        "tags": [
+          "hiking",
+          "family",
+          "wildflowers"
+        ],
+        "difficulty": "moderate",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 8,
+        "origin_lat": 47.61,
+        "origin_lon": -122.33,
+        "max_drive_hours": 6,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "mora",
+        "olym"
+      ]
+    },
+    {
+      "id": "history_easy_walk",
+      "split": "holdout",
+      "profile": {
+        "biomes": [
+          "urban",
+          "forest",
+          "canyon"
+        ],
+        "tags": [
+          "family",
+          "history",
+          "easy_walk"
+        ],
+        "difficulty": "easy",
+        "days_needed": "1",
+        "crowd_pref": "medium",
+        "budget_tier": "low",
+        "month": 5,
+        "allow_remote": false,
+        "allow_permits": true
+      },
+      "relevant": [
+        "jeff",
+        "hosp",
+        "meve"
+      ]
+    }
+  ]
+}

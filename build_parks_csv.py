@@ -1,0 +1,114 @@
+"""Generate data/parks.csv — 63 U.S. National Parks with ranking features."""
+
+from __future__ import annotations
+
+import csv
+from pathlib import Path
+
+# Columns used by the recommender. Tags are pipe-separated.
+# crowd: low | medium | high
+# difficulty: easy | moderate | challenging
+# budget_tier: low | mid | high  (travel cost to reach + stay, not entrance fee)
+# days_needed: 1 | 2-3 | 4-7 | 7+
+# remote: 1 if typically requires flight / ferry / long dirt road
+
+PARKS = [
+    # code, name, states, lat, lon, biome, tags, difficulty, days, months, crowd, permit, budget, remote
+    ("acad", "Acadia National Park", "ME", 44.35, -68.21, "coast", "hiking|scenic_drive|family|coast|wildlife|camping", "easy", "2-3", "5,6,7,8,9,10", "high", 0, "mid", 0),
+    ("npsa", "National Park of American Samoa", "AS", -14.26, -170.68, "rainforest", "hiking|coast|wildlife|family", "moderate", "2-3", "5,6,7,8,9", "low", 0, "high", 1),
+    ("arch", "Arches National Park", "UT", 38.68, -109.57, "desert", "hiking|scenic_drive|family|desert|stargazing|photography", "easy", "1", "3,4,5,9,10,11", "high", 1, "mid", 0),
+    ("badl", "Badlands National Park", "SD", 43.75, -102.50, "prairie", "hiking|scenic_drive|wildlife|family|stargazing|paleontology", "easy", "1", "5,6,9,10", "medium", 0, "low", 0),
+    ("bibe", "Big Bend National Park", "TX", 29.25, -103.25, "desert", "hiking|backpacking|stargazing|desert|wildlife|scenic_drive|camping", "moderate", "4-7", "2,3,4,10,11", "low", 0, "mid", 1),
+    ("bisc", "Biscayne National Park", "FL", 25.65, -80.08, "coast", "water|wildlife|family|coast|boat", "easy", "1", "12,1,2,3,4", "medium", 0, "mid", 0),
+    ("blca", "Black Canyon of the Gunnison National Park", "CO", 38.57, -107.72, "canyon", "hiking|scenic_drive|photography|canyon|stargazing", "moderate", "1", "5,6,9,10", "low", 0, "low", 0),
+    ("brca", "Bryce Canyon National Park", "UT", 37.59, -112.19, "canyon", "hiking|family|scenic_drive|photography|stargazing|canyon", "easy", "1", "5,6,9,10", "high", 0, "mid", 0),
+    ("cany", "Canyonlands National Park", "UT", 38.20, -109.93, "canyon", "hiking|backpacking|scenic_drive|desert|stargazing|4x4", "moderate", "2-3", "3,4,5,9,10", "medium", 0, "mid", 0),
+    ("care", "Capitol Reef National Park", "UT", 38.20, -111.17, "canyon", "hiking|scenic_drive|family|desert|stargazing", "easy", "2-3", "4,5,9,10", "medium", 0, "low", 0),
+    ("cave", "Carlsbad Caverns National Park", "NM", 32.17, -104.44, "cave", "family|cave|wildlife|easy_walk", "easy", "1", "3,4,5,9,10", "medium", 0, "low", 0),
+    ("chis", "Channel Islands National Park", "CA", 34.01, -119.42, "island", "hiking|wildlife|water|boat|backpacking|kayak", "moderate", "2-3", "4,5,6,9,10", "low", 1, "mid", 1),
+    ("cong", "Congaree National Park", "SC", 33.78, -80.78, "wetland", "hiking|family|wildlife|water|boardwalk", "easy", "1", "3,4,10,11", "low", 0, "low", 0),
+    ("crla", "Crater Lake National Park", "OR", 42.94, -122.10, "alpine", "hiking|scenic_drive|family|photography|winter", "easy", "1", "7,8,9", "medium", 0, "mid", 0),
+    ("cuva", "Cuyahoga Valley National Park", "OH", 41.24, -81.55, "forest", "hiking|family|scenic_drive|easy_walk|biking", "easy", "1", "5,6,9,10", "medium", 0, "low", 0),
+    ("deva", "Death Valley National Park", "CA", 36.24, -116.82, "desert", "hiking|scenic_drive|stargazing|desert|photography|family", "moderate", "2-3", "11,12,1,2,3", "medium", 0, "mid", 0),
+    ("dena", "Denali National Park", "AK", 63.33, -150.50, "tundra", "wildlife|scenic_drive|hiking|backpacking|photography", "challenging", "4-7", "6,7,8", "medium", 1, "high", 1),
+    ("drto", "Dry Tortugas National Park", "FL", 24.63, -82.87, "island", "water|wildlife|boat|history|snorkeling", "easy", "1", "12,1,2,3,4", "low", 1, "high", 1),
+    ("ever", "Everglades National Park", "FL", 25.32, -80.93, "wetland", "wildlife|water|hiking|family|boat|birding", "easy", "2-3", "12,1,2,3", "medium", 0, "mid", 0),
+    ("gaar", "Gates of the Arctic National Park", "AK", 67.78, -153.30, "tundra", "backpacking|wildlife|wilderness|remote", "challenging", "7+", "6,7,8", "low", 0, "high", 1),
+    ("jeff", "Gateway Arch National Park", "MO", 38.63, -90.19, "urban", "family|history|easy_walk|urban", "easy", "1", "4,5,9,10", "high", 0, "low", 0),
+    ("glac", "Glacier National Park", "MT", 48.76, -113.79, "alpine", "hiking|scenic_drive|wildlife|backpacking|photography|alpine", "moderate", "4-7", "7,8,9", "high", 1, "mid", 0),
+    ("glba", "Glacier Bay National Park", "AK", 58.50, -137.00, "coast", "wildlife|boat|water|photography|remote", "moderate", "2-3", "6,7,8", "low", 0, "high", 1),
+    ("grca", "Grand Canyon National Park", "AZ", 36.06, -112.14, "canyon", "hiking|scenic_drive|family|photography|backpacking|canyon", "moderate", "2-3", "4,5,9,10", "high", 1, "mid", 0),
+    ("grte", "Grand Teton National Park", "WY", 43.73, -110.80, "alpine", "hiking|wildlife|scenic_drive|backpacking|photography|alpine", "moderate", "2-3", "6,7,8,9", "high", 0, "mid", 0),
+    ("grba", "Great Basin National Park", "NV", 38.98, -114.30, "alpine", "hiking|stargazing|cave|scenic_drive|low_crowd", "moderate", "2-3", "6,7,8,9", "low", 0, "low", 1),
+    ("grsa", "Great Sand Dunes National Park", "CO", 37.73, -105.51, "desert", "hiking|family|stargazing|sand|photography", "easy", "1", "5,6,9", "medium", 0, "low", 0),
+    ("grsm", "Great Smoky Mountains National Park", "TN", 35.68, -83.53, "forest", "hiking|scenic_drive|family|wildlife|waterfalls|camping", "easy", "2-3", "4,5,6,9,10", "high", 1, "low", 0),
+    ("gumo", "Guadalupe Mountains National Park", "TX", 31.92, -104.87, "desert", "hiking|backpacking|desert|low_crowd", "challenging", "2-3", "3,4,10,11", "low", 0, "low", 1),
+    ("hale", "Haleakala National Park", "HI", 20.72, -156.17, "volcano", "hiking|sunrise|scenic_drive|volcano|stargazing", "moderate", "1", "1,2,3,4,5,6,7,8,9,10,11,12", "high", 1, "high", 1),
+    ("havo", "Hawaii Volcanoes National Park", "HI", 19.38, -155.20, "volcano", "hiking|family|volcano|scenic_drive|photography", "easy", "2-3", "1,2,3,4,5,6,7,8,9,10,11,12", "medium", 0, "high", 1),
+    ("hosp", "Hot Springs National Park", "AR", 34.51, -93.05, "forest", "family|easy_walk|history|hot_springs", "easy", "1", "3,4,5,9,10", "medium", 0, "low", 0),
+    ("indu", "Indiana Dunes National Park", "IN", 41.65, -87.07, "coast", "hiking|family|coast|easy_walk|birding", "easy", "1", "5,6,9", "medium", 0, "low", 0),
+    ("isro", "Isle Royale National Park", "MI", 48.10, -88.55, "island", "backpacking|hiking|wildlife|water|boat|wilderness", "challenging", "4-7", "6,7,8,9", "low", 1, "mid", 1),
+    ("jotr", "Joshua Tree National Park", "CA", 33.79, -115.90, "desert", "hiking|climbing|stargazing|desert|camping|family|photography", "easy", "2-3", "10,11,12,1,2,3,4", "high", 0, "mid", 0),
+    ("katm", "Katmai National Park", "AK", 58.50, -155.00, "tundra", "wildlife|bears|boat|photography|remote", "moderate", "2-3", "7,8", "low", 1, "high", 1),
+    ("kefj", "Kenai Fjords National Park", "AK", 59.92, -149.65, "coast", "wildlife|boat|hiking|water|photography", "moderate", "2-3", "6,7,8", "medium", 0, "high", 1),
+    ("kica", "Kings Canyon National Park", "CA", 36.80, -118.55, "forest", "hiking|scenic_drive|backpacking|waterfalls|alpine|family", "moderate", "2-3", "6,7,8,9", "medium", 0, "mid", 0),
+    ("kova", "Kobuk Valley National Park", "AK", 67.55, -159.28, "tundra", "wilderness|remote|wildlife|backpacking", "challenging", "7+", "6,7,8", "low", 0, "high", 1),
+    ("lacl", "Lake Clark National Park", "AK", 60.97, -153.42, "tundra", "wildlife|wilderness|water|remote|backpacking", "challenging", "4-7", "6,7,8", "low", 0, "high", 1),
+    ("lavo", "Lassen Volcanic National Park", "CA", 40.49, -121.51, "volcano", "hiking|family|volcano|scenic_drive|camping", "easy", "2-3", "7,8,9", "low", 0, "low", 0),
+    ("maca", "Mammoth Cave National Park", "KY", 37.18, -86.10, "cave", "family|cave|hiking|easy_walk|history", "easy", "1", "4,5,9,10", "medium", 1, "low", 0),
+    ("meve", "Mesa Verde National Park", "CO", 37.18, -108.49, "canyon", "family|history|scenic_drive|archaeology|hiking", "easy", "1", "5,6,9,10", "medium", 1, "mid", 0),
+    ("mora", "Mount Rainier National Park", "WA", 46.85, -121.75, "alpine", "hiking|scenic_drive|family|wildflowers|alpine|photography", "moderate", "2-3", "7,8,9", "high", 1, "mid", 0),
+    ("neri", "New River Gorge National Park", "WV", 38.07, -81.08, "forest", "hiking|climbing|water|scenic_drive|family", "moderate", "2-3", "5,6,9,10", "medium", 0, "low", 0),
+    ("noca", "North Cascades National Park", "WA", 48.70, -121.20, "alpine", "hiking|backpacking|alpine|low_crowd|photography|wildlife", "challenging", "4-7", "7,8,9", "low", 0, "mid", 1),
+    ("olym", "Olympic National Park", "WA", 47.80, -123.70, "rainforest", "hiking|coast|rainforest|hot_springs|backpacking|family", "moderate", "4-7", "6,7,8,9", "high", 0, "mid", 0),
+    ("pefo", "Petrified Forest National Park", "AZ", 35.07, -109.78, "desert", "hiking|scenic_drive|family|desert|paleontology", "easy", "1", "3,4,5,10,11", "medium", 0, "low", 0),
+    ("pinn", "Pinnacles National Park", "CA", 36.48, -121.16, "chaparral", "hiking|climbing|wildlife|family|cave", "moderate", "1", "2,3,4,10,11", "medium", 0, "low", 0),
+    ("redw", "Redwood National Park", "CA", 41.30, -124.00, "rainforest", "hiking|family|scenic_drive|coast|wildlife", "easy", "2-3", "5,6,7,8,9", "medium", 0, "mid", 0),
+    ("romo", "Rocky Mountain National Park", "CO", 40.40, -105.58, "alpine", "hiking|scenic_drive|wildlife|family|alpine|photography", "moderate", "2-3", "6,7,8,9", "high", 1, "mid", 0),
+    ("sagu", "Saguaro National Park", "AZ", 32.25, -110.50, "desert", "hiking|family|desert|stargazing|easy_walk", "easy", "1", "11,12,1,2,3,4", "medium", 0, "low", 0),
+    ("seki", "Sequoia National Park", "CA", 36.49, -118.56, "forest", "hiking|family|scenic_drive|giant_trees|alpine", "easy", "2-3", "6,7,8,9", "high", 0, "mid", 0),
+    ("shen", "Shenandoah National Park", "VA", 38.53, -78.35, "forest", "hiking|scenic_drive|family|waterfalls|camping", "easy", "2-3", "4,5,6,9,10", "high", 0, "low", 0),
+    ("thro", "Theodore Roosevelt National Park", "ND", 46.97, -103.45, "prairie", "hiking|wildlife|scenic_drive|family|low_crowd", "easy", "2-3", "5,6,9", "low", 0, "low", 0),
+    ("viis", "Virgin Islands National Park", "VI", 18.33, -64.73, "coast", "water|hiking|family|snorkeling|coast|beach", "easy", "2-3", "12,1,2,3,4", "medium", 0, "high", 1),
+    ("voya", "Voyageurs National Park", "MN", 48.50, -92.88, "forest", "water|boat|wildlife|camping|fishing", "moderate", "2-3", "6,7,8,9", "low", 0, "mid", 1),
+    ("whsa", "White Sands National Park", "NM", 32.78, -106.17, "desert", "hiking|family|sand|photography|stargazing", "easy", "1", "3,4,10,11", "medium", 0, "low", 0),
+    ("wica", "Wind Cave National Park", "SD", 43.57, -103.48, "prairie", "cave|wildlife|hiking|family", "easy", "1", "5,6,9,10", "low", 1, "low", 0),
+    ("wrst", "Wrangell-St. Elias National Park", "AK", 61.00, -142.00, "alpine", "wilderness|backpacking|remote|glacier|wildlife", "challenging", "7+", "6,7,8", "low", 0, "high", 1),
+    ("yell", "Yellowstone National Park", "WY", 44.60, -110.50, "alpine", "wildlife|scenic_drive|family|hiking|geothermal|camping", "easy", "4-7", "5,6,7,8,9", "high", 0, "mid", 0),
+    ("yose", "Yosemite National Park", "CA", 37.75, -119.60, "alpine", "hiking|scenic_drive|family|waterfalls|backpacking|climbing|photography", "moderate", "2-3", "5,6,9,10", "high", 1, "mid", 0),
+    ("zion", "Zion National Park", "UT", 37.30, -113.05, "canyon", "hiking|canyon|family|photography|scenic_drive|permits", "moderate", "2-3", "3,4,5,10,11", "high", 1, "mid", 0),
+]
+
+FIELDS = [
+    "park_code",
+    "name",
+    "states",
+    "lat",
+    "lon",
+    "biome",
+    "tags",
+    "difficulty",
+    "days_needed",
+    "best_months",
+    "crowd",
+    "permit_likely",
+    "budget_tier",
+    "remote",
+]
+
+
+def main() -> None:
+    out = Path(__file__).resolve().parents[1] / "data" / "parks.csv"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    assert len(PARKS) == 63, f"expected 63 parks, got {len(PARKS)}"
+    codes = [row[0] for row in PARKS]
+    assert len(codes) == len(set(codes)), "duplicate park codes"
+    with out.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(FIELDS)
+        writer.writerows(PARKS)
+    print(f"wrote {len(PARKS)} parks → {out}")
+
+
+if __name__ == "__main__":
+    main()

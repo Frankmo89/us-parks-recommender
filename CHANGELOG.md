@@ -1,0 +1,27 @@
+# Changelog
+
+## 2026-09-21 — docs and fixture honesty
+
+- README / eval JSON no longer call the holdout "blind". It was seen during
+  development; labels were revised once. Treat the suite as regression checks.
+- `quiet_canyon` no longer lists Bryce (`crowd=high`) as relevant for a
+  low-crowd profile.
+- Drive-hour tests now read lat/lon from `parks.csv` instead of hardcoded
+  coordinates that were not the catalog values.
+
+## 2026-09-21 — drive model and labels
+
+- Drive speed 50 mph → 65 mph. With the 1.25 detour factor the old setting
+  behaved like 40 mph, so Saguaro was scored at ~10 h from San Diego
+  (real drive ~6 h) and dropped out of an 8 h radius.
+- Evaluation labels rewritten once the same day. Previous holdout numbers
+  (R-Prec 0.736 / nDCG 0.840) were computed under the slow drive model
+  and are retired.
+- Yosemite `best_months` now includes July and August (catalog error).
+- Test `test_easy_short_trip_ranks_joshua_tree_ahead_of_far_saguaro` removed.
+  It passed only because Saguaro was filtered out.
+- Activity tags use smoothed IDF so ubiquitous tags like `hiking` do not
+  dominate rarer ones like `stargazing`. Side effect: parks with extra rare
+  tags the user did not ask for get a longer content vector and a lower cosine.
+- Imports moved to the top of `recommender.py`. Streamlit `use_container_width`
+  replaced with `width="stretch"`.

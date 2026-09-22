@@ -2,29 +2,27 @@
 
 Content-based recommender for the **63 U.S. National Parks**.
 
-You describe a trip (terrain, days, crowds, month, driving radius). The model ranks parks in the same feature space with **cosine similarity**, then applies hard filters (season, remote parks, permits, max drive hours).
+A trip profile (terrain, days, crowds, month, driving radius) is scored against
+every park. Content overlap uses cosine similarity on biome + **IDF-weighted**
+activity tags. Trip length, difficulty and budget use closeness
+(`1 − |Δ| / max`). Crowds are a penalty only. Season, remote parks and permits
+are hard filters.
 
-This repo is standalone. It does **not** copy editorial content from any product site.
+The catalog is the official set of 63 national parks with structured tags.
+This repo does not copy editorial content from any product site.
 
-## What I built vs. what I used
+## Score
 
-| Piece | Source |
-|---|---|
-| Catalog of 63 parks + coordinates | Public NPS identities |
-| Feature tags | Curated in `data/parks.csv` |
-| Ranking model | `src/recommender.py` |
-| Evaluation | `data/eval_profiles.json` |
-| UI | Streamlit demo |
+```
+score = 0.55 * cosine(biome + IDF(tags))
+      + 0.18 * days_closeness
+      + 0.14 * difficulty_closeness
+      + 0.08 * budget_closeness
+      − 0.12 * max(0, park_crowd − wanted_crowd)
+```
 
-Not in this project: LLM wrappers, booking, trail-by-trail routing.
-
-## How the model works
-
-1. Each park becomes a vector: biome, tags, difficulty, trip length, crowd, budget, season, permit, remote.
-2. The user profile is encoded in that same space.
-3. Rank by cosine similarity.
-4. Filter out-of-season, too-far, remote, or permit parks when asked.
-5. Crowd penalty when the user wants solitude.
+Drive time is `great_circle_miles × 1.25 / 65 mph`. That is a highway sketch,
+not Google Maps. `permit_likely` is a coarse 2026-09 snapshot and will go stale.
 
 ## Setup
 
@@ -32,26 +30,49 @@ Not in this project: LLM wrappers, booking, trail-by-trail routing.
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python scripts/build_parks_csv.py   # already committed
 ```
 
-## CLI
-
 ```bash
-python -m src.cli --biome desert --tag hiking --tag stargazing --days 2-3 --month 11 --crowd low --origin san_diego --max-hours 8 --no-remote
-```
+python -m src.cli --biome desert --tag hiking --tag stargazing \
+  --days 2-3 --month 11 --origin san_diego --max-hours 8 --no-remote --explain
 
-Origins: san_diego, los_angeles, phoenix, denver, seattle, salt_lake, nyc.
-
-## Demo
-
-```bash
-streamlit run app/streamlit_app.py
 python -m src.evaluate
+pytest
+streamlit run app/streamlit_app.py
 ```
 
-Current catalog: **Precision@5 = 0.60** on six labeled profiles.
+Origins: `san_diego`, `los_angeles`, `phoenix`, `denver`, `seattle`, `salt_lake`, `nyc`.
+
+## Metrics
+
+18 hand-written fixtures. Treat them as a **regression suite**, not a blind
+holdout or a user study. The holdout was seen during development. Labels were
+revised once on 2026-09-21. Weights were not retuned after that pass.
+
+| Split | n | R-Precision | nDCG@5 |
+|---|---|---|---|
+| Train | 12 | 0.804 | 0.838 |
+| Holdout | 6 | 0.794 | 0.820 |
+
+See `CHANGELOG.md` for the 50 mph drive bug. Those older figures are retired.
+
+Yosemite `best_months` was missing July/August in the catalog; that is a
+data fix, not a label tweak.
+
+## Layout
+
+```
+data/parks.csv
+data/eval_profiles.json
+src/features.py
+src/recommender.py
+src/evaluate.py
+src/cli.py
+src/origins.py
+app/streamlit_app.py
+.github/workflows/ci.yml
+```
 
 ## License
 
-MIT.
+MIT. Park names are used descriptively. NPS logos and photography are not bundled.
