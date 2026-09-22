@@ -1,12 +1,14 @@
 import sys
 from pathlib import Path
 
+import altair as alt
 import pandas as pd
 import streamlit as st
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from app.breakdown import PART_ORDER, match_percent, nps_url, score_breakdown, why_sentence
 from src.features import UserProfile
 from src.origins import ORIGINS
 from src.recommender import ParkRecommender
@@ -140,6 +142,15 @@ def inject_base_css() -> None:
             padding: 1.8rem 1.8rem 1.5rem;
             backdrop-filter: blur(8px);
           }
+          .park-name { color: #f7f1e4; font-weight: 600; font-size: 1rem; margin: 0 0 .4rem; }
+          .park-name-lg { font-size: 1.35rem; }
+          .park-meta { color: #d7cbb3; font-size: .85rem; }
+          .match-badge {
+            display: inline-block; background: #e8d9b8; color: #16210f;
+            font-weight: 700; font-size: .78rem; padding: .18rem .6rem;
+            border-radius: 999px; margin-right: .5rem; vertical-align: middle;
+          }
+          .why-sentence { color: #d7cbb3; font-size: .88rem; margin-top: .6rem; }
         </style>
         """
     )
@@ -159,21 +170,23 @@ def paint_background(step: str) -> None:
     )
 
 
+DEFAULT_ANSWERS = {
+    "biomes_pills": ["desert"],
+    "tags_pills": ["hiking"],
+    "difficulty": "easy",
+    "days": "2-3",
+    "crowd": "medium",
+    "budget": "mid",
+    "month_pills": "November",
+    "origin_label": "Anywhere",
+    "max_hours": 8,
+    "allow_remote": False,
+    "allow_permits": True,
+}
+
+
 def init_state() -> None:
-    defaults = {
-        "step": "welcome",
-        "biomes_pills": ["desert"],
-        "tags_pills": ["hiking"],
-        "difficulty": "easy",
-        "days": "2-3",
-        "crowd": "medium",
-        "budget": "mid",
-        "month_pills": "November",
-        "origin_label": "Anywhere",
-        "max_hours": 8,
-        "allow_remote": False,
-        "allow_permits": True,
-    }
+    defaults = {"step": "welcome", **DEFAULT_ANSWERS}
     for key, value in defaults.items():
         if key not in st.session_state:
             st.session_state[key] = value
@@ -184,10 +197,101 @@ def go(step: str) -> None:
     st.rerun()
 
 
+def start_over() -> None:
+    for key, value in DEFAULT_ANSWERS.items():
+        st.session_state[key] = value
+    go("welcome")
+
+
 def dots(step: str) -> None:
     idx = max(STEPS.index(step) if step in STEPS else 0, 0)
     marks = "".join("●" if i <= idx else "○" for i in range(len(STEPS) - 1))
     st.markdown(f'<p class="quiz-kicker">{marks}</p>', unsafe_allow_html=True)
+
+
+def why_chart(breakdown: pd.DataFrame) -> alt.Chart:
+    base = alt.Chart(breakdown).encode(
+        y=alt.Y(
+            "part:N",
+            sort=PART_ORDER,
+            title=None,
+            axis=alt.Axis(labelColor="#d7cbb3", labelFontSize=12, domain=False, ticks=False, grid=False),
+        ),
+        x=alt.X(
+            "value:Q",
+            title="Contribution to score",
+            axis=alt.Axis(
+                labelColor="#8fa393",
+                titleColor="#8fa393",
+                gridColor="#2a3a30",
+                domain=False,
+                tickCount=4,
+            ),
+        ),
+    )
+    bars = base.mark_bar(size=16, cornerRadiusEnd=3).encode(
+        color=alt.Color(
+            "kind:N",
+            sort=["Gain", "Loss"],
+            scale=alt.Scale(domain=["Gain", "Loss"], range=["#0ca30c", "#d03b3b"]),
+            legend=alt.Legend(title=None, orient="bottom", labelColor="#d7cbb3"),
+        ),
+        tooltip=[alt.Tooltip("part:N", title="Part"), alt.Tooltip("value:Q", title="Contribution", format="+.2f")],
+    )
+    zero_rule = alt.Chart(pd.DataFrame({"x": [0]})).mark_rule(color="#4a5a4e", strokeWidth=1).encode(x="x:Q")
+    labels_pos = (
+        base.transform_filter(alt.datum.value >= 0)
+        .mark_text(align="left", dx=5, color="#f7f1e4", fontSize=11)
+        .encode(text=alt.Text("value:Q", format="+.2f"))
+    )
+    labels_neg = (
+        base.transform_filter(alt.datum.value < 0)
+        .mark_text(align="right", dx=-5, color="#f7f1e4", fontSize=11)
+        .encode(text=alt.Text("value:Q", format="+.2f"))
+    )
+    return (
+        (zero_rule + bars + labels_pos + labels_neg)
+        .properties(height=160, background="transparent")
+        .configure_view(strokeWidth=0)
+    )
+
+
+def _why_expander(row: pd.Series) -> None:
+    with st.expander("Why this park"):
+        breakdown = score_breakdown(row)
+        st.altair_chart(why_chart(breakdown), width="stretch", theme=None)
+        st.markdown(f'<p class="why-sentence">{why_sentence(breakdown)}</p>', unsafe_allow_html=True)
+
+
+def _card_meta(row: pd.Series) -> str:
+    bits = [str(row["states"])]
+    if pd.notna(row.get("drive_hours")):
+        bits.append(f"~{row['drive_hours']:.1f}h drive")
+    return " · ".join(bits)
+
+
+def render_top_card(row: pd.Series) -> None:
+    with st.container(border=True):
+        st.markdown(f'<p class="park-name park-name-lg">{row["name"]}</p>', unsafe_allow_html=True)
+        st.markdown(
+            f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
+            f'<span class="park-meta">{_card_meta(row)}</span>',
+            unsafe_allow_html=True,
+        )
+        st.link_button("NPS page", nps_url(row["park_code"]))
+        _why_expander(row)
+
+
+def render_small_card(row: pd.Series) -> None:
+    with st.container(border=True):
+        st.markdown(f'<p class="park-name">{row["name"]}</p>', unsafe_allow_html=True)
+        st.markdown(
+            f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
+            f'<span class="park-meta">{_card_meta(row)}</span>',
+            unsafe_allow_html=True,
+        )
+        st.link_button("NPS page", nps_url(row["park_code"]))
+        _why_expander(row)
 
 
 init_state()
@@ -360,13 +464,18 @@ with st.container(key="app_shell"):
             if ranked.empty:
                 st.warning("Nothing matched. Loosen month, distance, or the remote filter.")
             else:
-                for _, row in ranked.iterrows():
-                    hours = "" if pd.isna(row["drive_hours"]) else f" · ~{row['drive_hours']:.1f}h"
-                    st.markdown(
-                        f"**{row['name']}**  \n"
-                        f"`{row['park_code']}` · {row['score']:.2f}{hours}  \n"
-                        f"{row['why']}"
-                    )
-                    st.progress(min(max(float(row["score"]), 0.0), 1.0))
-            if st.button("Start over", width="stretch"):
-                go("welcome")
+                render_top_card(ranked.iloc[0])
+                rest = ranked.iloc[1:]
+                if not rest.empty:
+                    st.markdown('<p class="quiz-hint">More picks</p>', unsafe_allow_html=True)
+                    rest_rows = list(rest.iterrows())
+                    for start in range(0, len(rest_rows), 2):
+                        cols = st.columns(2)
+                        for col, (_, row) in zip(cols, rest_rows[start : start + 2]):
+                            with col:
+                                render_small_card(row)
+            c1, c2 = st.columns(2)
+            if c1.button("Change answers", width="stretch"):
+                go("terrain")
+            if c2.button("Start over", width="stretch"):
+                start_over()

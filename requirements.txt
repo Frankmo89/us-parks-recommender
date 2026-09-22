@@ -1,4 +1,5 @@
 pandas>=2.0
 numpy>=1.26
 streamlit>=1.40
+altair>=5.0
 pytest>=8.0
