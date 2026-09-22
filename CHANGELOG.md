@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-09-21 — CLAUDE.md and drive test lower bound
+
+- Added `CLAUDE.md` with rules for this repo: model/data change scope,
+  required checks (`pytest`, `src.evaluate`), changelog discipline, style,
+  and commit size.
+- `test_drive_hours_use_catalog_coordinates` now also asserts San Diego to
+  Joshua Tree is more than 1.5 h, not just under 3.5 h, so the test catches
+  a drive model that becomes unrealistically fast. No model change; current
+  value is ~2.0 h. Metrics unchanged (train R-Prec 0.804 / nDCG 0.838,
+  holdout 0.794 / 0.820).
+
 ## 2026-09-21 — docs and fixture honesty
 
 - README / eval JSON no longer call the holdout "blind". It was seen during

@@ -29,6 +29,7 @@ def test_drive_hours_use_catalog_coordinates():
     parks = ParkRecommender().parks.set_index("park_code")
     jotr = drive_hours(32.72, -117.16, float(parks.loc["jotr", "lat"]), float(parks.loc["jotr", "lon"]))
     sagu = drive_hours(32.72, -117.16, float(parks.loc["sagu", "lat"]), float(parks.loc["sagu", "lon"]))
+    assert jotr > 1.5
     assert jotr < 3.5
     assert sagu < 8.0
     assert jotr < sagu
