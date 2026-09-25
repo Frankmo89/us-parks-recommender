@@ -15,6 +15,8 @@
 - Result cards caption the Match % badge: "A fit score, not a probability."
 - How it works notes that eval profiles have no chaparral case and only one
   island case.
+- Removed redundant own-biome tokens from `parks.csv` tags (they were never
+  in TAG_VOCAB, so scoring is unchanged). Validator now rejects that pattern.
 
 ## 2026-09-21 — CLAUDE.md and drive test lower bound
 
