@@ -1,12 +1,6 @@
-import sys
-from pathlib import Path
-
 import altair as alt
 import pandas as pd
 import streamlit as st
-
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
 
 from app.breakdown import PART_ORDER, match_percent, nps_url, score_breakdown, why_sentence
 from src.evaluate import run as run_evaluation

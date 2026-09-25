@@ -6,6 +6,8 @@
   prairie, tundra, island, rainforest, chaparral, and urban appear and new
   catalog biomes cannot drift out of the UI.
 - `requirements.txt` pins exact installed versions (`pip freeze`), not floors.
+- Added `pyproject.toml` for an editable install; Streamlit no longer hacks
+  `sys.path`.
 
 ## 2026-09-21 — CLAUDE.md and drive test lower bound
 
