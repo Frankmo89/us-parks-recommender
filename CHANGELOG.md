@@ -8,6 +8,8 @@
 - `requirements.txt` pins exact installed versions (`pip freeze`), not floors.
 - Added `pyproject.toml` for an editable install; Streamlit no longer hacks
   `sys.path`.
+- `tests/test_metrics_pinned.py` asserts train/holdout R-Precision and
+  nDCG@5 match the README figures exactly (to 3 decimals).
 
 ## 2026-09-21 — CLAUDE.md and drive test lower bound
 
