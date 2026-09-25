@@ -15,6 +15,7 @@ Any change to weights, filters, or scoring logic follows this order:
 5. Never edit the "relevant" lists in data/eval_profiles.json to fit a new model's output.
 6. Every model change is its own commit, with a CHANGELOG.md entry showing train and holdout before and after.
 7. If holdout disagrees sharply with train, report that as a finding. It is not a reason to keep adjusting against holdout.
+8. "Smallest weight that keeps the frozen eval metrics unchanged" is not, by itself, an acceptance criterion. It can converge on a weight that defeats the feature's purpose without moving R-Prec/nDCG, because those metrics only track items already marked relevant. Before accepting a weight, run a crossover test: pick a real off-season park with strong content match against a real in-season park with weak content match, and confirm the intended behavior actually happens for at least some realistic profiles, not zero.
 
 ## Frozen data
 Never edit the `relevant` lists in `data/eval_profiles.json`. They are frozen
