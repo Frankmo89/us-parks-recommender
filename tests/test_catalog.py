@@ -34,3 +34,15 @@ def test_bad_month_token_names_park_code():
     frame.loc[frame.index[0], "best_months"] = "5,13,9"
     with pytest.raises(ValueError, match=rf"Park {code}: bad best_months token '13'"):
         validate_parks(frame)
+
+
+def test_own_biome_repeated_in_tags_is_rejected():
+    frame = ParkRecommender().parks.head(1).copy()
+    code = frame.iloc[0]["park_code"]
+    biome = frame.iloc[0]["biome"]
+    frame.loc[frame.index[0], "tags"] = f"hiking|{biome}"
+    with pytest.raises(
+        ValueError,
+        match=rf"Park {code}: tags must not repeat the park biome '{biome}'",
+    ):
+        validate_parks(frame)

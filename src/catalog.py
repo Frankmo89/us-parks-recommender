@@ -10,9 +10,10 @@ import pandas as pd
 
 from .features import BIOMES, TAG_VOCAB, parse_months, parse_tags
 
-# Biome names are sometimes duplicated into the tags column. A few catalog
-# annotations (low_crowd, permits, remote) are also used as tags but are not
-# activity features — scoring ignores them via TAG_VOCAB.
+# Other biome names may appear as tags on a park (e.g. alpine on a forest
+# park). A park's own biome must not be repeated in tags. Catalog annotations
+# (low_crowd, permits, remote) are also allowed as tags but are not activity
+# features — scoring ignores them via TAG_VOCAB.
 KNOWN_TAGS = set(TAG_VOCAB) | set(BIOMES) | {"low_crowd", "permits", "remote"}
 KNOWN_BIOMES = set(BIOMES)
 
@@ -30,7 +31,12 @@ def validate_parks(parks: pd.DataFrame) -> None:
         if biome not in KNOWN_BIOMES:
             raise ValueError(f"Park {code}: unknown biome {biome!r}")
 
-        for tag in parse_tags(getattr(row, "tags", "")):
+        tags = parse_tags(getattr(row, "tags", ""))
+        if biome in tags:
+            raise ValueError(
+                f"Park {code}: tags must not repeat the park biome {biome!r}"
+            )
+        for tag in tags:
             if tag not in KNOWN_TAGS:
                 raise ValueError(f"Park {code}: unknown tag {tag!r}")
 
