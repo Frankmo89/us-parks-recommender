@@ -20,6 +20,7 @@ from .features import (
     park_content_vector,
     tag_idf,
 )
+from .catalog import validate_parks
 
 DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "parks.csv"
 
@@ -47,6 +48,7 @@ class ParkRecommender:
     def __init__(self, csv_path: Path | None = None) -> None:
         path = csv_path or DATA_PATH
         self.parks = pd.read_csv(path)
+        validate_parks(self.parks)
         self.idf = tag_idf(self.parks["tags"])
         raw = np.vstack(
             [park_content_vector(row, idf=self.idf) for _, row in self.parks.iterrows()]

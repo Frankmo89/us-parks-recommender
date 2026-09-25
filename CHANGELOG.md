@@ -10,6 +10,8 @@
   `sys.path`.
 - `tests/test_metrics_pinned.py` asserts train/holdout R-Precision and
   nDCG@5 match the README figures exactly (to 3 decimals).
+- Catalog load validates biome, tags, and `best_months` tokens and raises
+  naming the bad `park_code` (no scoring change).
 
 ## 2026-09-21 — CLAUDE.md and drive test lower bound
 
