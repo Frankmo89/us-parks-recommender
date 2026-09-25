@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-25 — UI and tooling
+
+- Terrain picker now lists every biome in `parks.csv` (was 8 of 14), so
+  prairie, tundra, island, rainforest, chaparral, and urban appear and new
+  catalog biomes cannot drift out of the UI.
+
 ## 2026-09-21 — CLAUDE.md and drive test lower bound
 
 - Added `CLAUDE.md` with rules for this repo: model/data change scope,

@@ -47,16 +47,33 @@ BACKGROUNDS = {
     },
 }
 
-TERRAIN = [
-    ("desert", "Desert"),
-    ("canyon", "Canyon"),
-    ("alpine", "Alpine"),
-    ("forest", "Forest"),
-    ("coast", "Coast"),
-    ("volcano", "Volcano"),
-    ("wetland", "Wetland"),
-    ("cave", "Cave"),
-]
+# Display labels for biomes present in the catalog. Options themselves are
+# always read from parks.csv via catalog_terrains() so new biomes appear here.
+BIOME_LABELS = {
+    "alpine": "Alpine",
+    "canyon": "Canyon",
+    "cave": "Cave",
+    "chaparral": "Chaparral",
+    "coast": "Coast",
+    "desert": "Desert",
+    "forest": "Forest",
+    "island": "Island",
+    "prairie": "Prairie",
+    "rainforest": "Rainforest",
+    "tundra": "Tundra",
+    "urban": "Urban",
+    "volcano": "Volcano",
+    "wetland": "Wetland",
+}
+
+
+def catalog_terrains(parks: pd.DataFrame) -> list[tuple[str, str]]:
+    """Biome picker options from the loaded catalog — never a hardcoded subset."""
+    codes = sorted({str(biome) for biome in parks["biome"].dropna().unique()})
+    return [
+        (code, BIOME_LABELS.get(code, code.replace("_", " ").title()))
+        for code in codes
+    ]
 VIBES = [
     ("hiking", "Hiking"),
     ("family", "Family"),
@@ -429,10 +446,12 @@ with st.container(key="app_shell"):
                 '<p class="quiz-title">What kind of ground do you want under your boots?</p>',
                 unsafe_allow_html=True,
             )
+            terrain = catalog_terrains(model.parks)
+            terrain_labels = dict(terrain)
             st.pills(
                 "Terrain",
-                options=[code for code, _ in TERRAIN],
-                format_func=dict(TERRAIN).get,
+                options=[code for code, _ in terrain],
+                format_func=terrain_labels.get,
                 selection_mode="multi",
                 default=st.session_state.biomes_pills,
                 key="biomes_pills",
