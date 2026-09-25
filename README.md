@@ -30,6 +30,7 @@ not Google Maps. `permit_likely` is a coarse 2026-09 snapshot and will go stale.
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+pip install -e .
 ```
 
 ```bash

@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "us-parks-recommender"
+version = "0.1.0"
+description = "Content-based recommender for the 63 U.S. National Parks"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+dependencies = [
+    "altair==6.3.0",
+    "numpy==2.5.3",
+    "pandas==3.0.6",
+    "streamlit==1.64.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

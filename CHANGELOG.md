@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-09-25 — UI and tooling
+
+- Terrain picker now lists every biome in `parks.csv` (was 8 of 14), so
+  prairie, tundra, island, rainforest, chaparral, and urban appear and new
+  catalog biomes cannot drift out of the UI.
+- `requirements.txt` pins exact installed versions (`pip freeze`), not floors.
+- Added `pyproject.toml` for an editable install; Streamlit no longer hacks
+  `sys.path`.
+- `tests/test_metrics_pinned.py` asserts train/holdout R-Precision and
+  nDCG@5 match the README figures exactly (to 3 decimals).
+- Catalog load validates biome, tags, and `best_months` tokens and raises
+  naming the bad `park_code` (no scoring change).
+- Result cards caption the Match % badge: "A fit score, not a probability."
+- How it works notes that eval profiles have no chaparral case and only one
+  island case.
+
 ## 2026-09-21 — CLAUDE.md and drive test lower bound
 
 - Added `CLAUDE.md` with rules for this repo: model/data change scope,

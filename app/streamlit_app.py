@@ -1,12 +1,6 @@
-import sys
-from pathlib import Path
-
 import altair as alt
 import pandas as pd
 import streamlit as st
-
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
 
 from app.breakdown import PART_ORDER, match_percent, nps_url, score_breakdown, why_sentence
 from src.evaluate import run as run_evaluation
@@ -47,16 +41,33 @@ BACKGROUNDS = {
     },
 }
 
-TERRAIN = [
-    ("desert", "Desert"),
-    ("canyon", "Canyon"),
-    ("alpine", "Alpine"),
-    ("forest", "Forest"),
-    ("coast", "Coast"),
-    ("volcano", "Volcano"),
-    ("wetland", "Wetland"),
-    ("cave", "Cave"),
-]
+# Display labels for biomes present in the catalog. Options themselves are
+# always read from parks.csv via catalog_terrains() so new biomes appear here.
+BIOME_LABELS = {
+    "alpine": "Alpine",
+    "canyon": "Canyon",
+    "cave": "Cave",
+    "chaparral": "Chaparral",
+    "coast": "Coast",
+    "desert": "Desert",
+    "forest": "Forest",
+    "island": "Island",
+    "prairie": "Prairie",
+    "rainforest": "Rainforest",
+    "tundra": "Tundra",
+    "urban": "Urban",
+    "volcano": "Volcano",
+    "wetland": "Wetland",
+}
+
+
+def catalog_terrains(parks: pd.DataFrame) -> list[tuple[str, str]]:
+    """Biome picker options from the loaded catalog — never a hardcoded subset."""
+    codes = sorted({str(biome) for biome in parks["biome"].dropna().unique()})
+    return [
+        (code, BIOME_LABELS.get(code, code.replace("_", " ").title()))
+        for code in codes
+    ]
 VIBES = [
     ("hiking", "Hiking"),
     ("family", "Family"),
@@ -155,6 +166,10 @@ def inject_base_css() -> None:
             display: inline-block; background: #e8d9b8; color: #16210f;
             font-weight: 700; font-size: .78rem; padding: .18rem .6rem;
             border-radius: 999px; margin-right: .5rem; vertical-align: middle;
+          }
+          .match-caption {
+            display: inline; color: #8fa393; font-size: .72rem;
+            margin-left: .15rem; vertical-align: middle;
           }
           .why-sentence { color: #d7cbb3; font-size: .88rem; margin-top: .6rem; }
           .how-h { color: #e8d9b8; font-weight: 700; font-size: 1.05rem; margin: 1.5rem 0 .5rem; }
@@ -290,7 +305,8 @@ def render_top_card(row: pd.Series) -> None:
         st.markdown(f'<p class="park-name park-name-lg">{row["name"]}</p>', unsafe_allow_html=True)
         st.markdown(
             f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
-            f'<span class="park-meta">{_card_meta(row)}</span>',
+            f'<span class="match-caption">A fit score, not a probability.</span>'
+            f'<span class="park-meta"> · {_card_meta(row)}</span>',
             unsafe_allow_html=True,
         )
         st.link_button("NPS page", nps_url(row["park_code"]))
@@ -302,7 +318,8 @@ def render_small_card(row: pd.Series) -> None:
         st.markdown(f'<p class="park-name">{row["name"]}</p>', unsafe_allow_html=True)
         st.markdown(
             f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
-            f'<span class="park-meta">{_card_meta(row)}</span>',
+            f'<span class="match-caption">A fit score, not a probability.</span>'
+            f'<span class="park-meta"> · {_card_meta(row)}</span>',
             unsafe_allow_html=True,
         )
         st.link_button("NPS page", nps_url(row["park_code"]))
@@ -392,6 +409,7 @@ def render_how_it_works(model: ParkRecommender) -> None:
         "<li>18 hand-written profiles &mdash; a regression check, not a user study or a blind "
         "holdout.</li>"
         "<li>The holdout split was seen during development; labels were revised once.</li>"
+        "<li>Eval profiles have no chaparral case and only one island case.</li>"
         "<li>Smoothed IDF down-weights common tags, so parks with extra rare tags the user did "
         "not ask for score a lower cosine.</li>"
         "<li>Drive times are a highway sketch (great-circle distance &times; detour &times; "
@@ -429,10 +447,12 @@ with st.container(key="app_shell"):
                 '<p class="quiz-title">What kind of ground do you want under your boots?</p>',
                 unsafe_allow_html=True,
             )
+            terrain = catalog_terrains(model.parks)
+            terrain_labels = dict(terrain)
             st.pills(
                 "Terrain",
-                options=[code for code, _ in TERRAIN],
-                format_func=dict(TERRAIN).get,
+                options=[code for code, _ in terrain],
+                format_func=terrain_labels.get,
                 selection_mode="multi",
                 default=st.session_state.biomes_pills,
                 key="biomes_pills",
