@@ -4,6 +4,18 @@
 The model lives in `src/` (`features.py`, `recommender.py`, `evaluate.py`, `origins.py`, `cli.py`).
 Do not change weights, features, or scoring logic unless explicitly asked.
 
+## Model tuning protocol
+
+Any change to weights, filters, or scoring logic follows this order:
+
+1. State the hypothesis and the reason before writing code (e.g. "a hard month filter drops otherwise-good parks; a soft penalty should raise nDCG on shoulder-season trips").
+2. Implement the change.
+3. Run `python -m src.evaluate`. While iterating, look only at the train numbers. Do not view or reason about holdout results during iteration.
+4. Once train looks right, run the full evaluate once more and report both train and holdout, unedited, even if holdout drops.
+5. Never edit the "relevant" lists in data/eval_profiles.json to fit a new model's output.
+6. Every model change is its own commit, with a CHANGELOG.md entry showing train and holdout before and after.
+7. If holdout disagrees sharply with train, report that as a finding. It is not a reason to keep adjusting against holdout.
+
 ## Frozen data
 Never edit the `relevant` lists in `data/eval_profiles.json`. They are frozen
 regression labels. Other fields in that file (profile inputs, notes) may be
