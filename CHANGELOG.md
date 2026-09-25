@@ -13,6 +13,8 @@
 - Catalog load validates biome, tags, and `best_months` tokens and raises
   naming the bad `park_code` (no scoring change).
 - Result cards caption the Match % badge: "A fit score, not a probability."
+- How it works notes that eval profiles have no chaparral case and only one
+  island case.
 
 ## 2026-09-21 — CLAUDE.md and drive test lower bound
 

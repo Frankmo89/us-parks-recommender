@@ -409,6 +409,7 @@ def render_how_it_works(model: ParkRecommender) -> None:
         "<li>18 hand-written profiles &mdash; a regression check, not a user study or a blind "
         "holdout.</li>"
         "<li>The holdout split was seen during development; labels were revised once.</li>"
+        "<li>Eval profiles have no chaparral case and only one island case.</li>"
         "<li>Smoothed IDF down-weights common tags, so parks with extra rare tags the user did "
         "not ask for score a lower cosine.</li>"
         "<li>Drive times are a highway sketch (great-circle distance &times; detour &times; "
