@@ -12,6 +12,7 @@
   nDCG@5 match the README figures exactly (to 3 decimals).
 - Catalog load validates biome, tags, and `best_months` tokens and raises
   naming the bad `park_code` (no scoring change).
+- Result cards caption the Match % badge: "A fit score, not a probability."
 
 ## 2026-09-21 — CLAUDE.md and drive test lower bound
 

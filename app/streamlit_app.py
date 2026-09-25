@@ -167,6 +167,10 @@ def inject_base_css() -> None:
             font-weight: 700; font-size: .78rem; padding: .18rem .6rem;
             border-radius: 999px; margin-right: .5rem; vertical-align: middle;
           }
+          .match-caption {
+            display: inline; color: #8fa393; font-size: .72rem;
+            margin-left: .15rem; vertical-align: middle;
+          }
           .why-sentence { color: #d7cbb3; font-size: .88rem; margin-top: .6rem; }
           .how-h { color: #e8d9b8; font-weight: 700; font-size: 1.05rem; margin: 1.5rem 0 .5rem; }
           .how-list { color: #d7cbb3; font-size: .9rem; line-height: 1.55; padding-left: 1.2rem; margin: 0 0 .5rem; }
@@ -301,7 +305,8 @@ def render_top_card(row: pd.Series) -> None:
         st.markdown(f'<p class="park-name park-name-lg">{row["name"]}</p>', unsafe_allow_html=True)
         st.markdown(
             f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
-            f'<span class="park-meta">{_card_meta(row)}</span>',
+            f'<span class="match-caption">A fit score, not a probability.</span>'
+            f'<span class="park-meta"> · {_card_meta(row)}</span>',
             unsafe_allow_html=True,
         )
         st.link_button("NPS page", nps_url(row["park_code"]))
@@ -313,7 +318,8 @@ def render_small_card(row: pd.Series) -> None:
         st.markdown(f'<p class="park-name">{row["name"]}</p>', unsafe_allow_html=True)
         st.markdown(
             f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
-            f'<span class="park-meta">{_card_meta(row)}</span>',
+            f'<span class="match-caption">A fit score, not a probability.</span>'
+            f'<span class="park-meta"> · {_card_meta(row)}</span>',
             unsafe_allow_html=True,
         )
         st.link_button("NPS page", nps_url(row["park_code"]))
