@@ -10,6 +10,9 @@ weights, tie_epsilon, k.
 Rules:
 
 * Fixtures differ  -> pyproject.toml ``[project].version`` must also differ.
+  "Differ" is whole-bundle equality after normalization, so profiles added or
+  removed (a change in the pinned set) count, not just changed output for
+  profiles present on both sides.
 * Fixtures identical -> no bump required.
 * The fixture's own version stamps must equal pyproject's version, so a bump
   cannot leave the parity file stamped with the old number.
@@ -86,9 +89,16 @@ def _scores(output: dict) -> list[tuple]:
     ]
 
 
-def describe_fixture_changes(base: dict, head: dict) -> list[str]:
-    """Human-readable list of what differs between two normalized bundles."""
+def describe_fixture_changes(base: dict, head: dict) -> tuple[list[str], list[str]]:
+    """What differs between two normalized bundles.
+
+    Returns ``(behavior, surface)``: ``behavior`` lists changed constants and
+    changed output for profiles present on both sides; ``surface`` lists
+    profiles added or removed (the pinned set a consumer can rely on grew or
+    shrank, even if every shared profile is unchanged).
+    """
     lines: list[str] = []
+    surface: list[str] = []
     for key in ("weights", "tie_epsilon", "k"):
         if base.get(key) != head.get(key):
             lines.append(f"{key}: {base.get(key)!r} -> {head.get(key)!r}")
@@ -96,9 +106,13 @@ def describe_fixture_changes(base: dict, head: dict) -> list[str]:
     base_profiles = {p["id"]: p for p in base.get("profiles", [])}
     head_profiles = {p["id"]: p for p in head.get("profiles", [])}
     for pid in sorted(set(base_profiles) - set(head_profiles)):
-        lines.append(f"{pid}: profile removed")
+        surface.append(f"{pid}: profile removed")
     for pid in sorted(set(head_profiles) - set(base_profiles)):
-        lines.append(f"{pid}: profile added")
+        surface.append(f"{pid}: profile added")
+    if len(base.get("profiles", [])) != len(base_profiles) or len(
+        head.get("profiles", [])
+    ) != len(head_profiles):
+        surface.append("duplicate profile ids present")
 
     for pid in sorted(set(base_profiles) & set(head_profiles)):
         b, h = base_profiles[pid], head_profiles[pid]
@@ -117,7 +131,7 @@ def describe_fixture_changes(base: dict, head: dict) -> list[str]:
         if not kinds:
             kinds.append("other output fields")
         lines.append(f"{pid}: " + "; ".join(kinds))
-    return lines
+    return lines, surface
 
 
 def check(
@@ -155,18 +169,30 @@ def check(
         )
         return Verdict(ok, messages)
 
-    changes = describe_fixture_changes(base_norm, head_norm)
+    behavior, surface = describe_fixture_changes(base_norm, head_norm)
+    changes = behavior + surface
     detail = "\n".join(f"  - {line}" for line in changes) or "  - (see git diff)"
 
     if base_version == head_version:
         ok = False
+        reasons = []
+        if behavior or not surface:
+            reasons.append(
+                f"Per {CONTRACT_REF}, any change to weights, filters, drive constants, "
+                f"IDF, vocab, score formula, tie semantics, or catalog features that "
+                f"changes scores/order for existing profiles is breaking and must bump "
+                f"engine_version."
+            )
+        if surface:
+            reasons.append(
+                f"Profiles were added or removed ({len(surface)}). The pinned set of "
+                f"behaviors a consumer can rely on changed, so per the spirit of "
+                f"{CONTRACT_REF} it must be visible as a new engine_version."
+            )
         messages.append(
             f"FAIL: {FIXTURES_PATH} changed but {PYPROJECT_PATH} version is still "
-            f"{head_version}.\n"
-            f"Per {CONTRACT_REF}, any change to weights, filters, drive constants, "
-            f"IDF, vocab, score formula, tie semantics, or catalog features that "
-            f"changes scores/order for existing profiles is breaking and must bump "
-            f"engine_version (today: the minor component of 0.x, e.g. 0.1.0 -> 0.2.0), "
+            f"{head_version}.\n" + "\n".join(reasons) + "\n"
+            f"Bump the version (today: the minor component of 0.x, e.g. 0.1.0 -> 0.2.0), "
             f"restamp the fixtures, and record before/after metrics in CHANGELOG.md.\n"
             f"Fixture changes detected:\n{detail}"
         )

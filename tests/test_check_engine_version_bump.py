@@ -138,11 +138,41 @@ def test_missing_base_passes():
 
 
 def test_added_profile_without_bump_fails():
+    """Added profile, every shared profile unchanged: the pinned set grew."""
     head = _bundle()
     head["profiles"].append(copy.deepcopy(head["profiles"][0]) | {"id": "p2"})
     verdict = mod.check(_bundle(), head, "0.1.0", "0.1.0")
     assert not verdict.ok
-    assert "p2: profile added" in "\n".join(verdict.messages)
+    text = "\n".join(verdict.messages)
+    assert "p2: profile added" in text
+    assert "Profiles were added or removed (1)" in text
+    assert "changes scores/order for existing profiles" not in text
+
+
+def test_removed_profile_without_bump_fails():
+    base = _bundle()
+    base["profiles"].append(copy.deepcopy(base["profiles"][0]) | {"id": "p2"})
+    verdict = mod.check(base, _bundle(), "0.1.0", "0.1.0")
+    assert not verdict.ok
+    assert "p2: profile removed" in "\n".join(verdict.messages)
+
+
+def test_added_profile_with_bump_passes():
+    head = _bundle("0.2.0")
+    head["profiles"].append(copy.deepcopy(head["profiles"][0]) | {"id": "p2"})
+    verdict = mod.check(_bundle(), head, "0.1.0", "0.2.0")
+    assert verdict.ok
+
+
+def test_added_and_changed_reports_both_reasons():
+    head = _bundle()
+    head["profiles"][0]["output"]["parks"].reverse()
+    head["profiles"].append(copy.deepcopy(_bundle()["profiles"][0]) | {"id": "p2"})
+    verdict = mod.check(_bundle(), head, "0.1.0", "0.1.0")
+    text = "\n".join(verdict.messages)
+    assert not verdict.ok
+    assert "changes scores/order for existing profiles" in text
+    assert "Profiles were added or removed (1)" in text
 
 
 def test_committed_fixtures_are_stamped_with_pyproject_version():
@@ -159,6 +189,8 @@ def test_committed_fixtures_are_stamped_with_pyproject_version():
         ("3a82f07", "f104f49", 1),
         # PR #8 (TypeScript port) left fixtures untouched.
         ("f104f49", "799fd0d", 0),
+        # PR #9 added the null_enum_fields_use_defaults profile without a bump.
+        ("799fd0d", "f24f857", 1),
     ],
 )
 def test_history_regressions(base: str, head: str, expected: int, capsys):
