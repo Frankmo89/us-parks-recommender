@@ -6,7 +6,7 @@ from app.breakdown import PART_ORDER, match_percent, nps_url, score_breakdown, w
 from src.evaluate import run as run_evaluation
 from src.features import DRIVE_DETOUR, DRIVE_MPH, UserProfile
 from src.origins import ORIGINS
-from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, ParkRecommender
+from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, W_MONTH_PENALTY, ParkRecommender
 
 st.set_page_config(page_title="Find your park", page_icon="🌲", layout="wide", initial_sidebar_state="collapsed")
 
@@ -337,7 +337,8 @@ def render_how_it_works(model: ParkRecommender) -> None:
     st.markdown(
         "<p class=\"quiz-sub\">Parks and trips share one feature space of biome and activity "
         "tags. The score blends a content match in that space with closeness on days, effort "
-        "and budget, minus a penalty for crowds above what you asked for.</p>",
+        "and budget, minus penalties for crowds above what you asked for and for traveling "
+        "outside a park's best months.</p>",
         unsafe_allow_html=True,
     )
 
@@ -347,19 +348,23 @@ def render_how_it_works(model: ParkRecommender) -> None:
         f"      + {W_DAYS:.2f} * days_closeness\n"
         f"      + {W_DIFF:.2f} * difficulty_closeness\n"
         f"      + {W_BUDGET:.2f} * budget_closeness\n"
-        f"      - {CROWD_PENALTY:.2f} * crowd_excess",
+        f"      - {CROWD_PENALTY:.2f} * crowd_excess\n"
+        f"      - {W_MONTH_PENALTY:.2f} * (month_distance / 6)",
         language=None,
     )
     st.markdown(
         '<p class="how-note">Weights read live from src/recommender.py '
-        "(W_CONTENT, W_DAYS, W_DIFF, W_BUDGET, CROWD_PENALTY) — not typed by hand.</p>",
+        "(W_CONTENT, W_DAYS, W_DIFF, W_BUDGET, CROWD_PENALTY, W_MONTH_PENALTY) — not typed by hand. "
+        "month_distance is the circular months to the nearest best month (Dec wraps to Jan).</p>",
         unsafe_allow_html=True,
     )
 
     st.markdown('<p class="how-h">Filters</p>', unsafe_allow_html=True)
     st.markdown(
         '<ul class="how-list">'
-        "<li><b>Month</b> keeps only parks whose best months include the one you picked.</li>"
+        "<li><b>Month</b> is a soft penalty, not a hard filter: parks outside their best months "
+        "stay in the ranking but lose points by circular distance to the nearest best month "
+        f"(max at 6 months, weight {W_MONTH_PENALTY:.2f}).</li>"
         "<li><b>Remote</b> drops parks that need a flight or ferry (Alaska, Hawaii, island parks) "
         "unless you allow them.</li>"
         "<li><b>Permits</b> drops parks with timed entry or a permit likely needed, unless you "

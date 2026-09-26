@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-09-25 — soft month penalty
+
+- Hypothesis: a hard month filter drops otherwise-good parks; a soft circular
+  month penalty (same shape as crowd) should keep shoulder-season parks
+  rankable, and strong content should still beat a weak in-season match
+  when the season miss is moderate.
+- Replaced the hard `best_months` filter with
+  `month_penalty = (month_distance / 6) * W_MONTH_PENALTY`. Distance wraps
+  Dec↔Jan. `profile.month is None` → penalty 0. Remote / permits / drive
+  filters unchanged.
+- Weight selection:
+  - `1.60` rejected (rule 8): a 2-month miss (0.533) outweighed a ~20×
+    content lead — romo lost to sagu on alpine/wildlife/family/November.
+  - **`0.35` set as requested**: max 6-month penalty ≈ 0.35 (< W_CONTENT
+    0.55); 2-month miss ≈ 0.117.
+- Crossover (alpine / wildlife / scenic_drive / family / 4–7 days /
+  month=11): romo content 0.799, month_pen 0.117, score **0.473** beats
+  sagu content 0.040, month_pen 0.000, score **0.262**. Yellowstone
+  (dist=2, month_pen 0.117) ranks **#13**, score 0.351.
+- Metrics before → after (`W_MONTH_PENALTY=0.35`):
+  - train: R-Prec **0.804 → 0.729**, nDCG@5 **0.838 → 0.765**
+  - holdout: R-Prec **0.794 → 0.794**, nDCG@5 **0.820 → 0.808**
+  Holdout R-Prec flat; nDCG dips slightly. Reported unedited; not used to
+  retune.
+- How it works / README formula updated; month is no longer a hard filter.
+
 ## 2026-09-25 — UI and tooling
 
 - Terrain picker now lists every biome in `parks.csv` (was 8 of 14), so

@@ -86,6 +86,22 @@ def parse_tags(raw: str) -> list[str]:
 def parse_months(raw: str) -> set[str]:
     return {part.strip() for part in str(raw).split(",") if part.strip()}
 
+def month_distance(requested: int, best_months: str | set[str]) -> int:
+    """Min months from requested to the nearest best month (Dec wraps to Jan).
+
+    Farthest possible on a 12-month circle is 6. Empty best_months → 6.
+    """
+    months = parse_months(best_months) if isinstance(best_months, str) else set(best_months)
+    if not months:
+        return 6
+    req = int(requested)
+    best = 6
+    for token in months:
+        other = int(token)
+        delta = abs(req - other) % 12
+        best = min(best, min(delta, 12 - delta))
+    return best
+
 
 def tag_idf(tag_series: pd.Series) -> np.ndarray:
     n = max(len(tag_series), 1)

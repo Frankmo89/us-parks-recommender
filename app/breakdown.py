@@ -11,25 +11,26 @@ from __future__ import annotations
 import pandas as pd
 
 from src.features import CROWD_RANK
-from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF
+from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, W_MONTH_PENALTY
 
-PART_ORDER = ["Terrain & activities", "Days", "Effort", "Budget", "Crowds"]
+PART_ORDER = ["Terrain & activities", "Days", "Effort", "Budget", "Crowds", "Season"]
 
 # Worst-case crowd penalty: the widest possible gap between a park's crowd
 # level and the user's, times the per-level penalty (src.recommender.CROWD_PENALTY).
 MAX_CROWD_PENALTY = (max(CROWD_RANK.values()) - min(CROWD_RANK.values())) * CROWD_PENALTY
 
 # A part's ceiling: the weight it can contribute at best (content/days/effort/budget),
-# or the worst-case penalty it can subtract (crowds).
+# or the worst-case penalty it can subtract (crowds / season).
 PART_MAX = {
     "Terrain & activities": W_CONTENT,
     "Days": W_DAYS,
     "Effort": W_DIFF,
     "Budget": W_BUDGET,
     "Crowds": MAX_CROWD_PENALTY,
+    "Season": W_MONTH_PENALTY,
 }
 
-# The best a park can score: every fit part at its ceiling, no crowd penalty.
+# The best a park can score: every fit part at its ceiling, no penalties.
 MAX_SCORE = W_CONTENT + W_DAYS + W_DIFF + W_BUDGET
 
 _SENTENCE_WORD = {
@@ -69,6 +70,7 @@ def score_breakdown(row: pd.Series) -> pd.DataFrame:
         "Effort": W_DIFF * float(row["diff_fit"]),
         "Budget": W_BUDGET * float(row["budget_fit"]),
         "Crowds": -float(row["crowd_penalty"]),
+        "Season": -float(row.get("month_penalty", 0.0)),
     }
     return pd.DataFrame(
         {
@@ -98,7 +100,7 @@ def why_sentence(breakdown: pd.DataFrame) -> str:
     of its own maximum (that includes an exact 0.00) is not worth a clause,
     so only the strong-fit half of the sentence is shown.
     """
-    fits = breakdown[breakdown["part"] != "Crowds"].copy()
+    fits = breakdown[~breakdown["part"].isin(["Crowds", "Season"])].copy()
 
     strong = fits[fits["value"] >= STRONG_FRACTION * fits["max"]].sort_values("value", ascending=False)
     words = [_SENTENCE_WORD[part] for part in strong["part"]]
@@ -108,10 +110,11 @@ def why_sentence(breakdown: pd.DataFrame) -> str:
     weakest = fits.sort_values("gap", ascending=False).iloc[0]
     loss_gap, loss_max, loss_word = float(weakest["gap"]), float(weakest["max"]), _SENTENCE_WORD[weakest["part"]]
 
-    crowd = breakdown.loc[breakdown["part"] == "Crowds"].iloc[0]
-    crowd_gap, crowd_max = -float(crowd["value"]), float(crowd["max"])
-    if crowd_gap > loss_gap:
-        loss_gap, loss_max, loss_word = crowd_gap, crowd_max, "crowds"
+    for part, word in (("Crowds", "crowds"), ("Season", "season")):
+        row = breakdown.loc[breakdown["part"] == part].iloc[0]
+        gap, part_max = -float(row["value"]), float(row["max"])
+        if gap > loss_gap:
+            loss_gap, loss_max, loss_word = gap, part_max, word
 
     if loss_gap <= 0 or round(loss_gap, 2) == 0 or loss_gap <= LOSS_FRACTION * loss_max:
         return f"{fit_clause}."

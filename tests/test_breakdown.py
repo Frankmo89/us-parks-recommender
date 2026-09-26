@@ -19,8 +19,15 @@ PROFILE = UserProfile(
 )
 
 
-def _row(content=1.0, days_fit=1.0, diff_fit=1.0, budget_fit=1.0, crowd_penalty=0.0):
-    score = W_CONTENT * content + W_DAYS * days_fit + W_DIFF * diff_fit + W_BUDGET * budget_fit - crowd_penalty
+def _row(content=1.0, days_fit=1.0, diff_fit=1.0, budget_fit=1.0, crowd_penalty=0.0, month_penalty=0.0):
+    score = (
+        W_CONTENT * content
+        + W_DAYS * days_fit
+        + W_DIFF * diff_fit
+        + W_BUDGET * budget_fit
+        - crowd_penalty
+        - month_penalty
+    )
     return pd.Series(
         {
             "content": content,
@@ -28,6 +35,7 @@ def _row(content=1.0, days_fit=1.0, diff_fit=1.0, budget_fit=1.0, crowd_penalty=
             "diff_fit": diff_fit,
             "budget_fit": budget_fit,
             "crowd_penalty": crowd_penalty,
+            "month_penalty": month_penalty,
             "score": score,
         }
     )
@@ -46,6 +54,7 @@ def test_score_breakdown_matches_model_output():
         "Effort": W_DIFF * row["diff_fit"],
         "Budget": W_BUDGET * row["budget_fit"],
         "Crowds": -row["crowd_penalty"],
+        "Season": -row["month_penalty"],
     }
     for part, value in expected.items():
         got = breakdown.loc[breakdown["part"] == part, "value"].item()
