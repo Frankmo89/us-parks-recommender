@@ -3,7 +3,7 @@
     "Parity fixtures for a future TypeScript (or other) port of the ranking engine.",
     "Generated from the Python ParkRecommender; do not hand-edit scores.",
     "Regen by re-running the fixture generator after intentional scoring changes.",
-    "Includes the 18 eval profiles plus 7 edge cases. Eval 'relevant' labels are not included."
+    "Includes the 18 eval profiles plus 8 edge cases. Eval 'relevant' labels are not included."
   ],
   "engine_version": "0.1.0",
   "weights": {
@@ -6802,6 +6802,307 @@
               "permit_likely": false,
               "nps_url": "https://www.nps.gov/wrst/",
               "why": "alpine \u00b7 backpacking \u00b7 wilderness \u00b7 7+ day trip \u00b7 low crowds",
+              "drive_hours": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "null_enum_fields_use_defaults",
+      "kind": "edge",
+      "split": null,
+      "notes": "Explicit null on all enum fields = omit; uses documented defaults.",
+      "profile": {
+        "biomes": [
+          "desert"
+        ],
+        "tags": [
+          "hiking",
+          "stargazing"
+        ],
+        "difficulty": null,
+        "days_needed": null,
+        "crowd_pref": null,
+        "budget_tier": null,
+        "month": 11,
+        "origin_lat": null,
+        "origin_lon": null,
+        "max_drive_hours": null,
+        "allow_remote": true,
+        "allow_permits": true
+      },
+      "output": {
+        "engine_version": "0.1.0",
+        "k": 5,
+        "n_returned": 5,
+        "empty": false,
+        "tie_epsilon": 0.001,
+        "tie_groups": [],
+        "parks": [
+          {
+            "rank": 1,
+            "score": 0.773267,
+            "match_percent": 81,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.805941,
+              "days": 1.0,
+              "difficulty": 0.5,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.443267,
+                "days": 0.18,
+                "difficulty": 0.07,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "deva",
+              "name": "Death Valley National Park",
+              "states": "CA",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "stargazing",
+                "photography",
+                "family"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "medium",
+              "budget_tier": "mid",
+              "best_months": [
+                "11",
+                "12",
+                "1",
+                "2",
+                "3"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "nps_url": "https://www.nps.gov/deva/",
+              "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 2-3 day trip",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 2,
+            "score": 0.751492,
+            "match_percent": 79,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.817864,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 0.5,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.058333,
+              "weighted": {
+                "content": 0.449825,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.04,
+                "crowd_penalty": 0.0,
+                "month_penalty": -0.058333
+              }
+            },
+            "facts": {
+              "park_code": "care",
+              "name": "Capitol Reef National Park",
+              "states": "UT",
+              "biomes": [
+                "canyon",
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "stargazing"
+              ],
+              "difficulty": "easy",
+              "days_needed": "2-3",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "4",
+                "5",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "nps_url": "https://www.nps.gov/care/",
+              "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 stargazing \u00b7 2-3 day trip",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 3,
+            "score": 0.663267,
+            "match_percent": 70,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.805941,
+              "days": 0.666667,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.443267,
+                "days": 0.12,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": -0.12,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "arch",
+              "name": "Arches National Park",
+              "states": "UT",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "stargazing",
+                "photography"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "3",
+                "4",
+                "5",
+                "9",
+                "10",
+                "11"
+              ],
+              "remote": false,
+              "permit_likely": true,
+              "nps_url": "https://www.nps.gov/arch/",
+              "why": "desert \u00b7 hiking \u00b7 stargazing",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 4,
+            "score": 0.653275,
+            "match_percent": 69,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.642318,
+              "days": 0.666667,
+              "difficulty": 1.0,
+              "budget": 0.5,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.353275,
+                "days": 0.12,
+                "difficulty": 0.14,
+                "budget": 0.04,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "sagu",
+              "name": "Saguaro National Park",
+              "states": "AZ",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "stargazing",
+                "easy_walk"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "11",
+                "12",
+                "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "nps_url": "https://www.nps.gov/sagu/",
+              "why": "desert \u00b7 hiking \u00b7 stargazing",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 5,
+            "score": 0.586095,
+            "match_percent": 62,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.574718,
+              "days": 0.666667,
+              "difficulty": 0.5,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.316095,
+                "days": 0.12,
+                "difficulty": 0.07,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "bibe",
+              "name": "Big Bend National Park",
+              "states": "TX",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "backpacking",
+                "stargazing",
+                "wildlife",
+                "scenic_drive",
+                "camping"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "4-7",
+              "crowd": "low",
+              "budget_tier": "mid",
+              "best_months": [
+                "2",
+                "3",
+                "4",
+                "10",
+                "11"
+              ],
+              "remote": true,
+              "permit_likely": false,
+              "nps_url": "https://www.nps.gov/bibe/",
+              "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 low crowds",
               "drive_hours": null
             }
           }

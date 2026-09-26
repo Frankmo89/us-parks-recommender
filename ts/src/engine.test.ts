@@ -73,8 +73,8 @@ function nearly(a: number, b: number, tol = TOL): boolean {
 }
 
 describe("TS engine parity with Python fixtures", () => {
-  test("fixture bundle has 25 profiles", () => {
-    expect(fixtures.profiles).toHaveLength(25);
+  test("fixture bundle has 26 profiles", () => {
+    expect(fixtures.profiles).toHaveLength(26);
   });
 
   for (const item of fixtures.profiles) {
