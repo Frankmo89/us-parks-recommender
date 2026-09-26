@@ -27,6 +27,20 @@ jobs:
       - name: Evaluate
         run: python -m src.evaluate
 
+  engine-version:
+    # docs/engine-contract.md §4: a fixture change must ship with a version bump.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch base branch
+        run: git fetch --no-tags --depth=1 origin "+refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
+      - name: Fixture change requires engine_version bump
+        run: python scripts/check_engine_version_bump.py --base "origin/${{ github.base_ref }}"
+
   typescript:
     runs-on: ubuntu-latest
     defaults:
