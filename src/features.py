@@ -77,6 +77,7 @@ CROWD_RANK = {"low": 0, "medium": 1, "high": 2}
 # 65 mph and 1.25 detour ~= 52 mph over the crow-flies distance.
 DRIVE_DETOUR = 1.25
 DRIVE_MPH = 65.0
+EARTH_RADIUS_MILES = 3958.8
 
 
 def parse_tags(raw: str) -> list[str]:
@@ -152,7 +153,7 @@ def closeness(park_level: float, user_level: float, span: float) -> float:
 
 
 def drive_hours(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
-    r_miles = 3958.8
+    r_miles = EARTH_RADIUS_MILES
     p1, p2 = np.radians(lat1), np.radians(lat2)
     dphi = np.radians(lat2 - lat1)
     dlmb = np.radians(lon2 - lon1)

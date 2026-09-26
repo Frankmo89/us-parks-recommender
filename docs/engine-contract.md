@@ -246,21 +246,20 @@ before/after metrics in `CHANGELOG.md` per `CLAUDE.md`.
 
 ## 5. How other apps consume the engine (planned)
 
-Not built yet. Target shape:
-
-1. **JSON export** — A build step emits a single artifact (or small set) with:
-   - Catalog rows needed to score (`park_code`, biomes, tags, ordinals,
-     `best_months`, crowd, remote, permit, budget, lat/lon, name, states)
-   - Weight constants and drive-model constants
-   - Biome / tag vocab and IDF table (or enough data to recompute IDF)
-   - `engine_version`
+1. **JSON export** — `python scripts/export_engine_data.py` writes
+   `web/engine_data.json` with catalog rows, weight / drive constants,
+   biome + tag vocab and IDF, ordinal maps, `engine_version`, and a
+   `content_hash` of `data/parks.csv`. CI regenerates the file and fails on
+   drift. Values come from the live Python engine, not a hand copy.
 2. **TypeScript port** — Pure functions: `recommend(profile, catalog, weights) → output`
    matching this contract. No Python runtime in the quiz/concierge path.
+   Not built yet; the export + fixture parity test are the contract to port against.
 3. **CI parity** — Load `data/engine_fixtures.json`, run the TS port on each of
    the 25 profiles, assert park order, scores, breakdown parts, drive hours
    (tolerance ~1e-6), and `tie_groups` match the Python snapshot.
 
-Until that lands, Python `ParkRecommender.recommend` remains the source of truth.
+Until the TypeScript port lands, Python `ParkRecommender.recommend` remains
+the source of truth.
 
 ---
 

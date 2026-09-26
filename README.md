@@ -77,6 +77,8 @@ data/parks.csv
 data/eval_profiles.json
 data/engine_fixtures.json
 docs/engine-contract.md
+web/engine_data.json
+scripts/export_engine_data.py
 src/features.py
 src/recommender.py
 src/evaluate.py
