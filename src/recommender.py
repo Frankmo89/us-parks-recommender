@@ -158,7 +158,13 @@ class ParkRecommender:
             - frame["month_penalty"]
         )
 
-        ranked = frame.sort_values("score", ascending=False).head(k).copy()
+        # Primary: score descending. Exact ties: park_code ascending (portable
+        # rule any client can replicate — not pandas quicksort internals).
+        ranked = frame.sort_values(
+            ["score", "park_code"],
+            ascending=[False, True],
+            kind="stable",
+        ).head(k).copy()
         ranked["why"] = ranked.apply(lambda row: self._why(row, profile), axis=1)
         ranked = ranked.reset_index(drop=True)
         ranked, tie_groups = annotate_ties(ranked)

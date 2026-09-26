@@ -20,5 +20,9 @@ jobs:
           pip install -e .
       - name: Tests
         run: pytest -q
+      - name: Engine data export drift
+        run: |
+          python scripts/export_engine_data.py
+          git diff --exit-code web/engine_data.json
       - name: Evaluate
         run: python -m src.evaluate

@@ -203,7 +203,9 @@ otherwise `null`. It is the same highway sketch used for the hard filter.
 
 1. **Determinism** — Same profile JSON (same catalog + weights + `engine_version`)
    produces the same ordered list, scores, and breakdown. No randomness, no
-   live NPS fetch, no time-of-day effects.
+   live NPS fetch, no time-of-day effects. Exact score ties are broken by
+   `park_code` ascending — a portable, documented rule any client can
+   replicate, not left to sort-algorithm internals.
 2. **Hard filters** — A returned park always satisfies:
    - `allow_remote=false` ⇒ `remote=0`
    - `allow_permits=false` ⇒ `permit_likely=0`
@@ -211,10 +213,9 @@ otherwise `null`. It is the same highway sketch used for the hard filter.
    Soft signals (month, crowds) never remove a park; they only change score.
 3. **Ties** — Parks whose scores differ by at most `tie_epsilon` (**0.001**
    absolute) are reported in `tie_groups` (on the result attrs) with
-   `tied_with_neighbors=True` on each member. Among ties, the engine keeps the
-   same park order the ranker already produced (stable sort, not a meaningful
-   preference). Consumers and the concierge must treat tied parks as
-   effectively equal (do not oversell tiny rank gaps).
+   `tied_with_neighbors=True` on each member. Ranking among exact ties follows
+   `park_code` ascending (see Determinism). Consumers and the concierge must
+   treat tied parks as effectively equal (do not oversell tiny rank gaps).
 
 Empty `parks` is a valid outcome when filters leave no candidates. Clients
 should ask the user to loosen drive radius, remote/permit flags, or constraints.
@@ -246,21 +247,20 @@ before/after metrics in `CHANGELOG.md` per `CLAUDE.md`.
 
 ## 5. How other apps consume the engine (planned)
 
-Not built yet. Target shape:
-
-1. **JSON export** — A build step emits a single artifact (or small set) with:
-   - Catalog rows needed to score (`park_code`, biomes, tags, ordinals,
-     `best_months`, crowd, remote, permit, budget, lat/lon, name, states)
-   - Weight constants and drive-model constants
-   - Biome / tag vocab and IDF table (or enough data to recompute IDF)
-   - `engine_version`
+1. **JSON export** — `python scripts/export_engine_data.py` writes
+   `web/engine_data.json` with catalog rows, weight / drive constants,
+   biome + tag vocab and IDF, ordinal maps, `engine_version`, and a
+   `content_hash` of `data/parks.csv`. CI regenerates the file and fails on
+   drift. Values come from the live Python engine, not a hand copy.
 2. **TypeScript port** — Pure functions: `recommend(profile, catalog, weights) → output`
    matching this contract. No Python runtime in the quiz/concierge path.
+   Not built yet; the export + fixture parity test are the contract to port against.
 3. **CI parity** — Load `data/engine_fixtures.json`, run the TS port on each of
    the 25 profiles, assert park order, scores, breakdown parts, drive hours
    (tolerance ~1e-6), and `tie_groups` match the Python snapshot.
 
-Until that lands, Python `ParkRecommender.recommend` remains the source of truth.
+Until the TypeScript port lands, Python `ParkRecommender.recommend` remains
+the source of truth.
 
 ---
 
