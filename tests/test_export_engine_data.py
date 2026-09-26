@@ -93,16 +93,17 @@ def recommend_from_export(data: dict, profile: dict, k: int = 5) -> dict:
 
     user_biomes = list(profile.get("biomes") or [])
     user_tags = list(profile.get("tags") or [])
-    difficulty = profile.get("difficulty", "easy")
-    days_needed = profile.get("days_needed", "2-3")
-    crowd_pref = profile.get("crowd_pref", "medium")
-    budget_tier = profile.get("budget_tier", "mid")
+    # Explicit null == omit → documented default (parity with validate_profile).
+    difficulty = profile.get("difficulty") if profile.get("difficulty") is not None else "easy"
+    days_needed = profile.get("days_needed") if profile.get("days_needed") is not None else "2-3"
+    crowd_pref = profile.get("crowd_pref") if profile.get("crowd_pref") is not None else "medium"
+    budget_tier = profile.get("budget_tier") if profile.get("budget_tier") is not None else "mid"
     month = profile.get("month")
     origin_lat = profile.get("origin_lat")
     origin_lon = profile.get("origin_lon")
     max_drive_hours = profile.get("max_drive_hours")
-    allow_remote = profile.get("allow_remote", True)
-    allow_permits = profile.get("allow_permits", True)
+    allow_remote = True if profile.get("allow_remote") is None else profile.get("allow_remote")
+    allow_permits = True if profile.get("allow_permits") is None else profile.get("allow_permits")
 
     user_vec = _l2_normalize(_content_vector(user_biomes, user_tags, data))
     days_u = float(ord_days[days_needed])
@@ -237,7 +238,7 @@ def test_export_has_required_keys(engine_data: dict):
 def test_export_json_only_matches_live_recommend_for_all_fixtures(
     engine_data: dict, fixtures: dict, live_model: ParkRecommender
 ):
-    assert len(fixtures["profiles"]) == 25
+    assert len(fixtures["profiles"]) == 26
     for item in fixtures["profiles"]:
         profile = {key: item["profile"][key] for key in PROFILE_FIELDS}
         live = live_model.recommend(UserProfile(**profile), k=fixtures["k"])

@@ -338,10 +338,13 @@ function normalizeProfile(profile: TripProfile): RequiredProfile {
   return {
     biomes: profile.biomes ?? [],
     tags: profile.tags ?? [],
+    // null/undefined on enums = omit → documented default (parity with Python).
     difficulty: profile.difficulty ?? "easy",
     days_needed: profile.days_needed ?? "2-3",
     crowd_pref: profile.crowd_pref ?? "medium",
     budget_tier: profile.budget_tier ?? "mid",
+    // month and max_drive_hours: null stays null ("no constraint"), never
+    // replaced with a numeric default — validateProfile checks the real value.
     month: profile.month ?? null,
     origin_lat: profile.origin_lat ?? null,
     origin_lon: profile.origin_lon ?? null,

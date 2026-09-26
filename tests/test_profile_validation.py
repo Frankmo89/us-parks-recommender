@@ -71,6 +71,33 @@ def test_unknown_biome_and_tag_do_not_raise():
     assert not ranked.empty
 
 
+@pytest.mark.parametrize(
+    "field,default",
+    [
+        ("difficulty", "easy"),
+        ("days_needed", "2-3"),
+        ("crowd_pref", "medium"),
+        ("budget_tier", "mid"),
+    ],
+)
+def test_enum_null_equals_omit(field, default):
+    """Explicit None on an enum field matches omitting it (documented default)."""
+    model = ParkRecommender()
+    base = {"biomes": ["desert"], "tags": ["hiking", "stargazing"], "month": 11}
+    omitted = UserProfile(**base)
+    with_null = UserProfile(**base, **{field: None})
+    validate_profile(omitted)
+    validate_profile(with_null)
+    assert getattr(with_null, field) == default
+    assert getattr(omitted, field) == default
+
+    a = model.recommend(UserProfile(**base), k=5)
+    b = model.recommend(UserProfile(**base, **{field: None}), k=5)
+    assert a["park_code"].tolist() == b["park_code"].tolist()
+    assert list(a["score"]) == pytest.approx(list(b["score"]), abs=1e-12)
+    assert a.attrs["tie_groups"] == b.attrs["tie_groups"]
+
+
 def test_valid_defaults_and_month_null_ok():
     validate_profile(UserProfile(biomes=[], tags=[]))
     validate_profile(UserProfile(biomes=["coast"], tags=["boat"], month=None))

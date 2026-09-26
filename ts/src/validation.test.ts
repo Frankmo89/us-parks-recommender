@@ -61,6 +61,41 @@ describe("InvalidProfileError", () => {
     expect(result.n_returned).toBeGreaterThan(0);
   });
 
+  test.each([
+    ["difficulty", "easy"],
+    ["days_needed", "2-3"],
+    ["crowd_pref", "medium"],
+    ["budget_tier", "mid"],
+  ] as const)("null on %s equals omit (default %s)", (field, _default) => {
+    const base = {
+      biomes: ["desert"],
+      tags: ["hiking", "stargazing"],
+      month: 11,
+    };
+    const omitted = recommend(engineData, base, 5);
+    const withNull = recommend(engineData, { ...base, [field]: null }, 5);
+    expect(withNull.parks.map((p) => p.facts.park_code)).toEqual(
+      omitted.parks.map((p) => p.facts.park_code),
+    );
+    for (let i = 0; i < omitted.parks.length; i++) {
+      expect(Math.abs(withNull.parks[i]!.score - omitted.parks[i]!.score)).toBeLessThanOrEqual(
+        1e-12,
+      );
+    }
+    expect(withNull.tie_groups).toEqual(omitted.tie_groups);
+  });
+
+  test("month null stays no-constraint (not defaulted to a month)", () => {
+    const result = recommend(engineData, {
+      biomes: ["canyon"],
+      tags: ["hiking"],
+      month: null,
+    });
+    for (const park of result.parks) {
+      expect(park.breakdown.month_penalty).toBe(0);
+    }
+  });
+
   test("hard filters never return violating parks", () => {
     const result = recommend(
       engineData,

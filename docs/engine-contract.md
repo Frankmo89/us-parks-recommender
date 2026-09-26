@@ -45,9 +45,16 @@ raise `InvalidProfileError` (Python) / `InvalidProfileError` (TypeScript) with
 the field name, the bad value, and the allowed set — never a bare `KeyError`
 or a silent `NaN` deep in the math.
 
+**Null vs omitted:** For fields with a documented default (`difficulty`,
+`days_needed`, `crowd_pref`, `budget_tier`), an explicit `null` / `None` is
+equivalent to omitting the field — the default is applied, then validation
+runs. Only a **non-null** value outside the enum (e.g. `"hard"`) raises.
+`month` and `max_drive_hours` already treat `null` as a valid "no constraint"
+value; that is unchanged.
+
 | Field | On bad input |
 |---|---|
-| `difficulty`, `days_needed`, `crowd_pref`, `budget_tier` | **Raise** if not in the allowed enum list |
+| `difficulty`, `days_needed`, `crowd_pref`, `budget_tier` | **Raise** if non-null and not in the allowed enum list; `null` → default |
 | `month` | **Raise** if not `null` and not an integer `1`–`12` |
 | `max_drive_hours` | **Raise** if set and not a positive number |
 | `biomes` entries outside biome vocab | **Silently ignored** in scoring (multi-hot miss) |
@@ -60,8 +67,9 @@ Example raise message:
 Invalid difficulty='hard'; allowed: ['easy', 'moderate', 'challenging']
 ```
 
-The concierge must get enums / month / drive hours right. It may send unknown
-activity tags or biomes; the engine will simply not match them.
+The concierge must get enums / month / drive hours right when it sends a
+concrete value. It may send unknown activity tags or biomes; the engine will
+simply not match them. Sending `null` on an enum field is fine (uses default).
 
 Optional top-level request fields (not part of the score input):
 
@@ -279,7 +287,7 @@ before/after metrics in `CHANGELOG.md` per `CLAUDE.md`.
    drift. Values come from the live Python engine, not a hand copy.
 2. **TypeScript port** — `ts/` loads `web/engine_data.json` at runtime and
    exposes `recommend(data, profile, k)`. Pure functions; no framework.
-   Vitest asserts all 25 fixture profiles against the Python snapshot.
+   Vitest asserts all 26 fixture profiles against the Python snapshot.
 3. **CI parity** — The `typescript` CI job runs `npm ci && npm test` in `ts/`.
    Fixture checks cover park order, scores, breakdown, drive hours, and
    `tie_groups`.

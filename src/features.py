@@ -78,6 +78,14 @@ DAYS_VALUES = tuple(DAYS_ORD.keys())
 CROWD_VALUES = tuple(CROWD_RANK.keys())
 BUDGET_VALUES = tuple(BUDGET_ORD.keys())
 
+# Explicit null/None on these fields means "not specified" — same as omit.
+ENUM_DEFAULTS = {
+    "difficulty": "easy",
+    "days_needed": "2-3",
+    "crowd_pref": "medium",
+    "budget_tier": "mid",
+}
+
 
 class InvalidProfileError(ValueError):
     """Profile field failed validation before scoring.
@@ -102,8 +110,14 @@ class InvalidProfileError(ValueError):
 def validate_profile(profile: UserProfile) -> None:
     """Raise InvalidProfileError if an enum / month / drive field is illegal.
 
+    Explicit None on difficulty / days_needed / crowd_pref / budget_tier means
+    "not specified" and is replaced with the documented default (same as omit).
     Unknown biomes and tags are intentionally not checked — scoring ignores them.
     """
+    for field, default in ENUM_DEFAULTS.items():
+        if getattr(profile, field) is None:
+            setattr(profile, field, default)
+
     _require_enum("difficulty", profile.difficulty, DIFFICULTY_VALUES)
     _require_enum("days_needed", profile.days_needed, DAYS_VALUES)
     _require_enum("crowd_pref", profile.crowd_pref, CROWD_VALUES)
@@ -232,10 +246,10 @@ def drive_hours(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 class UserProfile:
     biomes: list[str]
     tags: list[str]
-    difficulty: str = "easy"
-    days_needed: str = "2-3"
-    crowd_pref: str = "medium"
-    budget_tier: str = "mid"
+    difficulty: str | None = "easy"
+    days_needed: str | None = "2-3"
+    crowd_pref: str | None = "medium"
+    budget_tier: str | None = "mid"
     month: int | None = None
     origin_lat: float | None = None
     origin_lon: float | None = None
