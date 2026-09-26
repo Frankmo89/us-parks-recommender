@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-09-26 — engine_version 0.1.0 → 0.2.0 (retroactive)
+
+- Bumped `engine_version` to `0.2.0` in `pyproject.toml`, `ts/package.json`
+  (+ lockfile root), every stamp in `data/engine_fixtures.json`, the
+  regenerated `web/engine_data.json`, and `docs/engine-contract.md`.
+- Why: `0.1.0` was stamped when the contract landed (PR #5) but stayed in
+  place through two changes that `docs/engine-contract.md` §4 says must bump
+  the version, so one version string described two different pinned
+  behaviors. This bump retroactively covers:
+  - PR #7 — portable `park_code` tie-break changed park order for
+    `empty_content_defaults` (`havo,viis,thro` → `care,havo,lavo` in the 0.36
+    tier) and its `tie_groups`.
+  - PR #9 — explicit `null` on `difficulty` / `days_needed` / `crowd_pref` /
+    `budget_tier` now applies the documented default instead of raising, and
+    a new pinned profile `null_enum_fields_use_defaults` (25 → 26 fixtures).
+- Done before any consumer pins a commit, so the first pin starts from an
+  honest version number. No scoring, catalog, or fixture-content change in
+  this entry; metrics unchanged: train 0.708 / 0.764, holdout 0.794 / 0.813.
+
 ## 2026-09-26 — CI enforces engine_version bump on fixture changes
 
 - Added `scripts/check_engine_version_bump.py` and an `engine-version` CI job
