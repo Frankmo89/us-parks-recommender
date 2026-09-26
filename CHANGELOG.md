@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-26 — Streamlit Cloud install
+
+- `requirements.txt` ends with `-e .` so Streamlit Cloud's
+  `pip install -r requirements.txt` also installs the local package from
+  `pyproject.toml` (app/ and src/ importable). No scoring change.
+
 ## 2026-09-26 — README metrics and pinned-test hardening
 
 - README Metrics table set to train 0.708 / 0.764 and holdout 0.794 / 0.813.
