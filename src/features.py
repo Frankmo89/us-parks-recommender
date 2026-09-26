@@ -73,6 +73,72 @@ DIFF_ORD = {"easy": 0.0, "moderate": 1.0, "challenging": 2.0}
 BUDGET_ORD = {"low": 0.0, "mid": 1.0, "high": 2.0}
 CROWD_RANK = {"low": 0, "medium": 1, "high": 2}
 
+DIFFICULTY_VALUES = tuple(DIFF_ORD.keys())
+DAYS_VALUES = tuple(DAYS_ORD.keys())
+CROWD_VALUES = tuple(CROWD_RANK.keys())
+BUDGET_VALUES = tuple(BUDGET_ORD.keys())
+
+
+class InvalidProfileError(ValueError):
+    """Profile field failed validation before scoring.
+
+    Attributes:
+        field: Name of the bad field (e.g. ``difficulty``).
+        value: The rejected value.
+        allowed: Human-readable allowed set, or None.
+    """
+
+    def __init__(self, field: str, value: object, allowed: object | None = None) -> None:
+        self.field = field
+        self.value = value
+        self.allowed = allowed
+        if allowed is None:
+            msg = f"Invalid {field}={value!r}"
+        else:
+            msg = f"Invalid {field}={value!r}; allowed: {allowed}"
+        super().__init__(msg)
+
+
+def validate_profile(profile: UserProfile) -> None:
+    """Raise InvalidProfileError if an enum / month / drive field is illegal.
+
+    Unknown biomes and tags are intentionally not checked — scoring ignores them.
+    """
+    _require_enum("difficulty", profile.difficulty, DIFFICULTY_VALUES)
+    _require_enum("days_needed", profile.days_needed, DAYS_VALUES)
+    _require_enum("crowd_pref", profile.crowd_pref, CROWD_VALUES)
+    _require_enum("budget_tier", profile.budget_tier, BUDGET_VALUES)
+
+    month = profile.month
+    if month is not None:
+        if type(month) is not int or not (1 <= month <= 12):
+            raise InvalidProfileError(
+                "month",
+                month,
+                allowed="null or integer 1-12",
+            )
+
+    max_hours = profile.max_drive_hours
+    if max_hours is not None:
+        if isinstance(max_hours, bool) or not isinstance(max_hours, (int, float)):
+            raise InvalidProfileError(
+                "max_drive_hours",
+                max_hours,
+                allowed="null or a positive number",
+            )
+        if not (max_hours > 0) or max_hours != max_hours:  # NaN check
+            raise InvalidProfileError(
+                "max_drive_hours",
+                max_hours,
+                allowed="null or a positive number",
+            )
+
+
+def _require_enum(field: str, value: object, allowed: tuple[str, ...]) -> None:
+    if value not in allowed:
+        raise InvalidProfileError(field, value, allowed=list(allowed))
+
+
 # Great-circle miles * detour / highway speed.
 # 65 mph and 1.25 detour ~= 52 mph over the crow-flies distance.
 DRIVE_DETOUR = 1.25

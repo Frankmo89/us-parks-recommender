@@ -38,6 +38,31 @@ Python today; consumers should not send them.
 `biomes` and `tags` may be empty arrays. Ordinal / filter fields may be omitted;
 the engine applies the defaults above.
 
+### Validation: raise vs ignore
+
+Before scoring, the engine validates enum and numeric constraints. Bad values
+raise `InvalidProfileError` (Python) / `InvalidProfileError` (TypeScript) with
+the field name, the bad value, and the allowed set — never a bare `KeyError`
+or a silent `NaN` deep in the math.
+
+| Field | On bad input |
+|---|---|
+| `difficulty`, `days_needed`, `crowd_pref`, `budget_tier` | **Raise** if not in the allowed enum list |
+| `month` | **Raise** if not `null` and not an integer `1`–`12` |
+| `max_drive_hours` | **Raise** if set and not a positive number |
+| `biomes` entries outside biome vocab | **Silently ignored** in scoring (multi-hot miss) |
+| `tags` entries outside tag vocab | **Silently ignored** in scoring (multi-hot miss) |
+| Unknown top-level keys | **Ignored** by Python today; do not send them |
+
+Example raise message:
+
+```text
+Invalid difficulty='hard'; allowed: ['easy', 'moderate', 'challenging']
+```
+
+The concierge must get enums / month / drive hours right. It may send unknown
+activity tags or biomes; the engine will simply not match them.
+
 Optional top-level request fields (not part of the score input):
 
 | Field | Type | Default | Notes |

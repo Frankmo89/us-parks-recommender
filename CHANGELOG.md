@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-09-26 — profile input validation
+
+- Hypothesis: out-of-enum profile fields (e.g. `difficulty="hard"`) crashed with
+  an unhandled `KeyError`; an LLM concierge will plausibly hallucinate values
+  outside the documented vocab and needs a clear typed failure.
+- Added `InvalidProfileError` + `validate_profile()` for enums, `month` (null or
+  1–12), and positive `max_drive_hours`. Unknown biomes/tags stay silently
+  ignored. Same validation in `ts/src/engine.ts`.
+- Hard-filter property tests + invalid/silent-ignore cases. Contract §1
+  documents raise vs ignore. Bumped Vitest to clear moderate npm advisories.
+- Metrics unchanged (validation only; scoring path untouched for valid input).
+
 ## 2026-09-26 — TypeScript engine port with fixture parity
 
 - Added `ts/`: pure TypeScript port of `ParkRecommender.recommend()` that loads
