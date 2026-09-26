@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-09-26 — TypeScript engine port with fixture parity
+
+- Added `ts/`: pure TypeScript port of `ParkRecommender.recommend()` that loads
+  all constants from `web/engine_data.json` at runtime (no hardcoded catalog,
+  weights, or vocab). Output matches `docs/engine-contract.md` §2.
+- Vitest parity: all 25 `data/engine_fixtures.json` profiles — park order,
+  scores/breakdown within 1e-6, match_percent, drive_hours, tie_groups.
+- CI: Node job runs `npm ci` + `npm test` in `ts/` alongside the Python job.
+- No Python scoring/data changes; metrics unchanged.
+
 ## 2026-09-26 — portable park_code tie-break
 
 - Hypothesis: pandas `sort_values` defaults to unstable quicksort, so exact
