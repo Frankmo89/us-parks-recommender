@@ -203,7 +203,9 @@ otherwise `null`. It is the same highway sketch used for the hard filter.
 
 1. **Determinism** — Same profile JSON (same catalog + weights + `engine_version`)
    produces the same ordered list, scores, and breakdown. No randomness, no
-   live NPS fetch, no time-of-day effects.
+   live NPS fetch, no time-of-day effects. Exact score ties are broken by
+   `park_code` ascending — a portable, documented rule any client can
+   replicate, not left to sort-algorithm internals.
 2. **Hard filters** — A returned park always satisfies:
    - `allow_remote=false` ⇒ `remote=0`
    - `allow_permits=false` ⇒ `permit_likely=0`
@@ -211,10 +213,9 @@ otherwise `null`. It is the same highway sketch used for the hard filter.
    Soft signals (month, crowds) never remove a park; they only change score.
 3. **Ties** — Parks whose scores differ by at most `tie_epsilon` (**0.001**
    absolute) are reported in `tie_groups` (on the result attrs) with
-   `tied_with_neighbors=True` on each member. Among ties, the engine keeps the
-   same park order the ranker already produced (stable sort, not a meaningful
-   preference). Consumers and the concierge must treat tied parks as
-   effectively equal (do not oversell tiny rank gaps).
+   `tied_with_neighbors=True` on each member. Ranking among exact ties follows
+   `park_code` ascending (see Determinism). Consumers and the concierge must
+   treat tied parks as effectively equal (do not oversell tiny rank gaps).
 
 Empty `parks` is a valid outcome when filters leave no candidates. Clients
 should ask the user to loosen drive radius, remote/permit flags, or constraints.

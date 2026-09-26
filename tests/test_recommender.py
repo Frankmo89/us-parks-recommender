@@ -157,11 +157,12 @@ def test_tie_groups_cuva_acad_near_tie():
 
 
 def test_tie_groups_empty_content_defaults_two_groups():
-    """empty_content_defaults: ever/redw and havo/viis/thro."""
+    """empty_content_defaults: ever/redw and care/havo/lavo (park_code asc)."""
     ranked = ParkRecommender().recommend(_profile_from_fixture("empty_content_defaults"), k=5)
-    assert ranked.attrs["tie_groups"] == [["ever", "redw"], ["havo", "viis", "thro"]]
+    assert ranked["park_code"].tolist() == ["ever", "redw", "care", "havo", "lavo"]
+    assert ranked.attrs["tie_groups"] == [["ever", "redw"], ["care", "havo", "lavo"]]
     tied = set(ranked.loc[ranked["tied_with_neighbors"], "park_code"])
-    assert tied == {"ever", "redw", "havo", "viis", "thro"}
+    assert tied == {"ever", "redw", "care", "havo", "lavo"}
 
 
 def test_tie_groups_empty_when_no_ties():

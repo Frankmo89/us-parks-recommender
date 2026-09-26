@@ -11,7 +11,6 @@ import json
 import math
 from pathlib import Path
 
-import pandas as pd
 import pytest
 
 from src.evaluate import PROFILE_FIELDS
@@ -169,12 +168,10 @@ def recommend_from_export(data: dict, profile: dict, k: int = 5) -> dict:
     if not candidates:
         return {"parks": [], "tie_groups": []}
 
-    # Same sort as ParkRecommender.recommend(): pandas sort_values default
-    # (unstable quicksort). A pure stable sort would reshuffle exact ties and
-    # diverge from live output / engine_fixtures.json.
-    frame = pd.DataFrame(candidates)
-    ranked_frame = frame.sort_values("score", ascending=False).head(k).reset_index(drop=True)
-    ranked = ranked_frame.to_dict(orient="records")
+    # Portable tie-break matching the engine contract: score desc, then
+    # park_code asc. Do not call pandas.sort_values — re-derive independently.
+    candidates.sort(key=lambda row: (-float(row["score"]), str(row["park_code"])))
+    ranked = candidates[:k]
 
     tie_epsilon = float(w["TIE_EPSILON"])
     tie_groups: list[list[str]] = []

@@ -5169,9 +5169,9 @@
             "redw"
           ],
           [
+            "care",
             "havo",
-            "viis",
-            "thro"
+            "lavo"
           ]
         ],
         "parks": [
@@ -5303,6 +5303,58 @@
               }
             },
             "facts": {
+              "park_code": "care",
+              "name": "Capitol Reef National Park",
+              "states": "UT",
+              "biomes": [
+                "canyon",
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "stargazing"
+              ],
+              "difficulty": "easy",
+              "days_needed": "2-3",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "4",
+                "5",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "nps_url": "https://www.nps.gov/care/",
+              "why": "canyon \u00b7 desert \u00b7 2-3 day trip",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 4,
+            "score": 0.36,
+            "match_percent": 38,
+            "tied_with_neighbors": true,
+            "breakdown": {
+              "content": 0.0,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 0.5,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.0,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.04,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
               "park_code": "havo",
               "name": "Hawaii Volcanoes National Park",
               "states": "HI",
@@ -5341,59 +5393,6 @@
             }
           },
           {
-            "rank": 4,
-            "score": 0.36,
-            "match_percent": 38,
-            "tied_with_neighbors": true,
-            "breakdown": {
-              "content": 0.0,
-              "days": 1.0,
-              "difficulty": 1.0,
-              "budget": 0.5,
-              "crowd_penalty": 0.0,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.0,
-                "days": 0.18,
-                "difficulty": 0.14,
-                "budget": 0.04,
-                "crowd_penalty": 0.0,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "viis",
-              "name": "Virgin Islands National Park",
-              "states": "VI",
-              "biomes": [
-                "coast"
-              ],
-              "tags": [
-                "water",
-                "hiking",
-                "family",
-                "snorkeling",
-                "beach"
-              ],
-              "difficulty": "easy",
-              "days_needed": "2-3",
-              "crowd": "medium",
-              "budget_tier": "high",
-              "best_months": [
-                "12",
-                "1",
-                "2",
-                "3",
-                "4"
-              ],
-              "remote": true,
-              "permit_likely": false,
-              "nps_url": "https://www.nps.gov/viis/",
-              "why": "coast \u00b7 2-3 day trip",
-              "drive_hours": null
-            }
-          },
-          {
             "rank": 5,
             "score": 0.36,
             "match_percent": 38,
@@ -5415,32 +5414,32 @@
               }
             },
             "facts": {
-              "park_code": "thro",
-              "name": "Theodore Roosevelt National Park",
-              "states": "ND",
+              "park_code": "lavo",
+              "name": "Lassen Volcanic National Park",
+              "states": "CA",
               "biomes": [
-                "prairie"
+                "volcano",
+                "forest"
               ],
               "tags": [
                 "hiking",
-                "wildlife",
-                "scenic_drive",
                 "family",
-                "low_crowd"
+                "scenic_drive",
+                "camping"
               ],
               "difficulty": "easy",
               "days_needed": "2-3",
               "crowd": "low",
               "budget_tier": "low",
               "best_months": [
-                "5",
-                "6",
+                "7",
+                "8",
                 "9"
               ],
               "remote": false,
               "permit_likely": false,
-              "nps_url": "https://www.nps.gov/thro/",
-              "why": "prairie \u00b7 2-3 day trip \u00b7 low crowds",
+              "nps_url": "https://www.nps.gov/lavo/",
+              "why": "volcano \u00b7 forest \u00b7 2-3 day trip \u00b7 low crowds",
               "drive_hours": null
             }
           }

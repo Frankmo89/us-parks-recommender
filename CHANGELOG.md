@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-09-26 — portable park_code tie-break
+
+- Hypothesis: pandas `sort_values` defaults to unstable quicksort, so exact
+  score ties resolve by an undocumented algorithm detail instead of a portable
+  rule (confirmed on `empty_content_defaults`: care/havo/lavo/thro/viis at
+  0.36 ordered `havo,viis,thro,lavo,care` — not catalog order).
+- `ParkRecommender.recommend()` now sorts by score desc, then `park_code` asc
+  (`kind="stable"`). Scores, hard filters, and non-tied rankings unchanged.
+- Regenerated `data/engine_fixtures.json`. `empty_content_defaults` top-5
+  `havo,viis,thro` → `care,havo,lavo` among the 0.36 tier; other exact-tie
+  profiles (`gaar`/`kova`) already matched alphabetical order.
+- Export JSON-only test re-derives order independently (no pandas sort mirror).
+- Contract §3 Determinism documents the `park_code` ascending tie-break.
+- Metrics unchanged: train 0.708 / 0.764, holdout 0.794 / 0.813.
+
 ## 2026-09-26 — engine data export for non-Python consumers
 
 - Added `scripts/export_engine_data.py` → `web/engine_data.json`: catalog,
