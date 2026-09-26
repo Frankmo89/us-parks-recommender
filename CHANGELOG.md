@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-09-26 — multi-biome catalog
+
+- Hypothesis: a single biome column drops real matches (Yellowstone is alpine
+  and forest, but a forest trip never scores the forest half).
+- Renamed `biome` → `biomes` (pipe-separated). Parks keep one biome or get a
+  clearly secondary one (e.g. yell `alpine|forest`); no padding.
+- Content vectors pass the full biome list into the existing multi-hot.
+  Catalog validation checks every listed biome. Terrain picker options come
+  from every token across parks.
+- Crossover (forest / hiking / wildlife / scenic_drive / 4–7 days / July):
+  Yellowstone **#12 → #9**, content **0.163 → 0.322**.
+- Metrics before → after (on top of soft month W=0.35):
+  - train: R-Prec **0.729 → 0.708**, nDCG@5 **0.765 → 0.764**
+  - holdout: R-Prec **0.794 → 0.794**, nDCG@5 **0.808 → 0.813**
+
 ## 2026-09-25 — soft month penalty
 
 - Hypothesis: a hard month filter drops otherwise-good parks; a soft circular

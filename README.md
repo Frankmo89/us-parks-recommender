@@ -57,8 +57,8 @@ revised once on 2026-09-21. Weights were not retuned after that pass.
 
 | Split | n | R-Precision | nDCG@5 |
 |---|---|---|---|
-| Train | 12 | 0.729 | 0.765 |
-| Holdout | 6 | 0.794 | 0.808 |
+| Train | 12 | 0.708 | 0.764 |
+| Holdout | 6 | 0.794 | 0.813 |
 
 See `CHANGELOG.md` for the 50 mph drive bug. Those older figures are retired.
 

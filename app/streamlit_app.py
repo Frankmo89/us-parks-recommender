@@ -4,7 +4,7 @@ import streamlit as st
 
 from app.breakdown import PART_ORDER, match_percent, nps_url, score_breakdown, why_sentence
 from src.evaluate import run as run_evaluation
-from src.features import DRIVE_DETOUR, DRIVE_MPH, UserProfile
+from src.features import DRIVE_DETOUR, DRIVE_MPH, UserProfile, parse_biomes
 from src.origins import ORIGINS
 from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, W_MONTH_PENALTY, ParkRecommender
 
@@ -62,11 +62,16 @@ BIOME_LABELS = {
 
 
 def catalog_terrains(parks: pd.DataFrame) -> list[tuple[str, str]]:
-    """Biome picker options from the loaded catalog — never a hardcoded subset."""
-    codes = sorted({str(biome) for biome in parks["biome"].dropna().unique()})
+    """Biome picker options from the loaded catalog — never a hardcoded subset.
+
+    Collects every biome token across parks (a park may list several).
+    """
+    codes: set[str] = set()
+    for raw in parks["biomes"].dropna():
+        codes.update(parse_biomes(raw))
     return [
         (code, BIOME_LABELS.get(code, code.replace("_", " ").title()))
-        for code in codes
+        for code in sorted(codes)
     ]
 VIBES = [
     ("hiking", "Hiking"),

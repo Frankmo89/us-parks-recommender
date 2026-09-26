@@ -1,5 +1,5 @@
 from src.evaluate import ndcg_at_k, r_precision
-from src.features import UserProfile, closeness, drive_hours, month_distance
+from src.features import UserProfile, closeness, drive_hours, month_distance, parse_biomes
 from src.recommender import ParkRecommender
 
 
@@ -30,7 +30,7 @@ def test_desert_profile_returns_desert_parks():
         k=5,
     )
     assert not ranked.empty
-    assert "desert" in set(ranked["biome"])
+    assert any("desert" in parse_biomes(raw) for raw in ranked["biomes"])
 
 
 def test_month_is_a_soft_penalty_not_a_hard_filter():

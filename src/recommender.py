@@ -16,6 +16,7 @@ from .features import (
     closeness,
     drive_hours,
     month_distance,
+    parse_biomes,
     parse_tags,
     park_content_vector,
     tag_idf,
@@ -141,7 +142,7 @@ class ParkRecommender:
         return frame
 
     def _why(self, row: pd.Series, profile: UserProfile) -> str:
-        bits = [str(row["biome"])]
+        bits = list(parse_biomes(row["biomes"]))
         park_tags = set(parse_tags(row["tags"]))
         bits.extend([tag for tag in profile.tags if tag in park_tags][:3])
         if profile.days_needed == row["days_needed"]:
