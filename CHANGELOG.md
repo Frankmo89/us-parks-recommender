@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-26 — README metrics and pinned-test hardening
+
+- README Metrics table set to train 0.708 / 0.764 and holdout 0.794 / 0.813.
+  Month described as a soft penalty; score formula uses live
+  `W_MONTH_PENALTY` (0.35). No scoring change.
+- `tests/test_metrics_pinned.py` parses the README Metrics table instead of
+  hardcoded constants, so README ↔ evaluate drift fails with a clear message.
+
 ## 2026-09-26 — multi-biome catalog
 
 - Hypothesis: a single biome column drops real matches (Yellowstone is alpine

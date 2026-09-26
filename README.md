@@ -5,8 +5,9 @@ Content-based recommender for the **63 U.S. National Parks**.
 A trip profile (terrain, days, crowds, month, driving radius) is scored against
 every park. Content overlap uses cosine similarity on biome + **IDF-weighted**
 activity tags. Trip length, difficulty and budget use closeness
-(`1 − |Δ| / max`). Crowds and off-season travel are penalties. Remote parks and
-permits are hard filters.
+(`1 − |Δ| / max`). Crowds are a penalty. Month is a soft circular penalty on
+distance to `best_months` (not a hard filter). Remote parks and permits are
+hard filters.
 
 The catalog is the official set of 63 national parks with structured tags.
 This repo does not copy editorial content from any product site.
@@ -22,6 +23,8 @@ score = 0.55 * cosine(biome + IDF(tags))
       − 0.35 * (month_distance / 6)
 ```
 
+The last term is `W_MONTH_PENALTY * (month_distance / 6)` with
+`W_MONTH_PENALTY=0.35` from `src/recommender.py`.
 `month_distance` is the circular months to the nearest `best_months` entry
 (December wraps to January). Max distance is 6. Remote parks and permits stay
 hard filters.
