@@ -75,6 +75,8 @@ data fix, not a label tweak.
 ```
 data/parks.csv
 data/eval_profiles.json
+data/engine_fixtures.json
+docs/engine-contract.md
 src/features.py
 src/recommender.py
 src/evaluate.py

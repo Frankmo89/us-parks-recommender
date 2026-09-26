@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-09-26 — engine contract and parity fixtures
+
+- Added `docs/engine-contract.md`: trip-profile input schema, ranked output
+  (score, breakdown, drive hours, quotable facts), determinism / hard-filter /
+  tie guarantees, `engine_version`, planned JSON export + TypeScript port with
+  CI parity, concierge tool rules, and trail-level out of scope. No scoring
+  change.
+- Added `data/engine_fixtures.json`: 25 profiles (18 eval + 7 edge cases) with
+  the current Python `ParkRecommender` output for a future port parity test.
+
 ## 2026-09-26 — Streamlit Cloud install
 
 - `requirements.txt` ends with `-e .` so Streamlit Cloud's
