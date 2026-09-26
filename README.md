@@ -79,6 +79,7 @@ data/engine_fixtures.json
 docs/engine-contract.md
 web/engine_data.json
 scripts/export_engine_data.py
+scripts/check_engine_version_bump.py
 ts/
 src/features.py
 src/recommender.py

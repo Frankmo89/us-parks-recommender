@@ -243,6 +243,13 @@ should ask the user to loosen drive radius, remote/permit flags, or constraints.
 Any breaking change regenerates `data/engine_fixtures.json` and records
 before/after metrics in `CHANGELOG.md` per `CLAUDE.md`.
 
+CI enforces this: the `engine-version` job runs
+`scripts/check_engine_version_bump.py`, which compares
+`data/engine_fixtures.json` (everything except its own `engine_version`
+stamps and `notes`) against the PR's base branch. If the fixtures differ,
+`pyproject.toml`'s version must differ too. The fixture stamps must equal the
+`pyproject.toml` version.
+
 ---
 
 ## 5. How other apps consume the engine (planned)
