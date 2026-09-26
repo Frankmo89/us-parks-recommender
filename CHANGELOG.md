@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-09-26 — CI enforces engine_version bump on fixture changes
+
+- Added `scripts/check_engine_version_bump.py` and an `engine-version` CI job
+  (pull requests only). It compares `data/engine_fixtures.json` between the PR
+  and its base branch, ignoring only the file's own `engine_version` stamps and
+  prose `notes`. If park order, scores, breakdown, facts, tie_groups, weights,
+  `tie_epsilon`, `k`, or the set of pinned profiles (added/removed) differ,
+  `pyproject.toml` `[project].version` must also differ, or the job fails
+  pointing to `docs/engine-contract.md` §4. Identical fixtures need no bump.
+  The fixture stamps must also equal the pyproject version, so a bump cannot
+  leave the parity file on the old number.
+- Why: §4 had no enforcement. Run retroactively, the check fails PR #7
+  (`empty_content_defaults` order `havo,viis,thro` → `care,havo,lavo`) and
+  PR #9 (added profile `null_enum_fields_use_defaults`), and passes #6 and #8.
+- No scoring/data changes; metrics unchanged: train 0.708 / 0.764, holdout
+  0.794 / 0.813.
+
 ## 2026-09-26 — enum null equals omit (parity)
 
 - Found: `crowd_pref=None` raised in Python while `crowd_pref=null` used the
