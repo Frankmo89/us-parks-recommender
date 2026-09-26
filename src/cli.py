@@ -60,7 +60,7 @@ def main() -> None:
             print(
                 f"   content={row['content']:.2f} days={row['days_fit']:.2f} "
                 f"diff={row['diff_fit']:.2f} budget={row['budget_fit']:.2f} "
-                f"crowd_pen={row['crowd_penalty']:.2f}"
+                f"crowd_pen={row['crowd_penalty']:.2f} month_pen={row['month_penalty']:.2f}"
             )
 
 

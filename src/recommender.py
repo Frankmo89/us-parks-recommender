@@ -1,4 +1,4 @@
-"""Hybrid ranker: cosine on content + closeness on ordinals + crowd penalty."""
+"""Hybrid ranker: cosine on content + closeness on ordinals + penalties."""
 
 from __future__ import annotations
 
@@ -15,7 +15,8 @@ from .features import (
     UserProfile,
     closeness,
     drive_hours,
-    parse_months,
+    month_distance,
+    parse_biomes,
     parse_tags,
     park_content_vector,
     tag_idf,
@@ -30,6 +31,12 @@ W_DAYS = 0.18
 W_DIFF = 0.14
 W_BUDGET = 0.08
 CROWD_PENALTY = 0.12
+# Soft season penalty: (circular month distance / 6) * W_MONTH_PENALTY.
+# 0.35: max 6-month penalty ≈ 0.35 < W_CONTENT (0.55), so a near-perfect
+# off-season content match can beat a weak in-season park; a 2-month miss
+# costs ≈0.117. Chosen so content can win against a moderate season mismatch.
+W_MONTH_PENALTY = 0.35
+MONTH_DISTANCE_MAX = 6.0
 
 
 def _l2_normalize(matrix: np.ndarray) -> np.ndarray:
@@ -82,18 +89,31 @@ class ParkRecommender:
         crowd_p = frame["crowd"].map(CROWD_RANK).astype(float)
         penalty = (crowd_p - crowd_u).clip(lower=0) * CROWD_PENALTY
 
+        if profile.month is None:
+            month_pen = np.zeros(len(frame), dtype=float)
+        else:
+            month_pen = (
+                frame["best_months"]
+                .fillna("")
+                .map(lambda raw: month_distance(profile.month, raw) / MONTH_DISTANCE_MAX)
+                .to_numpy(dtype=float)
+                * W_MONTH_PENALTY
+            )
+
         frame = frame.copy()
         frame["content"] = content
         frame["days_fit"] = days_s.to_numpy()
         frame["diff_fit"] = diff_s.to_numpy()
         frame["budget_fit"] = budget_s.to_numpy()
         frame["crowd_penalty"] = penalty.to_numpy()
+        frame["month_penalty"] = month_pen
         frame["score"] = (
             W_CONTENT * frame["content"]
             + W_DAYS * frame["days_fit"]
             + W_DIFF * frame["diff_fit"]
             + W_BUDGET * frame["budget_fit"]
             - frame["crowd_penalty"]
+            - frame["month_penalty"]
         )
 
         ranked = frame.sort_values("score", ascending=False).head(k).copy()
@@ -102,10 +122,6 @@ class ParkRecommender:
 
     def _filtered(self, profile: UserProfile) -> pd.DataFrame:
         frame = self.parks.copy()
-        if profile.month is not None:
-            month = str(profile.month)
-            keep = frame["best_months"].fillna("").map(lambda raw: month in parse_months(raw))
-            frame = frame.loc[keep]
         if not profile.allow_remote:
             frame = frame.loc[frame["remote"] == 0]
         if not profile.allow_permits:
@@ -126,7 +142,7 @@ class ParkRecommender:
         return frame
 
     def _why(self, row: pd.Series, profile: UserProfile) -> str:
-        bits = [str(row["biome"])]
+        bits = list(parse_biomes(row["biomes"]))
         park_tags = set(parse_tags(row["tags"]))
         bits.extend([tag for tag in profile.tags if tag in park_tags][:3])
         if profile.days_needed == row["days_needed"]:

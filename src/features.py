@@ -83,8 +83,30 @@ def parse_tags(raw: str) -> list[str]:
     return [part.strip() for part in str(raw).split("|") if part.strip()]
 
 
+def parse_biomes(raw: str) -> list[str]:
+    """Pipe-separated biomes from parks.csv (one or more)."""
+    return [part.strip() for part in str(raw).split("|") if part.strip()]
+
+
 def parse_months(raw: str) -> set[str]:
     return {part.strip() for part in str(raw).split(",") if part.strip()}
+
+
+def month_distance(requested: int, best_months: str | set[str]) -> int:
+    """Min months from requested to the nearest best month (Dec wraps to Jan).
+
+    Farthest possible on a 12-month circle is 6. Empty best_months → 6.
+    """
+    months = parse_months(best_months) if isinstance(best_months, str) else set(best_months)
+    if not months:
+        return 6
+    req = int(requested)
+    best = 6
+    for token in months:
+        other = int(token)
+        delta = abs(req - other) % 12
+        best = min(best, min(delta, 12 - delta))
+    return best
 
 
 def tag_idf(tag_series: pd.Series) -> np.ndarray:
@@ -119,7 +141,7 @@ def content_vector_from_parts(
 
 
 def park_content_vector(row: pd.Series, idf: np.ndarray | None = None) -> np.ndarray:
-    return content_vector_from_parts([str(row["biome"])], parse_tags(row["tags"]), idf=idf)
+    return content_vector_from_parts(parse_biomes(row["biomes"]), parse_tags(row["tags"]), idf=idf)
 
 
 def closeness(park_level: float, user_level: float, span: float) -> float:

@@ -5,8 +5,9 @@ Content-based recommender for the **63 U.S. National Parks**.
 A trip profile (terrain, days, crowds, month, driving radius) is scored against
 every park. Content overlap uses cosine similarity on biome + **IDF-weighted**
 activity tags. Trip length, difficulty and budget use closeness
-(`1 − |Δ| / max`). Crowds are a penalty only. Season, remote parks and permits
-are hard filters.
+(`1 − |Δ| / max`). Crowds are a penalty. Month is a soft circular penalty on
+distance to `best_months` (not a hard filter). Remote parks and permits are
+hard filters.
 
 The catalog is the official set of 63 national parks with structured tags.
 This repo does not copy editorial content from any product site.
@@ -19,7 +20,14 @@ score = 0.55 * cosine(biome + IDF(tags))
       + 0.14 * difficulty_closeness
       + 0.08 * budget_closeness
       − 0.12 * max(0, park_crowd − wanted_crowd)
+      − 0.35 * (month_distance / 6)
 ```
+
+The last term is `W_MONTH_PENALTY * (month_distance / 6)` with
+`W_MONTH_PENALTY=0.35` from `src/recommender.py`.
+`month_distance` is the circular months to the nearest `best_months` entry
+(December wraps to January). Max distance is 6. Remote parks and permits stay
+hard filters.
 
 Drive time is `great_circle_miles × 1.25 / 65 mph`. That is a highway sketch,
 not Google Maps. `permit_likely` is a coarse 2026-09 snapshot and will go stale.
@@ -52,8 +60,8 @@ revised once on 2026-09-21. Weights were not retuned after that pass.
 
 | Split | n | R-Precision | nDCG@5 |
 |---|---|---|---|
-| Train | 12 | 0.804 | 0.838 |
-| Holdout | 6 | 0.794 | 0.820 |
+| Train | 12 | 0.708 | 0.764 |
+| Holdout | 6 | 0.794 | 0.813 |
 
 See `CHANGELOG.md` for the 50 mph drive bug. Those older figures are retired.
 
