@@ -153,6 +153,12 @@ def inject_base_css() -> None:
           .quiz-sub { position: relative; z-index: 2; color: #d7cbb3; margin-bottom: 1.2rem; }
           .quiz-hint { position: relative; z-index: 2; color: #cfe8d9; font-size: .82rem; margin: .5rem 0 .9rem; }
           .quiz-hint-warn { color: #f4b56a; font-weight: 600; }
+          .live-demo-link {
+            position: relative; z-index: 2; display: block; text-align: center;
+            margin-top: .85rem; color: #e8d9b8; font-size: .85rem;
+            text-decoration: underline; text-underline-offset: .18em;
+          }
+          .live-demo-link:hover { color: #f7f1e4; }
           .st-key-app_shell {
             position: relative; z-index: 2; max-width: 760px; margin: 0 auto;
             padding: 2.4rem 1rem 3rem;
@@ -451,6 +457,11 @@ with st.container(key="app_shell"):
                 go("terrain")
             if st.button("How it works", type="tertiary", width="stretch"):
                 open_how_it_works()
+            st.markdown(
+                '<a class="live-demo-link" href="https://us-national-parks-recommender.streamlit.app" '
+                'target="_blank" rel="noopener noreferrer">Live demo</a>',
+                unsafe_allow_html=True,
+            )
 
         elif step == "terrain":
             st.markdown(

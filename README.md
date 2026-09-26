@@ -1,5 +1,7 @@
 # US Parks Recommender
 
+**Live demo:** https://us-national-parks-recommender.streamlit.app
+
 Content-based recommender for the **63 U.S. National Parks**.
 
 A trip profile (terrain, days, crowds, month, driving radius) is scored against
