@@ -37,6 +37,46 @@ CROWD_PENALTY = 0.12
 # costs ≈0.117. Chosen so content can win against a moderate season mismatch.
 W_MONTH_PENALTY = 0.35
 MONTH_DISTANCE_MAX = 6.0
+# Adjacent parks within this absolute score gap are effectively tied
+# (docs/engine-contract.md §3). Annotation only — never reorders.
+TIE_EPSILON = 0.001
+
+
+def annotate_ties(
+    ranked: pd.DataFrame, epsilon: float = TIE_EPSILON
+) -> tuple[pd.DataFrame, list[list[str]]]:
+    """Mark adjacent score ties. Does not change park order or scores.
+
+    Returns the frame with a `tied_with_neighbors` column and `tie_groups`
+    (lists of park_code for each run of adjacent parks within epsilon).
+    """
+    if ranked.empty:
+        out = ranked.copy()
+        out["tied_with_neighbors"] = pd.Series(dtype=bool)
+        return out, []
+
+    scores = ranked["score"].to_numpy(dtype=float)
+    codes = ranked["park_code"].astype(str).tolist()
+    n = len(scores)
+    tied = [False] * n
+    tie_groups: list[list[str]] = []
+
+    group = [codes[0]]
+    for i in range(1, n):
+        if abs(scores[i - 1] - scores[i]) <= epsilon:
+            group.append(codes[i])
+            tied[i] = True
+            tied[i - 1] = True
+        else:
+            if len(group) > 1:
+                tie_groups.append(group)
+            group = [codes[i]]
+    if len(group) > 1:
+        tie_groups.append(group)
+
+    out = ranked.copy()
+    out["tied_with_neighbors"] = tied
+    return out, tie_groups
 
 
 def _l2_normalize(matrix: np.ndarray) -> np.ndarray:
@@ -65,7 +105,9 @@ class ParkRecommender:
     def recommend(self, profile: UserProfile, k: int = 5) -> pd.DataFrame:
         frame = self._filtered(profile)
         if frame.empty:
-            return frame
+            empty, tie_groups = annotate_ties(frame)
+            empty.attrs["tie_groups"] = tie_groups
+            return empty
 
         content = _cosine_rows(
             profile.content_vector(idf=self.idf),
@@ -118,7 +160,10 @@ class ParkRecommender:
 
         ranked = frame.sort_values("score", ascending=False).head(k).copy()
         ranked["why"] = ranked.apply(lambda row: self._why(row, profile), axis=1)
-        return ranked.reset_index(drop=True)
+        ranked = ranked.reset_index(drop=True)
+        ranked, tie_groups = annotate_ties(ranked)
+        ranked.attrs["tie_groups"] = tie_groups
+        return ranked
 
     def _filtered(self, profile: UserProfile) -> pd.DataFrame:
         frame = self.parks.copy()

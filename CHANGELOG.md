@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-09-26 — tie_groups in ParkRecommender.recommend()
+
+- Hypothesis: the engine contract's tie annotation (`tie_epsilon=0.001`) should
+  live in `ParkRecommender.recommend()` so ports and the concierge get real
+  `tie_groups` / `tied_with_neighbors`, not fixture-only labels. Annotation
+  must not reorder parks or change scores.
+- Added `TIE_EPSILON = 0.001` and `annotate_ties()`; `recommend()` attaches
+  `tied_with_neighbors` and `attrs["tie_groups"]`. Verified exact match against
+  all 25 profiles in `data/engine_fixtures.json` (fixtures unchanged).
+- Metrics before → after (ranking unchanged):
+  - train: R-Prec **0.708 → 0.708**, nDCG@5 **0.764 → 0.764**
+  - holdout: R-Prec **0.794 → 0.794**, nDCG@5 **0.813 → 0.813**
+
 ## 2026-09-26 — engine contract and parity fixtures
 
 - Added `docs/engine-contract.md`: trip-profile input schema, ranked output

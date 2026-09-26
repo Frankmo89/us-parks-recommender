@@ -118,3 +118,54 @@ def test_saguaro_is_inside_an_8h_san_diego_radius():
 def test_r_precision_uses_relevant_size():
     assert r_precision(["a", "b", "c", "d", "e"], ["a", "b", "c", "d"]) == 1.0
     assert ndcg_at_k(["a", "x"], ["a", "b"], k=5) > 0
+
+
+def _profile_from_fixture(fixture_id: str) -> UserProfile:
+    import json
+    from pathlib import Path
+
+    from src.evaluate import PROFILE_FIELDS
+
+    bundle = json.loads(Path("data/engine_fixtures.json").read_text(encoding="utf-8"))
+    item = next(p for p in bundle["profiles"] if p["id"] == fixture_id)
+    return UserProfile(**{k: item["profile"][k] for k in PROFILE_FIELDS})
+
+
+def test_tie_groups_gaar_kova_exact_tie():
+    """remote_alaska_backpack: gaar and kova share an exact score."""
+    ranked = ParkRecommender().recommend(_profile_from_fixture("remote_alaska_backpack"), k=5)
+    assert ranked.attrs["tie_groups"] == [["gaar", "kova"]]
+    by_code = ranked.set_index("park_code")
+    assert bool(by_code.loc["gaar", "tied_with_neighbors"])
+    assert bool(by_code.loc["kova", "tied_with_neighbors"])
+    assert float(by_code.loc["gaar", "score"]) == float(by_code.loc["kova", "score"])
+    # Annotation only — order unchanged.
+    assert ranked["park_code"].tolist()[:2] == ["gaar", "kova"]
+
+
+def test_tie_groups_cuva_acad_near_tie():
+    """beginner_family_east: cuva and acad within TIE_EPSILON, not equal."""
+    from src.recommender import TIE_EPSILON
+
+    ranked = ParkRecommender().recommend(_profile_from_fixture("beginner_family_east"), k=5)
+    assert ranked.attrs["tie_groups"] == [["cuva", "acad"]]
+    by_code = ranked.set_index("park_code")
+    assert bool(by_code.loc["cuva", "tied_with_neighbors"])
+    assert bool(by_code.loc["acad", "tied_with_neighbors"])
+    gap = abs(float(by_code.loc["cuva", "score"]) - float(by_code.loc["acad", "score"]))
+    assert 0 < gap <= TIE_EPSILON
+
+
+def test_tie_groups_empty_content_defaults_two_groups():
+    """empty_content_defaults: ever/redw and havo/viis/thro."""
+    ranked = ParkRecommender().recommend(_profile_from_fixture("empty_content_defaults"), k=5)
+    assert ranked.attrs["tie_groups"] == [["ever", "redw"], ["havo", "viis", "thro"]]
+    tied = set(ranked.loc[ranked["tied_with_neighbors"], "park_code"])
+    assert tied == {"ever", "redw", "havo", "viis", "thro"}
+
+
+def test_tie_groups_empty_when_no_ties():
+    ranked = ParkRecommender().recommend(_profile_from_fixture("quiet_canyon"), k=5)
+    assert ranked.attrs["tie_groups"] == []
+    assert not ranked["tied_with_neighbors"].any()
+    assert len(ranked) == 5

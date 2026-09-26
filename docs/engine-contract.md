@@ -209,14 +209,12 @@ otherwise `null`. It is the same highway sketch used for the hard filter.
    - `allow_permits=false` ⇒ `permit_likely=0`
    - origin + `max_drive_hours` set ⇒ `drive_hours ≤ max_drive_hours`
    Soft signals (month, crowds) never remove a park; they only change score.
-3. **Ties** — Defined by this contract, not yet implemented in
-   `ParkRecommender.recommend()`. Parks whose scores differ by at most
-   `tie_epsilon` (**0.001** absolute) are effectively tied; among ties, keep
-   the same park order the ranker already produced (stable sort, not a
-   meaningful preference). Today `tie_groups` / `tied_with_neighbors` appear
-   only in `data/engine_fixtures.json`, computed by the fixture-generation
-   script. Consumers and the concierge must treat tied parks as equal (do not
-   oversell tiny rank gaps) once the engine emits these fields.
+3. **Ties** — Parks whose scores differ by at most `tie_epsilon` (**0.001**
+   absolute) are reported in `tie_groups` (on the result attrs) with
+   `tied_with_neighbors=True` on each member. Among ties, the engine keeps the
+   same park order the ranker already produced (stable sort, not a meaningful
+   preference). Consumers and the concierge must treat tied parks as
+   effectively equal (do not oversell tiny rank gaps).
 
 Empty `parks` is a valid outcome when filters leave no candidates. Clients
 should ask the user to loosen drive radius, remote/permit flags, or constraints.
@@ -261,10 +259,6 @@ Not built yet. Target shape:
 3. **CI parity** — Load `data/engine_fixtures.json`, run the TS port on each of
    the 25 profiles, assert park order, scores, breakdown parts, drive hours
    (tolerance ~1e-6), and `tie_groups` match the Python snapshot.
-
-Implementing real `tie_groups` / `tied_with_neighbors` output in
-`ParkRecommender.recommend()` is a prerequisite before the TypeScript port, so
-the port has live Python code to match instead of only fixture data.
 
 Until that lands, Python `ParkRecommender.recommend` remains the source of truth.
 
