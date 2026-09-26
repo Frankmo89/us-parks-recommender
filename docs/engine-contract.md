@@ -8,7 +8,7 @@ This document is the API contract. It does not change scoring. A future
 TypeScript (or other) port must match the Python behavior pinned in
 `data/engine_fixtures.json`.
 
-Current `engine_version`: **`0.1.0`** (same as `pyproject.toml`).
+Current `engine_version`: **`0.2.0`** (same as `pyproject.toml`).
 
 ---
 
@@ -138,7 +138,7 @@ Every successful response includes `engine_version` and a `parks` array
 
 ```json
 {
-  "engine_version": "0.1.0",
+  "engine_version": "0.2.0",
   "k": 5,
   "n_returned": 5,
   "empty": false,

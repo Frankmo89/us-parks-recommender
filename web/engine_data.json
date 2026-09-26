@@ -1,5 +1,5 @@
 {
-  "engine_version": "0.1.0",
+  "engine_version": "0.2.0",
   "content_hash": "60db29d69bacc28a47e8070ee70f2bace63281806ae119f0206b5d65f393cf7d",
   "weights": {
     "W_CONTENT": 0.55,

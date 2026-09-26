@@ -5,7 +5,7 @@
     "Regen by re-running the fixture generator after intentional scoring changes.",
     "Includes the 18 eval profiles plus 8 edge cases. Eval 'relevant' labels are not included."
   ],
-  "engine_version": "0.1.0",
+  "engine_version": "0.2.0",
   "weights": {
     "W_CONTENT": 0.55,
     "W_DAYS": 0.18,
@@ -43,7 +43,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -340,7 +340,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -641,7 +641,7 @@
         "allow_permits": false
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -937,7 +937,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1239,7 +1239,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1533,7 +1533,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1833,7 +1833,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2131,7 +2131,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2430,7 +2430,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2734,7 +2734,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
@@ -2975,7 +2975,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3278,7 +3278,7 @@
         "allow_permits": false
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3575,7 +3575,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3880,7 +3880,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -4175,7 +4175,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
@@ -4429,7 +4429,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -4730,7 +4730,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 2,
         "empty": false,
@@ -4872,7 +4872,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5158,7 +5158,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5470,7 +5470,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5764,7 +5764,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 2,
         "empty": false,
@@ -5903,7 +5903,7 @@
         "allow_permits": false
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6199,7 +6199,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6501,7 +6501,7 @@
         "allow_permits": false
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 0,
         "empty": true,
@@ -6537,7 +6537,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6833,7 +6833,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.1.0",
+        "engine_version": "0.2.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
