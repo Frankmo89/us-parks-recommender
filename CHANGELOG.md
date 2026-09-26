@@ -6,15 +6,39 @@
   (pull requests only). It compares `data/engine_fixtures.json` between the PR
   and its base branch, ignoring only the file's own `engine_version` stamps and
   prose `notes`. If park order, scores, breakdown, facts, tie_groups, weights,
-  `tie_epsilon`, or `k` differ, `pyproject.toml` `[project].version` must also
-  differ, or the job fails pointing to `docs/engine-contract.md` §4. Identical
-  fixtures need no bump. The fixture stamps must also equal the pyproject
-  version, so a bump cannot leave the parity file on the old number.
+  `tie_epsilon`, `k`, or the set of pinned profiles (added/removed) differ,
+  `pyproject.toml` `[project].version` must also differ, or the job fails
+  pointing to `docs/engine-contract.md` §4. Identical fixtures need no bump.
+  The fixture stamps must also equal the pyproject version, so a bump cannot
+  leave the parity file on the old number.
 - Why: §4 had no enforcement. Run retroactively, the check fails PR #7
   (`empty_content_defaults` order `havo,viis,thro` → `care,havo,lavo`) and
-  passes #6 and #8.
+  PR #9 (added profile `null_enum_fields_use_defaults`), and passes #6 and #8.
 - No scoring/data changes; metrics unchanged: train 0.708 / 0.764, holdout
   0.794 / 0.813.
+
+## 2026-09-26 — enum null equals omit (parity)
+
+- Found: `crowd_pref=None` raised in Python while `crowd_pref=null` used the
+  default in TypeScript (`??`). Same gap for other enum fields with defaults.
+- Decision: explicit null on `difficulty` / `days_needed` / `crowd_pref` /
+  `budget_tier` means "not specified" — apply the documented default, then
+  validate. Only non-null out-of-enum values raise. `month` / `max_drive_hours`
+  unchanged (`null` = no constraint).
+- Pinned with edge fixture `null_enum_fields_use_defaults` (26 profiles total)
+  and cross-language tests. Metrics unchanged.
+
+## 2026-09-26 — profile input validation
+
+- Hypothesis: out-of-enum profile fields (e.g. `difficulty="hard"`) crashed with
+  an unhandled `KeyError`; an LLM concierge will plausibly hallucinate values
+  outside the documented vocab and needs a clear typed failure.
+- Added `InvalidProfileError` + `validate_profile()` for enums, `month` (null or
+  1–12), and positive `max_drive_hours`. Unknown biomes/tags stay silently
+  ignored. Same validation in `ts/src/engine.ts`.
+- Hard-filter property tests + invalid/silent-ignore cases. Contract §1
+  documents raise vs ignore. Bumped Vitest to clear moderate npm advisories.
+- Metrics unchanged (validation only; scoring path untouched for valid input).
 
 ## 2026-09-26 — TypeScript engine port with fixture parity
 

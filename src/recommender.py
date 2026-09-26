@@ -20,6 +20,7 @@ from .features import (
     parse_tags,
     park_content_vector,
     tag_idf,
+    validate_profile,
 )
 from .catalog import validate_parks
 
@@ -103,6 +104,7 @@ class ParkRecommender:
         self.content_matrix = _l2_normalize(raw)
 
     def recommend(self, profile: UserProfile, k: int = 5) -> pd.DataFrame:
+        validate_profile(profile)
         frame = self._filtered(profile)
         if frame.empty:
             empty, tie_groups = annotate_ties(frame)

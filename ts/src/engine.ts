@@ -67,6 +67,82 @@ export type TripProfile = {
   allow_permits?: boolean;
 };
 
+/** Thrown when an enum / month / drive field is illegal (never a silent NaN). */
+export class InvalidProfileError extends Error {
+  readonly field: string;
+  readonly value: unknown;
+  readonly allowed: unknown;
+
+  constructor(field: string, value: unknown, allowed?: unknown) {
+    const msg =
+      allowed === undefined
+        ? `Invalid ${field}=${repr(value)}`
+        : `Invalid ${field}=${repr(value)}; allowed: ${formatAllowed(allowed)}`;
+    super(msg);
+    this.name = "InvalidProfileError";
+    this.field = field;
+    this.value = value;
+    this.allowed = allowed;
+  }
+}
+
+/** Match Python repr-ish quotes for strings; leave numbers/null bare. */
+function repr(value: unknown): string {
+  if (typeof value === "string") return `'${value}'`;
+  return String(value);
+}
+
+function formatAllowed(allowed: unknown): string {
+  if (Array.isArray(allowed)) {
+    return `[${allowed.map((item) => repr(item)).join(", ")}]`;
+  }
+  return String(allowed);
+}
+
+function requireEnum(
+  field: string,
+  value: string,
+  allowed: readonly string[],
+): void {
+  if (!allowed.includes(value)) {
+    throw new InvalidProfileError(field, value, [...allowed]);
+  }
+}
+
+/**
+ * Validate enum / month / drive fields. Unknown biomes and tags are not
+ * checked — scoring ignores them (contract §1).
+ */
+export function validateProfile(profile: RequiredProfile, data: EngineData): void {
+  requireEnum("difficulty", profile.difficulty, Object.keys(data.ordinals.difficulty));
+  requireEnum("days_needed", profile.days_needed, Object.keys(data.ordinals.days));
+  requireEnum("crowd_pref", profile.crowd_pref, Object.keys(data.ordinals.crowd));
+  requireEnum("budget_tier", profile.budget_tier, Object.keys(data.ordinals.budget));
+
+  const month = profile.month;
+  if (month !== null) {
+    if (
+      typeof month !== "number" ||
+      !Number.isInteger(month) ||
+      month < 1 ||
+      month > 12
+    ) {
+      throw new InvalidProfileError("month", month, "null or integer 1-12");
+    }
+  }
+
+  const maxHours = profile.max_drive_hours;
+  if (maxHours !== null) {
+    if (typeof maxHours !== "number" || !(maxHours > 0) || Number.isNaN(maxHours)) {
+      throw new InvalidProfileError(
+        "max_drive_hours",
+        maxHours,
+        "null or a positive number",
+      );
+    }
+  }
+}
+
 export type Breakdown = {
   content: number;
   days: number;
@@ -262,10 +338,13 @@ function normalizeProfile(profile: TripProfile): RequiredProfile {
   return {
     biomes: profile.biomes ?? [],
     tags: profile.tags ?? [],
+    // null/undefined on enums = omit → documented default (parity with Python).
     difficulty: profile.difficulty ?? "easy",
     days_needed: profile.days_needed ?? "2-3",
     crowd_pref: profile.crowd_pref ?? "medium",
     budget_tier: profile.budget_tier ?? "mid",
+    // month and max_drive_hours: null stays null ("no constraint"), never
+    // replaced with a numeric default — validateProfile checks the real value.
     month: profile.month ?? null,
     origin_lat: profile.origin_lat ?? null,
     origin_lon: profile.origin_lon ?? null,
@@ -320,6 +399,7 @@ export function recommend(
   k = 5,
 ): RecommendResult {
   const profile = normalizeProfile(profileInput);
+  validateProfile(profile, data);
   const w = data.weights;
   const userVec = contentVector(profile.biomes, profile.tags, data);
   const daysU = data.ordinals.days[profile.days_needed]!;
