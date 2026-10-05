@@ -6,6 +6,10 @@ Holdout was not used to pick weights.
 
 Baselines and ablations use the same hard-filtered candidate set as the
 model so the comparison is fair. They do not change scoring.
+
+The external split (crowd labels from docs/label-form.md) is reported on
+its own lines for testing only. ``all`` stays train + holdout so legacy
+numbers stay comparable. Never tune on external.
 """
 
 from __future__ import annotations
@@ -211,11 +215,14 @@ def _detect_filter_only(
 def run(k: int = 5) -> dict:
     bundle = load_bundle()
     model = ParkRecommender()
-    all_profiles = bundle["profiles"]
-    train = [p for p in all_profiles if p.get("split") != "holdout"]
-    holdout = [p for p in all_profiles if p.get("split") == "holdout"]
+    profiles = bundle["profiles"]
+    train = [p for p in profiles if p.get("split", "train") == "train"]
+    holdout = [p for p in profiles if p.get("split") == "holdout"]
+    external = [p for p in profiles if p.get("split") == "external"]
+    # ``all`` is train + holdout only so legacy metrics stay comparable.
+    comparable = train + holdout
 
-    filter_only_ids = _detect_filter_only(model, all_profiles, k=k)
+    filter_only_ids = _detect_filter_only(model, comparable + external, k=k)
 
     def score_method(method: str) -> dict:
         return {
@@ -226,7 +233,10 @@ def run(k: int = 5) -> dict:
                 model, holdout, method=method, k=k, filter_only_ids=filter_only_ids
             ),
             "all": _score_profiles(
-                model, all_profiles, method=method, k=k, filter_only_ids=filter_only_ids
+                model, comparable, method=method, k=k, filter_only_ids=filter_only_ids
+            ),
+            "external": _score_profiles(
+                model, external, method=method, k=k, filter_only_ids=filter_only_ids
             ),
         }
 
@@ -253,6 +263,7 @@ def run(k: int = 5) -> dict:
         "train": model_blocks["train"],
         "holdout": model_blocks["holdout"],
         "all": model_blocks["all"],
+        "external": model_blocks["external"],
         "popularity": popularity,
         "random": random_blocks,
         "content_only": content_only,
@@ -287,7 +298,7 @@ def _print_comparison_table(result: dict) -> None:
         ("Content-only", "content_only", False),
         ("Content-only", "content_only", True),
     ]
-    splits = ("train", "holdout", "all")
+    splits = ("train", "holdout", "all", "external")
     print(
         f"{'Method':<14} {'Scope':<18} {'Split':<8} {'n':>3}  "
         f"{'R-Prec':>7}  {'nDCG@5':>7}"
@@ -323,7 +334,9 @@ def main() -> None:
     print()
     _print_block("holdout (model)", result["holdout"])
     print()
-    _print_block("all (model)", result["all"])
+    _print_block("all (model; train+holdout)", result["all"])
+    print()
+    _print_block("external (model; test-only)", result["external"])
 
 
 if __name__ == "__main__":
