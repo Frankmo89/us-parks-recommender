@@ -100,6 +100,13 @@ beats train on R-Precision.
 | Content-only (excl. filter-only) | Holdout | 4 | 0.692 | 0.804 |
 | Content-only (excl. filter-only) | All | 16 | 0.614 | 0.764 |
 
+**Ablation finding (weights unchanged):** Excluding filter-only profiles
+(n=16), the full model scores R-Prec 0.704 / nDCG@5 0.753, and content-only
+scores 0.614 / 0.764. The days, difficulty, budget, crowd, and month terms
+raise R-Precision by about 0.09 but do not improve nDCG@5. On holdout,
+content-only beats the full model on nDCG@5 (0.804 vs 0.720), but n=4 is too
+small to conclude anything.
+
 See `CHANGELOG.md` for the 50 mph drive bug. Those older figures are retired.
 
 Yosemite `best_months` was missing July/August in the catalog; that is a

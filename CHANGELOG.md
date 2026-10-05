@@ -20,6 +20,11 @@
   - model holdout excl. filter-only: R-Prec **0.692**, nDCG@5 **0.720**
   - content-only train: R-Prec **0.588**, nDCG@5 **0.751**
   - content-only holdout: R-Prec **0.794**, nDCG@5 **0.869**
+- **Finding (no weight change):** Excluding filter-only profiles (n=16), the
+  full model scores R-Prec 0.704 / nDCG@5 0.753 versus content-only 0.614 /
+  0.764. Days, difficulty, budget, crowd, and month raise R-Precision by about
+  0.09 but do not improve nDCG@5. On holdout, content-only beats the full model
+  on nDCG@5 (0.804 vs 0.720), but n=4 is too small to conclude anything.
 
 
 ## 2026-10-05 — evaluation baselines (popularity + random)
