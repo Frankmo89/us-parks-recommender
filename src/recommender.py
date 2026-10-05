@@ -105,7 +105,7 @@ class ParkRecommender:
 
     def recommend(self, profile: UserProfile, k: int = 5) -> pd.DataFrame:
         validate_profile(profile)
-        frame = self._filtered(profile)
+        frame = self.candidates(profile)
         if frame.empty:
             empty, tie_groups = annotate_ties(frame)
             empty.attrs["tie_groups"] = tie_groups
@@ -173,7 +173,8 @@ class ParkRecommender:
         ranked.attrs["tie_groups"] = tie_groups
         return ranked
 
-    def _filtered(self, profile: UserProfile) -> pd.DataFrame:
+    def candidates(self, profile: UserProfile) -> pd.DataFrame:
+        """Parks that pass hard filters (remote, permits, drive hours)."""
         frame = self.parks.copy()
         if not profile.allow_remote:
             frame = frame.loc[frame["remote"] == 0]

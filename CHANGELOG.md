@@ -1,5 +1,32 @@
 # Changelog
 
+## 2026-10-05 — filter-only ablation and public candidates()
+
+- Renamed `ParkRecommender._filtered` → `candidates()` (public hard-filter
+  step). Callers updated; behavior unchanged — not a scoring/engine bump.
+- Evaluation now prints per-profile candidate counts and marks **filter-only**
+  profiles where the random baseline scores 1.0 on both R-Precision and
+  nDCG@5 (ranking cannot change the score). Current filter-only set:
+  `beginner_family_east`, `washington_alpine`.
+- Report every method with and without filter-only profiles.
+- Added **content-only** ablation: rank candidates by cosine similarity alone
+  (shows what days / difficulty / budget / crowds / month add).
+- README Metrics table expanded with content-only and excl. filter-only rows,
+  plus two sentences on why holdout averages higher than train (smaller
+  candidate sets; filter-only holdout profiles).
+- Metrics before → after (model unchanged):
+  - model train: R-Prec **0.708 → 0.708**, nDCG@5 **0.764 → 0.764**
+  - model holdout: R-Prec **0.794 → 0.794**, nDCG@5 **0.813 → 0.813**
+  - model holdout excl. filter-only: R-Prec **0.692**, nDCG@5 **0.720**
+  - content-only train: R-Prec **0.588**, nDCG@5 **0.751**
+  - content-only holdout: R-Prec **0.794**, nDCG@5 **0.869**
+- **Finding (no weight change):** Excluding filter-only profiles (n=16), the
+  full model scores R-Prec 0.704 / nDCG@5 0.753 versus content-only 0.614 /
+  0.764. Days, difficulty, budget, crowd, and month raise R-Precision by about
+  0.09 but do not improve nDCG@5. On holdout, content-only beats the full model
+  on nDCG@5 (0.804 vs 0.720), but n=4 is too small to conclude anything.
+
+
 ## 2026-10-05 — evaluation baselines (popularity + random)
 
 - Added popularity and random baselines to `src.evaluate` so model metrics have
