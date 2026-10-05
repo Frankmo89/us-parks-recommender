@@ -22,9 +22,11 @@ from src.features import (  # noqa: E402
     TAG_VOCAB,
     InvalidProfileError,
     UserProfile,
+    drive_hours,
     validate_profile,
 )
 from src.origins import ORIGINS  # noqa: E402
+from src.recommender import ParkRecommender  # noqa: E402
 
 PROFILES_PATH = ROOT / "data" / "eval_profiles.json"
 PARKS_CSV = ROOT / "data" / "parks.csv"
@@ -288,12 +290,66 @@ def _stable_id(timestamp: str, row_index: int, existing: set[str]) -> str:
     return f"{base}_{suffix}"
 
 
+def pick_filter_reasons(profile: UserProfile, park_row) -> list[str]:
+    """Return every hard-filter reason this park fails for the profile."""
+    reasons: list[str] = []
+    if not profile.allow_remote and int(park_row.remote) == 1:
+        reasons.append("remote")
+    if not profile.allow_permits and int(park_row.permit_likely) == 1:
+        reasons.append("permit")
+    if (
+        profile.origin_lat is not None
+        and profile.origin_lon is not None
+        and profile.max_drive_hours is not None
+    ):
+        hours = drive_hours(
+            profile.origin_lat,
+            profile.origin_lon,
+            float(park_row.lat),
+            float(park_row.lon),
+        )
+        if hours > profile.max_drive_hours:
+            reasons.append("drive")
+    return reasons
+
+
+def split_reachable_picks(
+    model: ParkRecommender,
+    profile: UserProfile,
+    picks: list[str],
+) -> tuple[list[str], list[dict]]:
+    """Keep picks that pass candidates(); move the rest to unreachable with reasons.
+
+    unreachable entries: {"park_code": str, "reasons": ["drive"|"remote"|"permit", ...]}
+    """
+    candidate_codes = set(model.candidates(profile)["park_code"].astype(str))
+    parks_by_code = {
+        str(row.park_code): row for row in model.parks.itertuples(index=False)
+    }
+    relevant: list[str] = []
+    unreachable: list[dict] = []
+    for code in picks:
+        if code in candidate_codes:
+            relevant.append(code)
+            continue
+        row = parks_by_code.get(code)
+        if row is None:
+            raise ValueError(f"Unknown park_code in picks: {code!r}")
+        reasons = pick_filter_reasons(profile, row)
+        if not reasons:
+            # Should not happen if candidates() and reason checks agree.
+            reasons = ["drive"]
+        unreachable.append({"park_code": code, "reasons": reasons})
+    return relevant, unreachable
+
+
 def row_to_profile(
     row: dict[str, str],
     *,
     row_index: int,
     name_to_code: dict[str, str],
     existing_ids: set[str],
+    model: ParkRecommender,
 ) -> dict:
     biomes = _map_list(row.get(COL_TERRAINS), BIOME_FROM_LABEL, "biome")
     tags = _map_list(row.get(COL_ACTIVITIES), TAG_FROM_LABEL, "tag")
@@ -349,13 +405,26 @@ def row_to_profile(
         payload["origin_lon"] = profile.origin_lon
         payload["max_drive_hours"] = profile.max_drive_hours
 
+    picks = relevant
+    relevant, unreachable = split_reachable_picks(model, profile, picks)
+    if not relevant:
+        detail = ", ".join(
+            f"{u['park_code']}:{'+'.join(u['reasons'])}" for u in unreachable
+        )
+        raise ValueError(
+            f"No top-3 picks pass hard filters (all unreachable: {detail})"
+        )
+
     profile_id = _stable_id(row.get(COL_TIMESTAMP, ""), row_index, existing_ids)
-    return {
+    item = {
         "id": profile_id,
         "split": "external",
         "profile": payload,
         "relevant": relevant,
     }
+    if unreachable:
+        item["unreachable"] = unreachable
+    return item
 
 
 def import_csv(
@@ -368,6 +437,7 @@ def import_csv(
     bundle = json.loads(profiles_path.read_text(encoding="utf-8"))
     existing = list(bundle.get("profiles") or [])
     existing_ids = {p["id"] for p in existing}
+    model = ParkRecommender()
 
     with csv_path.open(encoding="utf-8", newline="") as fh:
         reader = csv.DictReader(fh)
@@ -386,6 +456,7 @@ def import_csv(
                     row_index=index,
                     name_to_code=name_to_code,
                     existing_ids=existing_ids | {a["id"] for a in appended},
+                    model=model,
                 )
             except (ValueError, InvalidProfileError) as exc:
                 skipped.append(f"row {index}: {exc}")
@@ -432,7 +503,9 @@ def main(argv: list[str] | None = None) -> int:
         f"skipped={len(result['skipped'])}  dry_run={result['dry_run']}"
     )
     for item in result["appended"]:
-        print(f"  + {item['id']}: relevant={item['relevant']}")
+        unreachable = item.get("unreachable") or []
+        extra = f"  unreachable={unreachable}" if unreachable else ""
+        print(f"  + {item['id']}: relevant={item['relevant']}{extra}")
     for msg in result["skipped"]:
         print(f"  ! {msg}")
     return 0
