@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-10-05 — Apps Script generator for the label form
+
+- Added `scripts/build_form_script.py`, which writes
+  `scripts/create_label_form.gs` from `import_form_labels.get_form_spec()`
+  (same titles and choices the CSV importer uses), so the form and importer
+  cannot drift.
+- `createLabelForm()` builds the Google Form (title, description, all 12
+  questions, validations, responses sheet) and logs edit / public / sheet
+  links. Step-by-step Apps Script run instructions are in the file header.
+- Drift test fails if the committed `.gs` file is stale.
+- Metrics unchanged (docs/scripts only): train 0.708 / 0.764, holdout
+  0.794 / 0.813.
+
+
 ## 2026-10-05 — external importer drops unreachable picks
 
 - Importer runs `ParkRecommender.candidates()` on each form profile. Top-3 picks
