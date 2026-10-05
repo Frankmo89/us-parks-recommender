@@ -60,21 +60,45 @@ Origins: `san_diego`, `los_angeles`, `phoenix`, `denver`, `seattle`, `salt_lake`
 holdout or a user study. The holdout was seen during development. Labels were
 revised once on 2026-09-21. Weights were not retuned after that pass.
 
-Baselines use the same hard filters as the model (remote, permits, drive hours).
-**Popularity** ranks by crowd high→low (ties by `park_code`). **Random** is the
-mean of 100 shuffles of the filtered parks (seeds 0–99).
+Baselines and ablations use the same hard filters as the model (remote,
+permits, drive hours). **Popularity** ranks by crowd high→low (ties by
+`park_code`). **Random** is the mean of 100 shuffles of the filtered parks
+(seeds 0–99). **Content-only** ranks by cosine similarity alone (no days,
+difficulty, budget, crowd, or month terms). A profile is **filter-only** when
+random scores 1.0 on both metrics — every remaining candidate is relevant, so
+ranking cannot change the score.
+
+Holdout averages about 22 candidates after hard filters versus about 42 on
+train. Two holdout profiles (`washington_alpine`, `beginner_family_east`) are
+filter-only and lift the holdout average; excluding them, holdout no longer
+beats train on R-Precision.
 
 | Method | Split | n | R-Precision | nDCG@5 |
 |---|---|---|---|---|
 | Model | Train | 12 | 0.708 | 0.764 |
 | Model | Holdout | 6 | 0.794 | 0.813 |
 | Model | All | 18 | 0.737 | 0.781 |
+| Model (excl. filter-only) | Train | 12 | 0.708 | 0.764 |
+| Model (excl. filter-only) | Holdout | 4 | 0.692 | 0.720 |
+| Model (excl. filter-only) | All | 16 | 0.704 | 0.753 |
 | Popularity | Train | 12 | 0.124 | 0.153 |
 | Popularity | Holdout | 6 | 0.442 | 0.425 |
 | Popularity | All | 18 | 0.230 | 0.243 |
+| Popularity (excl. filter-only) | Train | 12 | 0.124 | 0.153 |
+| Popularity (excl. filter-only) | Holdout | 4 | 0.163 | 0.137 |
+| Popularity (excl. filter-only) | All | 16 | 0.133 | 0.149 |
 | Random | Train | 12 | 0.136 | 0.185 |
 | Random | Holdout | 6 | 0.483 | 0.498 |
 | Random | All | 18 | 0.252 | 0.289 |
+| Random (excl. filter-only) | Train | 12 | 0.136 | 0.185 |
+| Random (excl. filter-only) | Holdout | 4 | 0.224 | 0.246 |
+| Random (excl. filter-only) | All | 16 | 0.158 | 0.200 |
+| Content-only | Train | 12 | 0.588 | 0.751 |
+| Content-only | Holdout | 6 | 0.794 | 0.869 |
+| Content-only | All | 18 | 0.656 | 0.790 |
+| Content-only (excl. filter-only) | Train | 12 | 0.588 | 0.751 |
+| Content-only (excl. filter-only) | Holdout | 4 | 0.692 | 0.804 |
+| Content-only (excl. filter-only) | All | 16 | 0.614 | 0.764 |
 
 See `CHANGELOG.md` for the 50 mph drive bug. Those older figures are retired.
 
