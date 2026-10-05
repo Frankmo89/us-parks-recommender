@@ -192,6 +192,211 @@ REQUIRED_COLUMNS = [
     COL_TOP3,
 ]
 
+# Google Form metadata + display choices (shared with scripts/build_form_script.py).
+FORM_TITLE = "Help me test a national park recommender"
+FORM_DESCRIPTION = (
+    "Picture one trip you would really take. Answer for that trip, then pick "
+    "the 3 parks that fit it best."
+)
+BUDGET_HELP_TEXT = (
+    "Your total travel cost: gas or flights, lodging and food. Not the entrance fee."
+)
+HOURS_HELP_TEXT = (
+    "Positive number of hours (e.g. 8). Leave blank when Starting city is Anywhere."
+)
+
+# Ordered plain-English choices shown on the form (must map via *_FROM_LABEL).
+BIOME_FORM_CHOICES = [
+    "Mountains / alpine",
+    "Canyon",
+    "Cave",
+    "Chaparral / scrub",
+    "Coast",
+    "Desert",
+    "Forest",
+    "Island",
+    "Prairie / grassland",
+    "Rainforest",
+    "Tundra",
+    "Urban",
+    "Volcano",
+    "Wetland",
+]
+TAG_FORM_CHOICES = [
+    "4x4 / off-road",
+    "Archaeology",
+    "Backpacking",
+    "Beach",
+    "Bears",
+    "Biking",
+    "Birding",
+    "Boardwalk",
+    "Boat",
+    "Camping",
+    "Climbing",
+    "Easy walk",
+    "Family-friendly",
+    "Fishing",
+    "Geothermal",
+    "Giant trees",
+    "Glacier",
+    "Hiking",
+    "History",
+    "Hot springs",
+    "Kayak",
+    "Paleontology",
+    "Photography",
+    "Sand dunes",
+    "Scenic drive",
+    "Snorkeling",
+    "Stargazing",
+    "Sunrise / sunset views",
+    "Water / lakes",
+    "Waterfalls",
+    "Wilderness",
+    "Wildflowers",
+    "Wildlife",
+    "Winter activities",
+]
+DIFFICULTY_FORM_CHOICES = ["Easy", "Moderate", "Challenging"]
+DAYS_FORM_CHOICES = [
+    "Day trip",
+    "Weekend (2–3 days)",
+    "About a week (4–7 days)",
+    "Longer than a week",
+]
+CROWD_FORM_CHOICES = [
+    "Prefer quiet / low crowds",
+    "Medium is fine",
+    "Busy / popular is fine",
+]
+BUDGET_FORM_CHOICES = ["Low", "Mid", "High"]
+MONTH_FORM_CHOICES = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+    "No preference / not sure",
+]
+ORIGIN_FORM_CHOICES = [
+    "San Diego",
+    "Los Angeles",
+    "Phoenix",
+    "Denver",
+    "Seattle",
+    "Salt Lake City",
+    "New York City",
+    "Anywhere",
+]
+YES_NO_FORM_CHOICES = ["Yes", "No"]
+
+
+def park_form_choices() -> list[str]:
+    """Catalog park names in parks.csv order (Top 3 checkbox choices)."""
+    names: list[str] = []
+    with PARKS_CSV.open(encoding="utf-8") as fh:
+        reader = csv.DictReader(fh)
+        for row in reader:
+            names.append(row["name"].strip())
+    return names
+
+
+def get_form_spec() -> dict:
+    """Form blueprint consumed by scripts/build_form_script.py.
+
+    Titles and choices come from this module so the Apps Script and the
+    CSV importer cannot drift apart.
+    """
+    return {
+        "title": FORM_TITLE,
+        "description": FORM_DESCRIPTION,
+        "questions": [
+            {
+                "title": COL_TERRAINS,
+                "type": "checkbox",
+                "required": False,
+                "choices": list(BIOME_FORM_CHOICES),
+            },
+            {
+                "title": COL_ACTIVITIES,
+                "type": "checkbox",
+                "required": False,
+                "choices": list(TAG_FORM_CHOICES),
+            },
+            {
+                "title": COL_DIFFICULTY,
+                "type": "multiple_choice",
+                "required": True,
+                "choices": list(DIFFICULTY_FORM_CHOICES),
+            },
+            {
+                "title": COL_DAYS,
+                "type": "multiple_choice",
+                "required": True,
+                "choices": list(DAYS_FORM_CHOICES),
+            },
+            {
+                "title": COL_CROWD,
+                "type": "multiple_choice",
+                "required": True,
+                "choices": list(CROWD_FORM_CHOICES),
+            },
+            {
+                "title": COL_BUDGET,
+                "type": "multiple_choice",
+                "required": True,
+                "choices": list(BUDGET_FORM_CHOICES),
+                "help": BUDGET_HELP_TEXT,
+            },
+            {
+                "title": COL_MONTH,
+                "type": "multiple_choice",
+                "required": True,
+                "choices": list(MONTH_FORM_CHOICES),
+            },
+            {
+                "title": COL_CITY,
+                "type": "multiple_choice",
+                "required": True,
+                "choices": list(ORIGIN_FORM_CHOICES),
+            },
+            {
+                "title": COL_HOURS,
+                "type": "text",
+                "required": False,
+                "help": HOURS_HELP_TEXT,
+                "validation": "number_gt_0",
+            },
+            {
+                "title": COL_REMOTE,
+                "type": "multiple_choice",
+                "required": True,
+                "choices": list(YES_NO_FORM_CHOICES),
+            },
+            {
+                "title": COL_PERMITS,
+                "type": "multiple_choice",
+                "required": True,
+                "choices": list(YES_NO_FORM_CHOICES),
+            },
+            {
+                "title": COL_TOP3,
+                "type": "checkbox",
+                "required": True,
+                "choices": park_form_choices(),
+                "validation": "exactly_3",
+            },
+        ],
+    }
+
 
 def _load_park_name_to_code() -> dict[str, str]:
     mapping: dict[str, str] = {}
