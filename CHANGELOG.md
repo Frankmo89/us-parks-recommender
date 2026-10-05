@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-10-05 — evaluation baselines (popularity + random)
+
+- Added popularity and random baselines to `src.evaluate` so model metrics have
+  something to beat. Both reuse the model's hard-filtered candidate set
+  (remote, permits, drive hours) for a fair comparison. Scoring, filters,
+  catalog, and engine version are unchanged.
+- **Popularity:** rank filtered parks by crowd high→low, ties by `park_code`
+  ascending.
+- **Random:** mean R-Precision and nDCG@5 over 100 shuffles (seeds 0–99) of the
+  filtered parks (deterministic base order: `park_code` ascending).
+- Printed comparison table: Model / Popularity / Random × train / holdout / all.
+- README Metrics table expanded with baseline rows; `tests/test_metrics_pinned.py`
+  pins model and baseline numbers against README.
+- Metrics before → after (model unchanged; baselines new):
+  - model train: R-Prec **0.708 → 0.708**, nDCG@5 **0.764 → 0.764**
+  - model holdout: R-Prec **0.794 → 0.794**, nDCG@5 **0.813 → 0.813**
+  - popularity train: R-Prec **0.124**, nDCG@5 **0.153**
+  - popularity holdout: R-Prec **0.442**, nDCG@5 **0.425**
+  - random train: R-Prec **0.136**, nDCG@5 **0.185**
+  - random holdout: R-Prec **0.483**, nDCG@5 **0.498**
+
+
 ## 2026-09-26 — engine_version 0.1.0 → 0.2.0 (retroactive)
 
 - Bumped `engine_version` to `0.2.0` in `pyproject.toml`, `ts/package.json`
