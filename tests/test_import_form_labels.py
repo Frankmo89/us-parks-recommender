@@ -38,7 +38,7 @@ def test_sample_csv_appends_only_valid_external_rows(tmp_path, import_mod):
 
     after = json.loads(profiles_copy.read_text(encoding="utf-8"))
     assert len(result["appended"]) == 2
-    assert len(result["skipped"]) == 2
+    assert len(result["skipped"]) == 3
     assert len(after["profiles"]) == n_before + 2
 
     # Existing profiles untouched (ids and relevant lists).
@@ -61,6 +61,7 @@ def test_sample_csv_appends_only_valid_external_rows(tmp_path, import_mod):
     assert sd["profile"]["biomes"] == ["desert", "canyon"]
     assert sd["profile"]["tags"] == ["hiking", "stargazing", "photography"]
     assert sd["profile"]["month"] == 11
+    assert "unreachable" not in sd
 
     # Anywhere: no origin / drive fields.
     anywhere = next(item for item in new_items if item["relevant"] == ["yell", "grte", "glac"])
@@ -78,6 +79,49 @@ def test_sample_csv_dry_run_does_not_write(tmp_path, import_mod):
     result = import_mod.import_csv(SAMPLE_CSV, profiles_path=profiles_copy, dry_run=True)
     assert len(result["appended"]) == 2
     assert profiles_copy.read_text(encoding="utf-8") == before
+
+
+def test_san_diego_unreachable_picks_are_skipped(import_mod):
+    """San Diego ≤6h, no remote/permits, yell/havo/zion → all fail filters → skip."""
+    from src.features import UserProfile
+    from src.origins import ORIGINS
+    from src.recommender import ParkRecommender
+
+    model = ParkRecommender()
+    lat, lon = ORIGINS["san_diego"]
+    profile = UserProfile(
+        biomes=["desert"],
+        tags=["hiking"],
+        origin_lat=lat,
+        origin_lon=lon,
+        max_drive_hours=6,
+        allow_remote=False,
+        allow_permits=False,
+    )
+    relevant, unreachable = import_mod.split_reachable_picks(
+        model, profile, ["yell", "havo", "zion"]
+    )
+    assert relevant == []
+    by_code = {u["park_code"]: u["reasons"] for u in unreachable}
+    assert by_code["yell"] == ["drive"]
+    assert by_code["havo"] == ["remote", "drive"]
+    assert by_code["zion"] == ["permit", "drive"]
+
+    # Full CSV row is skipped (no reachable pick).
+    skipped_msgs = []
+    profiles_src = ROOT / "data" / "eval_profiles.json"
+    # Use dry-run import and look for the San Diego unreachable skip message.
+    import tempfile
+    from pathlib import Path
+
+    with tempfile.TemporaryDirectory() as tmp:
+        profiles_copy = Path(tmp) / "eval_profiles.json"
+        shutil.copy(profiles_src, profiles_copy)
+        result = import_mod.import_csv(SAMPLE_CSV, profiles_path=profiles_copy, dry_run=True)
+        skipped_msgs = result["skipped"]
+
+    assert any("No top-3 picks pass hard filters" in msg for msg in skipped_msgs)
+    assert any("yell:drive" in msg and "havo:" in msg and "zion:" in msg for msg in skipped_msgs)
 
 
 def test_evaluate_all_excludes_external(tmp_path, import_mod):
@@ -111,3 +155,4 @@ def test_evaluate_all_excludes_external(tmp_path, import_mod):
 
     assert with_external["external"]["n"] == 2
     assert baseline["external"]["n"] == 0
+    assert with_external["external_unreachable"]["parks"] == 0

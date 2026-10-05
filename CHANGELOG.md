@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-10-05 — external importer drops unreachable picks
+
+- Importer runs `ParkRecommender.candidates()` on each form profile. Top-3 picks
+  that pass stay in `relevant`; picks that fail hard filters move to
+  `unreachable` as `{"park_code", "reasons": ["drive"|"remote"|"permit", ...]}`.
+  Rows with no reachable pick are skipped and reported.
+- `src.evaluate` prints external unreachable pick counts by reason (drive /
+  remote / permit). Many drive drops are a filter finding, not a ranking miss.
+- Form copy: description "Picture one trip…" and Budget helper text about total
+  travel cost (not entrance fee). Sample CSV + test cover the San Diego ≤6h /
+  yell+havo+zion all-unreachable case.
+- Metrics unchanged (no committed external rows; train/holdout/all same):
+  train 0.708 / 0.764, holdout 0.794 / 0.813.
+
+
 ## 2026-10-05 — external label form + importer
 
 - Added `docs/label-form.md`: Google Form blueprint with plain-English choices

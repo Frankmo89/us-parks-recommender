@@ -8,6 +8,12 @@ in `data/eval_profiles.json` and are **for testing only — never tune on them**
 Engine field names and allowed values match `docs/engine-contract.md`.
 Import with `scripts/import_form_labels.py`.
 
+### Form description (paste at the top of the Google Form)
+
+```text
+Picture one trip you would really take. Answer for that trip, then pick the 3 parks that fit it best.
+```
+
 ## Form questions (exact choices)
 
 Copy the question text as the form field title so CSV column headers match.
@@ -110,6 +116,8 @@ Single choice:
 ### 6. Budget (travel cost to reach and stay, not entrance fee)
 
 **Question:** `Budget`
+
+**Helper text (paste under the question):** Your total travel cost: gas or flights, lodging and food. Not the entrance fee.
 
 Single choice:
 
@@ -271,3 +279,10 @@ python scripts/import_form_labels.py path/to/form_export.csv --dry-run
 Bad rows are skipped and printed. Existing profiles are never modified; only new
 `split: "external"` profiles are appended. `python -m src.evaluate` reports the
 external split on its own lines and keeps `all` = train + holdout only.
+
+After validation, the importer runs `ParkRecommender.candidates()` on the
+profile. Top-3 picks that pass stay in `relevant`. Picks that fail hard filters
+move to `unreachable` as
+`{"park_code": "...", "reasons": ["drive"|"remote"|"permit", ...]}`
+(every reason that applies). If no pick passes, the row is skipped. Many
+unreachable drive drops are a finding about the filters, not the ranking.
