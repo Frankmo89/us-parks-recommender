@@ -2,7 +2,8 @@
   "notes": [
     "Acceptance / regression fixtures, not a user study and not a blind holdout.",
     "Holdout was seen during development. Labels were revised once on 2026-09-21.",
-    "Do not edit relevant lists to chase metrics after this revision."
+    "Do not edit relevant lists to chase metrics after this revision.",
+    "External split (from docs/label-form.md) is for testing only; never tune on it. evaluate ``all`` is train+holdout only."
   ],
   "profiles": [
     {

@@ -1,5 +1,39 @@
 # Changelog
 
+## 2026-10-05 — external importer drops unreachable picks
+
+- Importer runs `ParkRecommender.candidates()` on each form profile. Top-3 picks
+  that pass stay in `relevant`; picks that fail hard filters move to
+  `unreachable` as `{"park_code", "reasons": ["drive"|"remote"|"permit", ...]}`.
+  Rows with no reachable pick are skipped and reported.
+- `src.evaluate` prints external unreachable pick counts by reason (drive /
+  remote / permit). Many drive drops are a filter finding, not a ranking miss.
+- Form copy: description "Picture one trip…" and Budget helper text about total
+  travel cost (not entrance fee). Sample CSV + test cover the San Diego ≤6h /
+  yell+havo+zion all-unreachable case.
+- Metrics unchanged (no committed external rows; train/holdout/all same):
+  train 0.708 / 0.764, holdout 0.794 / 0.813.
+
+
+## 2026-10-05 — external label form + importer
+
+- Added `docs/label-form.md`: Google Form blueprint with plain-English choices
+  mapped to engine biomes, tags, enums, origins (+ Anywhere), and the 63 park
+  names (exactly 3 top picks).
+- Added `scripts/import_form_labels.py`: reads form CSV, validates each row with
+  `validate_profile`, appends `split: "external"` profiles, skips bad rows.
+  Never edits existing profiles or their `relevant` lists.
+- `src.evaluate` reports the external split on its own lines (model, baselines,
+  content-only, with/without filter-only). ``all`` remains train + holdout only
+  so legacy metrics stay comparable. External is for testing only — never tune.
+- Sample CSV + tests: `tests/fixtures/form_labels_sample.csv`,
+  `tests/test_import_form_labels.py`.
+- Metrics before → after (model train/holdout/all unchanged; no external rows
+  in the committed fixtures yet):
+  - train: R-Prec **0.708 → 0.708**, nDCG@5 **0.764 → 0.764**
+  - holdout: R-Prec **0.794 → 0.794**, nDCG@5 **0.813 → 0.813**
+
+
 ## 2026-10-05 — filter-only ablation and public candidates()
 
 - Renamed `ParkRecommender._filtered` → `candidates()` (public hard-filter
