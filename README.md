@@ -60,10 +60,21 @@ Origins: `san_diego`, `los_angeles`, `phoenix`, `denver`, `seattle`, `salt_lake`
 holdout or a user study. The holdout was seen during development. Labels were
 revised once on 2026-09-21. Weights were not retuned after that pass.
 
-| Split | n | R-Precision | nDCG@5 |
-|---|---|---|---|
-| Train | 12 | 0.708 | 0.764 |
-| Holdout | 6 | 0.794 | 0.813 |
+Baselines use the same hard filters as the model (remote, permits, drive hours).
+**Popularity** ranks by crowd high→low (ties by `park_code`). **Random** is the
+mean of 100 shuffles of the filtered parks (seeds 0–99).
+
+| Method | Split | n | R-Precision | nDCG@5 |
+|---|---|---|---|---|
+| Model | Train | 12 | 0.708 | 0.764 |
+| Model | Holdout | 6 | 0.794 | 0.813 |
+| Model | All | 18 | 0.737 | 0.781 |
+| Popularity | Train | 12 | 0.124 | 0.153 |
+| Popularity | Holdout | 6 | 0.442 | 0.425 |
+| Popularity | All | 18 | 0.230 | 0.243 |
+| Random | Train | 12 | 0.136 | 0.185 |
+| Random | Holdout | 6 | 0.483 | 0.498 |
+| Random | All | 18 | 0.252 | 0.289 |
 
 See `CHANGELOG.md` for the 50 mph drive bug. Those older figures are retired.
 
