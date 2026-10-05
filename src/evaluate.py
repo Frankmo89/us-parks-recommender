@@ -212,6 +212,19 @@ def _detect_filter_only(
     return ids
 
 
+
+def external_unreachable_counts(profiles: list[dict]) -> dict[str, int]:
+    """Count unreachable external picks by hard-filter reason."""
+    counts = {"drive": 0, "remote": 0, "permit": 0, "parks": 0}
+    for item in profiles:
+        for entry in item.get("unreachable") or []:
+            counts["parks"] += 1
+            for reason in entry.get("reasons") or []:
+                if reason in counts:
+                    counts[reason] += 1
+    return counts
+
+
 def run(k: int = 5) -> dict:
     bundle = load_bundle()
     model = ParkRecommender()
@@ -269,6 +282,7 @@ def run(k: int = 5) -> dict:
         "content_only": content_only,
         "excl_filter_only": excl,
         "filter_only_ids": sorted(filter_only_ids),
+        "external_unreachable": external_unreachable_counts(external),
     }
 
 
@@ -323,6 +337,14 @@ def _print_comparison_table(result: dict) -> None:
     print(
         "Filter-only profiles (random R-Prec=1 and nDCG@5=1; ranking cannot change score): "
         + (", ".join(fo_ids) if fo_ids else "(none)")
+    )
+    unreachable = result.get("external_unreachable") or {}
+    print(
+        "External unreachable picks (hard filters, not ranking): "
+        f"parks={unreachable.get('parks', 0)} "
+        f"drive={unreachable.get('drive', 0)} "
+        f"remote={unreachable.get('remote', 0)} "
+        f"permit={unreachable.get('permit', 0)}"
     )
 
 
