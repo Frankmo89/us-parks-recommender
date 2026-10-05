@@ -112,6 +112,13 @@ See `CHANGELOG.md` for the 50 mph drive bug. Those older figures are retired.
 Yosemite `best_months` was missing July/August in the catalog; that is a
 data fix, not a label tweak.
 
+## External labels
+
+Crowd labels from other people use the form in `docs/label-form.md`. Import a
+CSV export with `scripts/import_form_labels.py`. Those profiles get
+`split: "external"` and appear on their own evaluate lines. They are for
+testing only — never tune on them. The `all` aggregate stays train + holdout.
+
 ## Layout
 
 ```
