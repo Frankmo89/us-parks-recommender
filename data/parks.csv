@@ -1,6 +1,6 @@
 park_code,name,states,lat,lon,biomes,tags,difficulty,days_needed,best_months,crowd,permit_likely,budget_tier,remote,access
 acad,Acadia National Park,ME,44.35,-68.21,coast|forest,hiking|scenic_drive|family|wildlife|camping,easy,2-3,"5,6,7,8,9,10",high,0,mid,0,road
-npsa,National Park of American Samoa,AS,-14.26,-170.68,rainforest,hiking|coast|wildlife|family,moderate,2-3,"5,6,7,8,9",low,0,high,1,flight
+npsa,National Park of American Samoa,AS,-14.26,-170.68,rainforest|coast,hiking|wildlife|family,moderate,2-3,"5,6,7,8,9",low,0,high,1,flight
 arch,Arches National Park,UT,38.68,-109.57,desert,hiking|scenic_drive|family|stargazing|photography,easy,1,"3,4,5,9,10,11",high,1,mid,0,road
 badl,Badlands National Park,SD,43.75,-102.5,prairie,hiking|scenic_drive|wildlife|family|stargazing|paleontology,easy,1,"5,6,9,10",medium,0,low,0,road
 bibe,Big Bend National Park,TX,29.25,-103.25,desert,hiking|backpacking|stargazing|wildlife|scenic_drive|camping,moderate,4-7,"2,3,4,10,11",low,0,mid,1,road
@@ -24,7 +24,7 @@ glac,Glacier National Park,MT,48.76,-113.79,alpine|forest,hiking|scenic_drive|wi
 glba,Glacier Bay National Park,AK,58.5,-137.0,coast,wildlife|boat|water|photography,moderate,2-3,"6,7,8",low,0,high,1,flight
 grca,Grand Canyon National Park,AZ,36.06,-112.14,canyon,hiking|scenic_drive|family|photography|backpacking,moderate,2-3,"4,5,9,10",high,1,mid,0,road
 grte,Grand Teton National Park,WY,43.73,-110.8,alpine|forest,hiking|wildlife|scenic_drive|backpacking|photography,moderate,2-3,"6,7,8,9",high,0,mid,0,road
-grba,Great Basin National Park,NV,38.98,-114.3,alpine,hiking|stargazing|cave|scenic_drive,moderate,2-3,"6,7,8,9",low,0,low,1,road
+grba,Great Basin National Park,NV,38.98,-114.3,alpine|cave,hiking|stargazing|scenic_drive,moderate,2-3,"6,7,8,9",low,0,low,1,road
 grsa,Great Sand Dunes National Park,CO,37.73,-105.51,desert,hiking|family|stargazing|sand|photography,easy,1,"5,6,9",medium,0,low,0,road
 grsm,Great Smoky Mountains National Park,"TN,NC",35.68,-83.53,forest,hiking|scenic_drive|family|wildlife|waterfalls|camping,easy,2-3,"4,5,6,9,10",high,1,low,0,road
 gumo,Guadalupe Mountains National Park,TX,31.92,-104.87,desert,hiking|backpacking,challenging,2-3,"3,4,10,11",low,0,low,1,road
@@ -47,7 +47,7 @@ neri,New River Gorge National Park,WV,38.07,-81.08,forest,hiking|climbing|water|
 noca,North Cascades National Park,WA,48.7,-121.2,alpine|forest,hiking|backpacking|photography|wildlife,challenging,4-7,"7,8,9",low,0,mid,1,road
 olym,Olympic National Park,WA,47.8,-123.7,rainforest|coast,hiking|hot_springs|backpacking|family,moderate,4-7,"6,7,8,9",high,0,mid,0,road
 pefo,Petrified Forest National Park,AZ,35.07,-109.78,desert,hiking|scenic_drive|family|paleontology,easy,1,"3,4,5,10,11",medium,0,low,0,road
-pinn,Pinnacles National Park,CA,36.48,-121.16,chaparral,hiking|climbing|wildlife|family|cave,moderate,1,"2,3,4,10,11",medium,0,low,0,road
+pinn,Pinnacles National Park,CA,36.48,-121.16,chaparral|cave,hiking|climbing|wildlife|family,moderate,1,"2,3,4,10,11",medium,0,low,0,road
 redw,Redwood National Park,CA,41.3,-124.0,rainforest|coast,hiking|family|scenic_drive|wildlife,easy,2-3,"5,6,7,8,9",medium,0,mid,0,road
 romo,Rocky Mountain National Park,CO,40.4,-105.58,alpine|forest,hiking|scenic_drive|wildlife|family|photography,moderate,2-3,"6,7,8,9",high,1,mid,0,road
 sagu,Saguaro National Park,AZ,32.25,-110.5,desert,hiking|family|stargazing|easy_walk,easy,1,"11,12,1,2,3,4",medium,0,low,0,road
