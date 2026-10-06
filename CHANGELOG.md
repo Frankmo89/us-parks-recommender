@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-10-05 — app: readable primary buttons (app only)
+
+- Why: Start, Next and See parks had light text on cream and were hard to
+  read on a phone. Streamlit draws primary buttons in the theme
+  `primaryColor` (#e8d9b8) with white text.
+- Contrast before → after (WCAG AA for text is 4.5:1; measured in Chrome at
+  390 px wide, computed with the WCAG formula):
+  - normal: white on #e8d9b8 **1.40** → #16210f on #e8d9b8 **11.96**
+  - hover and keyboard focus: white on #d6bb80 **1.86** → #16210f on
+    #d6bb80 **8.96**; focus also gets a 2 px #f7f1e4 outline
+  - pressed: white on #e8d9b8 **1.40** → #16210f on #c9a96a **7.44**
+  - disabled (Next with no terrain, See parks with an unknown ZIP): no
+    fill, #f7f1e4 at 40% opacity on the quiz card, **3.06–3.47** → solid
+    #b3ad9f, **5.26–8.86**, plus a dashed border so it still looks
+    disabled. The range is the card (rgba(6, 14, 10, .82)) over a white vs
+    a black photo.
+- Colors and the contrast math live in `app/contrast.py`, which builds the
+  CSS. `tests/test_contrast.py` checks every state is at least 4.5:1 and
+  that the theme `primaryColor` is the cream the ratios assume.
+- No engine change: `data/engine_fixtures.json` (`--check`) and
+  `web/engine_data.json` unchanged, and `src.evaluate` output is identical.
+  Metrics (unedited, unchanged):
+  - model train: R-Prec **0.685**, nDCG@5 **0.739** → **0.685** / **0.739**
+  - model holdout: **0.794** / **0.842** → **0.794** / **0.842**
+  - popularity, random and content-only baselines also unchanged.
+
 ## 2026-10-05 — app: why-sentence wording, phone chart axis, no self demo link (app only)
 
 - Why sentence (`app/breakdown.py`): it said "lost points for terrain" even

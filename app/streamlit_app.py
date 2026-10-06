@@ -11,6 +11,7 @@ from app.breakdown import (
     score_breakdown,
     why_sentence,
 )
+from app.contrast import primary_button_css
 from app.origin import FOUND, NOT_FOUND, drive_limit, zip_origin
 from app.states import state_choices, state_label, states_filter
 from src.evaluate import run as run_evaluation
@@ -178,6 +179,9 @@ def inject_base_css() -> None:
           .how-list { color: #d7cbb3; font-size: .9rem; line-height: 1.55; padding-left: 1.2rem; margin: 0 0 .5rem; }
           .how-list li { margin-bottom: .4rem; }
           .how-note { color: #8fa393; font-size: .8rem; margin: .4rem 0 0; }
+        """
+        + primary_button_css()
+        + """
         </style>
         """
     )
