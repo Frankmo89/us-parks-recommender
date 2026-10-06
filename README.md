@@ -28,8 +28,9 @@ score = 0.55 * cosine(biome + IDF(tags))
 The last term is `W_MONTH_PENALTY * (month_distance / 6)` with
 `W_MONTH_PENALTY=0.35` from `src/recommender.py`.
 `month_distance` is the circular months to the nearest `best_months` entry
-(December wraps to January). Max distance is 6. Remote parks and permits stay
-hard filters.
+(December wraps to January). Max distance is 6. Remote parks, permits and
+the optional `states` list (two-letter codes, e.g. `["UT"]`) stay hard
+filters.
 
 Drive time is `great_circle_miles × 1.25 / 65 mph`. That is a highway sketch,
 not Google Maps. Each park has an `access` value (`road`, `boat`, `flight`).
