@@ -145,7 +145,8 @@ while filling the profile.
 7. **Month** — parse "November", "next July", "fall" (pick a representative
    month). If timing is unknown, omit (`null`) so season does not penalize.
 8. **Origin / drive** — only when the user gives a city or "within N hours of
-   …". Resolve to lat/lon (named origins in `src/origins.py` are fine). If they
+   …". Resolve to lat/lon (named origins in `src/origins.py`, or a 5-digit
+   ZIP via `src/zipcodes.py` `lookup_zip`, are fine). If they
    say "fly anywhere", leave origin fields null. A drive limit already drops
    flight-access parks, so do not add one just to mean "no flights".
 9. **Remote / permits** — "no flights / lower 48 only" → `allow_remote: false`.

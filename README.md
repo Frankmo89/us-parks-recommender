@@ -157,6 +157,7 @@ src/recommender.py
 src/evaluate.py
 src/cli.py
 src/origins.py
+src/zipcodes.py
 app/streamlit_app.py
 .github/workflows/ci.yml
 ```

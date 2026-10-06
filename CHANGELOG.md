@@ -1,5 +1,28 @@
 # Changelog
 
+## 2026-10-05 — ZIP code starting point
+
+- Why: the app and CLI only offered 7 city presets, so most U.S. travelers
+  could not set their own starting point for the drive filter.
+- Added `data/zcta_centroids.csv` (`zip,lat,lon`, 33,791 rows, ~0.9 MB) from
+  the U.S. Census Bureau 2026 Gazetteer ZCTA national file (public domain),
+  built by `scripts/build_zcta_table.py`. ZIPs stay 5-char strings with
+  leading zeros; coordinates are the ZCTA internal points as printed by the
+  Census (a leading "+" on Guam / CNMI longitudes is dropped).
+- `src/zipcodes.py` `lookup_zip()` returns `(lat, lon)` or raises
+  `ZipNotFoundError` ("ZIP not found") for input that is not exactly five
+  digits or is not in the table.
+- App: the city list is replaced by a "Starting ZIP code" box. Empty means
+  Anywhere (no origin, no drive limit). The Max drive hours slider shows and
+  applies only for a valid ZIP. Bad input shows "ZIP not found" and disables
+  See parks.
+- CLI: new `--zip`, mutually exclusive with the `--origin` presets (kept).
+  A bad ZIP exits with "ZIP not found".
+- No engine, scoring, fixture, export or version change; the engine still
+  takes lat/lon. Metrics unchanged: train 0.708 / 0.764, holdout
+  0.794 / 0.813.
+
+
 ## 2026-10-05 — access cleanup: catalog build script and remote toggle
 
 - `scripts/build_parks_csv.py` had drifted from `data/parks.csv` (single
