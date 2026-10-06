@@ -56,6 +56,7 @@ PROFILE_ORDER = (
     "max_drive_hours",
     "allow_remote",
     "allow_permits",
+    "states",
 )
 
 EVAL_NOTES = "From data/eval_profiles.json; relevant list is frozen and not part of the engine API."
@@ -204,6 +205,44 @@ EDGE_PROFILES: list[dict] = [
             "max_drive_hours": None,
             "allow_remote": True,
             "allow_permits": True,
+        },
+    },
+    {
+        "id": "utah_canyons_states",
+        "notes": "states=[\"UT\"] keeps only Utah parks; without it Death Valley, Black Canyon and Big Bend outrank Arches and Bryce.",
+        "profile": {
+            "biomes": ["canyon", "desert"],
+            "tags": ["hiking", "photography", "stargazing"],
+            "difficulty": "moderate",
+            "days_needed": "4-7",
+            "crowd_pref": "medium",
+            "budget_tier": "mid",
+            "month": 10,
+            "origin_lat": None,
+            "origin_lon": None,
+            "max_drive_hours": None,
+            "allow_remote": True,
+            "allow_permits": True,
+            "states": ["UT"],
+        },
+    },
+    {
+        "id": "pacific_northwest_states",
+        "notes": "Multi-state filter states=[\"WA\", \"OR\"]: only 4 parks qualify, so fewer than k are returned.",
+        "profile": {
+            "biomes": ["alpine", "forest", "rainforest"],
+            "tags": ["hiking", "waterfalls", "photography"],
+            "difficulty": "moderate",
+            "days_needed": "2-3",
+            "crowd_pref": "medium",
+            "budget_tier": "mid",
+            "month": 8,
+            "origin_lat": None,
+            "origin_lon": None,
+            "max_drive_hours": None,
+            "allow_remote": True,
+            "allow_permits": True,
+            "states": ["WA", "OR"],
         },
     },
 ]

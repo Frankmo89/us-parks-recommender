@@ -37,6 +37,7 @@ PROFILE_FIELDS = {
     "max_drive_hours",
     "allow_remote",
     "allow_permits",
+    "states",
 }
 
 RANDOM_SEEDS = range(100)  # 0..99

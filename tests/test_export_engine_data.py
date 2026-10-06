@@ -248,7 +248,7 @@ def test_export_has_required_keys(engine_data: dict):
 def test_export_json_only_matches_live_recommend_for_all_fixtures(
     engine_data: dict, fixtures: dict, live_model: ParkRecommender
 ):
-    assert len(fixtures["profiles"]) == 26
+    assert len(fixtures["profiles"]) == 28
     for item in fixtures["profiles"]:
         profile = {key: item["profile"][key] for key in PROFILE_FIELDS}
         live = live_model.recommend(UserProfile(**profile), k=fixtures["k"])

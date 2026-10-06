@@ -3,9 +3,9 @@
     "Parity fixtures for a future TypeScript (or other) port of the ranking engine.",
     "Generated from the Python ParkRecommender; do not hand-edit scores.",
     "Regenerate with `python scripts/generate_engine_fixtures.py` after intentional, version-bumped engine changes.",
-    "Includes the 18 eval profiles plus 8 edge cases. Eval 'relevant' labels are not included."
+    "Includes the 18 eval profiles plus 10 edge cases. Eval 'relevant' labels are not included."
   ],
-  "engine_version": "0.3.0",
+  "engine_version": "0.4.0",
   "weights": {
     "W_CONTENT": 0.55,
     "W_DAYS": 0.18,
@@ -40,10 +40,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": true,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -342,10 +343,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -648,10 +650,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": false,
-        "allow_permits": false
+        "allow_permits": false,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -949,10 +952,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": true,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1256,10 +1260,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1555,10 +1560,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1860,10 +1866,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2163,10 +2170,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": true,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2467,10 +2475,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": true,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2776,10 +2785,11 @@
         "origin_lon": -87.63,
         "max_drive_hours": 8,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
@@ -3021,10 +3031,11 @@
         "origin_lon": -118.24,
         "max_drive_hours": 8,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3329,10 +3340,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": false,
-        "allow_permits": false
+        "allow_permits": false,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3631,10 +3643,11 @@
         "origin_lon": -117.16,
         "max_drive_hours": 8,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3941,10 +3954,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": true,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -4241,10 +4255,11 @@
         "origin_lon": -74.01,
         "max_drive_hours": 10,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
@@ -4499,10 +4514,11 @@
         "origin_lon": -112.07,
         "max_drive_hours": 8,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -4805,10 +4821,11 @@
         "origin_lon": -122.33,
         "max_drive_hours": 6,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 2,
         "empty": false,
@@ -4949,10 +4966,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5240,10 +5258,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": true,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5557,10 +5576,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5856,10 +5876,11 @@
         "origin_lon": -104.99,
         "max_drive_hours": 3,
         "allow_remote": false,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 2,
         "empty": false,
@@ -5997,10 +6018,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": false,
-        "allow_permits": false
+        "allow_permits": false,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6298,10 +6320,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": true,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6605,10 +6628,11 @@
         "origin_lon": -74.01,
         "max_drive_hours": 1,
         "allow_remote": false,
-        "allow_permits": false
+        "allow_permits": false,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 0,
         "empty": true,
@@ -6641,10 +6665,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": true,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6942,10 +6967,11 @@
         "origin_lon": null,
         "max_drive_hours": null,
         "allow_remote": true,
-        "allow_permits": true
+        "allow_permits": true,
+        "states": null
       },
       "output": {
-        "engine_version": "0.3.0",
+        "engine_version": "0.4.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -7220,6 +7246,575 @@
               "access": "road",
               "nps_url": "https://www.nps.gov/bibe/",
               "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 low crowds",
+              "drive_hours": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "utah_canyons_states",
+      "kind": "edge",
+      "split": null,
+      "notes": "states=[\"UT\"] keeps only Utah parks; without it Death Valley, Black Canyon and Big Bend outrank Arches and Bryce.",
+      "profile": {
+        "biomes": [
+          "canyon",
+          "desert"
+        ],
+        "tags": [
+          "hiking",
+          "photography",
+          "stargazing"
+        ],
+        "difficulty": "moderate",
+        "days_needed": "4-7",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 10,
+        "origin_lat": null,
+        "origin_lon": null,
+        "max_drive_hours": null,
+        "allow_remote": true,
+        "allow_permits": true,
+        "states": [
+          "UT"
+        ]
+      },
+      "output": {
+        "engine_version": "0.4.0",
+        "k": 5,
+        "n_returned": 5,
+        "empty": false,
+        "tie_epsilon": 0.001,
+        "tie_groups": [
+          [
+            "arch",
+            "brca"
+          ]
+        ],
+        "parks": [
+          {
+            "rank": 1,
+            "score": 0.687307,
+            "match_percent": 72,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.831467,
+              "days": 0.666667,
+              "difficulty": 0.5,
+              "budget": 0.5,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.457307,
+                "days": 0.12,
+                "difficulty": 0.07,
+                "budget": 0.04,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "care",
+              "name": "Capitol Reef National Park",
+              "states": "UT",
+              "biomes": [
+                "canyon",
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "stargazing"
+              ],
+              "difficulty": "easy",
+              "days_needed": "2-3",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "4",
+                "5",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/care/",
+              "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 stargazing",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 2,
+            "score": 0.572748,
+            "match_percent": 60,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.423178,
+              "days": 0.666667,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.232748,
+                "days": 0.12,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "cany",
+              "name": "Canyonlands National Park",
+              "states": "UT",
+              "biomes": [
+                "canyon",
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "backpacking",
+                "scenic_drive",
+                "stargazing",
+                "4x4"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "medium",
+              "budget_tier": "mid",
+              "best_months": [
+                "3",
+                "4",
+                "5",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/cany/",
+              "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 stargazing",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 3,
+            "score": 0.55588,
+            "match_percent": 59,
+            "tied_with_neighbors": true,
+            "breakdown": {
+              "content": 0.847055,
+              "days": 0.333333,
+              "difficulty": 0.5,
+              "budget": 1.0,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.46588,
+                "days": 0.06,
+                "difficulty": 0.07,
+                "budget": 0.08,
+                "crowd_penalty": -0.12,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "arch",
+              "name": "Arches National Park",
+              "states": "UT",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "stargazing",
+                "photography"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "3",
+                "4",
+                "5",
+                "9",
+                "10",
+                "11"
+              ],
+              "remote": false,
+              "permit_likely": true,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/arch/",
+              "why": "desert \u00b7 hiking \u00b7 photography \u00b7 stargazing",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 4,
+            "score": 0.55588,
+            "match_percent": 59,
+            "tied_with_neighbors": true,
+            "breakdown": {
+              "content": 0.847055,
+              "days": 0.333333,
+              "difficulty": 0.5,
+              "budget": 1.0,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.46588,
+                "days": 0.06,
+                "difficulty": 0.07,
+                "budget": 0.08,
+                "crowd_penalty": -0.12,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "brca",
+              "name": "Bryce Canyon National Park",
+              "states": "UT",
+              "biomes": [
+                "canyon"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "scenic_drive",
+                "photography",
+                "stargazing"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/brca/",
+              "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 stargazing",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 5,
+            "score": 0.535379,
+            "match_percent": 56,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.573416,
+              "days": 0.666667,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.315379,
+                "days": 0.12,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": -0.12,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "zion",
+              "name": "Zion National Park",
+              "states": "UT",
+              "biomes": [
+                "canyon"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "photography",
+                "scenic_drive",
+                "permits"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "3",
+                "4",
+                "5",
+                "10",
+                "11"
+              ],
+              "remote": false,
+              "permit_likely": true,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/zion/",
+              "why": "canyon \u00b7 hiking \u00b7 photography",
+              "drive_hours": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "pacific_northwest_states",
+      "kind": "edge",
+      "split": null,
+      "notes": "Multi-state filter states=[\"WA\", \"OR\"]: only 4 parks qualify, so fewer than k are returned.",
+      "profile": {
+        "biomes": [
+          "alpine",
+          "forest",
+          "rainforest"
+        ],
+        "tags": [
+          "hiking",
+          "waterfalls",
+          "photography"
+        ],
+        "difficulty": "moderate",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "mid",
+        "month": 8,
+        "origin_lat": null,
+        "origin_lon": null,
+        "max_drive_hours": null,
+        "allow_remote": true,
+        "allow_permits": true,
+        "states": [
+          "WA",
+          "OR"
+        ]
+      },
+      "output": {
+        "engine_version": "0.4.0",
+        "k": 5,
+        "n_returned": 4,
+        "empty": false,
+        "tie_epsilon": 0.001,
+        "tie_groups": [],
+        "parks": [
+          {
+            "rank": 1,
+            "score": 0.502291,
+            "match_percent": 53,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.422347,
+              "days": 0.666667,
+              "difficulty": 0.5,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.232291,
+                "days": 0.12,
+                "difficulty": 0.07,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "noca",
+              "name": "North Cascades National Park",
+              "states": "WA",
+              "biomes": [
+                "alpine",
+                "forest"
+              ],
+              "tags": [
+                "hiking",
+                "backpacking",
+                "low_crowd",
+                "photography",
+                "wildlife"
+              ],
+              "difficulty": "challenging",
+              "days_needed": "4-7",
+              "crowd": "low",
+              "budget_tier": "mid",
+              "best_months": [
+                "7",
+                "8",
+                "9"
+              ],
+              "remote": true,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/noca/",
+              "why": "alpine \u00b7 forest \u00b7 hiking \u00b7 photography \u00b7 low crowds",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 2,
+            "score": 0.414966,
+            "match_percent": 44,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.245393,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.134966,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": -0.12,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "mora",
+              "name": "Mount Rainier National Park",
+              "states": "WA",
+              "biomes": [
+                "alpine",
+                "forest"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "wildflowers",
+                "photography"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "7",
+                "8",
+                "9"
+              ],
+              "remote": false,
+              "permit_likely": true,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/mora/",
+              "why": "alpine \u00b7 forest \u00b7 hiking \u00b7 photography \u00b7 2-3 day trip",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 3,
+            "score": 0.404966,
+            "match_percent": 43,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.245393,
+              "days": 0.666667,
+              "difficulty": 0.5,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.134966,
+                "days": 0.12,
+                "difficulty": 0.07,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "crla",
+              "name": "Crater Lake National Park",
+              "states": "OR",
+              "biomes": [
+                "alpine",
+                "forest"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "photography",
+                "winter"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "medium",
+              "budget_tier": "mid",
+              "best_months": [
+                "7",
+                "8",
+                "9"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/crla/",
+              "why": "alpine \u00b7 forest \u00b7 hiking \u00b7 photography",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 4,
+            "score": 0.268357,
+            "match_percent": 28,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.087922,
+              "days": 0.666667,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.048357,
+                "days": 0.12,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": -0.12,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "olym",
+              "name": "Olympic National Park",
+              "states": "WA",
+              "biomes": [
+                "rainforest",
+                "coast"
+              ],
+              "tags": [
+                "hiking",
+                "hot_springs",
+                "backpacking",
+                "family"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "4-7",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/olym/",
+              "why": "rainforest \u00b7 coast \u00b7 hiking",
               "drive_hours": null
             }
           }
