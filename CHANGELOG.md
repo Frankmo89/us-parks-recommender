@@ -28,6 +28,12 @@ Measured in Chrome at 390 px wide (phone), before → after:
   heading to the card bottom with an 8 px margin (1020 × 1947), resized to
   900 × 1718, 256-color PNG via libimagequant (141 KB). README alt text
   updated.
+- Known bug, not fixed here: the quiz loses answers between steps.
+  Streamlit deletes a widget's key once the widget is not drawn, and
+  `init_state` then restores the default, so results always use the default
+  answers (desert, hiking, easy, 2-3 days, medium, mid, November). The
+  screenshot run used a local, uncommitted 5-line patch that re-assigns the
+  answer keys each run; the card and chart code are exactly this release.
 - No engine change: `data/engine_fixtures.json` (`--check`) and
   `web/engine_data.json` unchanged, and `src.evaluate` output is identical.
   Metrics (unedited, unchanged):
