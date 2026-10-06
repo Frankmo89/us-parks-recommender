@@ -6,7 +6,7 @@ choosing which park to visit.
 
 **Live demo:** https://us-national-parks-recommender.streamlit.app
 
-![Live demo results card for Arches National Park: 63% match, ~11.1h drive from the start, the 'Why this park' score chart, and the sentence 'Strong fit on effort and budget; partial match on terrain.'](docs/demo.png)
+![Live demo results card for Capitol Reef National Park: Match 65%, the 'Why this park' chart (terrain & activities +0.26, days +0.18, effort +0.14, budget +0.04, crowds 0, season 0) and the sentence 'Strong fit on length and effort; partial match on terrain.'](docs/demo.png)
 
 ## How it works
 
