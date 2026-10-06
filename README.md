@@ -6,7 +6,7 @@ choosing which park to visit.
 
 **Live demo:** https://us-national-parks-recommender.streamlit.app
 
-![Live demo: the last quiz step (starting ZIP, states, remote parks, permits)](docs/demo.png)
+![Live demo results card for Arches National Park: 63% match, ~11.1h drive from the start, the 'Why this park' score chart, and the sentence 'Strong fit on effort and budget; partial match on terrain.'](docs/demo.png)
 
 ## How it works
 
