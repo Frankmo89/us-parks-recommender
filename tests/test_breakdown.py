@@ -7,10 +7,12 @@ import pytest
 from app.breakdown import (
     MAX_SCORE,
     MINUS,
+    LABEL_SHARE,
     VALUE_AXIS_LABELS,
     format_contribution,
     match_percent,
     score_breakdown,
+    value_domain,
     why_sentence,
 )
 from src.features import UserProfile
@@ -197,6 +199,29 @@ def test_labels_match_values_for_gains_and_losses():
     assert labels["Terrain & activities"] == "+0.26"
     assert labels["Crowds"] == f"{MINUS}0.12"
     assert labels["Season"] == f"{MINUS}0.06"
+
+
+def test_value_domain_leaves_label_room_right_of_the_longest_bar():
+    breakdown = score_breakdown(_row(content=0.4639, days_fit=1.0, diff_fit=0.5, budget_fit=1.0))
+    lo, hi = value_domain(breakdown)
+    top = breakdown["value"].max()
+    assert lo == 0.0  # no penalties: axis starts at 0, no empty left side
+    assert (hi - top) / (hi - lo) >= LABEL_SHARE - 1e-9
+
+
+def test_value_domain_leaves_label_room_on_both_sides_with_a_penalty():
+    breakdown = score_breakdown(_row(content=0.6, crowd_penalty=0.24, month_penalty=0.0))
+    lo, hi = value_domain(breakdown)
+    low, top = breakdown["value"].min(), breakdown["value"].max()
+    assert lo < low < 0 < top < hi
+    assert (low - lo) / (hi - lo) >= LABEL_SHARE - 1e-9
+    assert (hi - top) / (hi - lo) >= LABEL_SHARE - 1e-9
+
+
+def test_value_domain_all_zero_still_has_a_width():
+    breakdown = score_breakdown(_row(content=0.0, days_fit=0.0, diff_fit=0.0, budget_fit=0.0))
+    lo, hi = value_domain(breakdown)
+    assert lo == 0.0 and hi > 0
 
 
 def test_badge_order_matches_ranking_order():

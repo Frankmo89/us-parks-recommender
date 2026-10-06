@@ -82,6 +82,28 @@ def format_contribution(value: float) -> str:
     return f"{sign}{abs(rounded):.2f}"
 
 
+# Share of the plot width kept free for value labels on each side that has
+# bars: "+0.26" at 11 px is ~37 px with its offset, about 28% of the
+# ~135 px plot on a 390 px phone.
+LABEL_SHARE = 0.28
+ROW_STEP = 30  # px per chart row; bars fill 60% of it
+
+
+def value_domain(breakdown: pd.DataFrame) -> tuple[float, float]:
+    """x-axis bounds that fit the bars plus room for their value labels.
+
+    Positive labels sit right of their bar (zero parts too, at x=0), so
+    the right side always gets label room; the left side gets it only when
+    a part is negative.
+    """
+    lo = min(0.0, float(breakdown["value"].min()))
+    hi = max(0.0, float(breakdown["value"].max()))
+    span = (hi - lo) or 0.1
+    sides = 2 if lo < 0 else 1
+    pad = span * LABEL_SHARE / (1 - sides * LABEL_SHARE)
+    return (lo - pad if lo < 0 else 0.0, hi + pad)
+
+
 def match_percent(score: float) -> int:
     """Score as a percentage of the best possible score, for the "Match" badge.
 

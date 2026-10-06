@@ -4,11 +4,13 @@ import streamlit as st
 
 from app.breakdown import (
     PART_ORDER,
+    ROW_STEP,
     VALUE_AXIS_LABELS,
     card_meta,
     match_percent,
     nps_url,
     score_breakdown,
+    value_domain,
     why_sentence,
 )
 from app.contrast import primary_button_css
@@ -165,6 +167,13 @@ def inject_base_css() -> None:
           .park-name { color: #f7f1e4; font-weight: 600; font-size: 1rem; margin: 0 0 .4rem; }
           .park-name-lg { font-size: 1.35rem; }
           .park-meta { color: #d7cbb3; font-size: .85rem; }
+          @media (max-width: 480px) {
+            /* Five nested paddings left the chart 200 px of a 390 px phone. */
+            .st-key-app_shell { padding-left: 0; padding-right: 0; }
+            .st-key-quiz_panel { padding-left: 1rem; padding-right: 1rem; }
+            div[class*="st-key-park_card_"] { padding-left: .6rem; padding-right: .6rem; }
+            [data-testid="stExpanderDetails"] { padding-left: .5rem; padding-right: .5rem; }
+          }
           .match-badge {
             display: inline-block; background: #e8d9b8; color: #16210f;
             font-weight: 700; font-size: .78rem; padding: .18rem .6rem;
@@ -252,11 +261,13 @@ def why_chart(breakdown: pd.DataFrame) -> alt.Chart:
             "part:N",
             sort=PART_ORDER,
             title=None,
+            scale=alt.Scale(paddingInner=0.4, paddingOuter=0.2),
             axis=alt.Axis(labelColor="#d7cbb3", labelFontSize=12, domain=False, ticks=False, grid=False),
         ),
         x=alt.X(
             "value:Q",
             title="Contribution to score",
+            scale=alt.Scale(domain=list(value_domain(breakdown)), nice=False),
             axis=alt.Axis(
                 labelColor="#8fa393",
                 titleColor="#8fa393",
@@ -266,7 +277,7 @@ def why_chart(breakdown: pd.DataFrame) -> alt.Chart:
             ),
         ),
     )
-    bars = base.mark_bar(size=16, cornerRadiusEnd=3).encode(
+    bars = base.mark_bar(cornerRadiusEnd=3).encode(
         color=alt.Color(
             "kind:N",
             sort=["Gain", "Loss"],
@@ -288,7 +299,7 @@ def why_chart(breakdown: pd.DataFrame) -> alt.Chart:
     )
     return (
         (zero_rule + bars + labels_pos + labels_neg)
-        .properties(height=160, background="transparent")
+        .properties(height=alt.Step(ROW_STEP), background="transparent")
         .configure_view(strokeWidth=0)
     )
 
@@ -301,7 +312,7 @@ def _why_expander(row: pd.Series) -> None:
 
 
 def render_top_card(row: pd.Series) -> None:
-    with st.container(border=True):
+    with st.container(border=True, key=f"park_card_{row['park_code']}"):
         st.markdown(f'<p class="park-name park-name-lg">{row["name"]}</p>', unsafe_allow_html=True)
         st.markdown(
             f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
@@ -314,7 +325,7 @@ def render_top_card(row: pd.Series) -> None:
 
 
 def render_small_card(row: pd.Series) -> None:
-    with st.container(border=True):
+    with st.container(border=True, key=f"park_card_{row['park_code']}"):
         st.markdown(f'<p class="park-name">{row["name"]}</p>', unsafe_allow_html=True)
         st.markdown(
             f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
