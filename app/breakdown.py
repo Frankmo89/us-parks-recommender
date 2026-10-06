@@ -65,6 +65,23 @@ VALUE_AXIS_LABELS = {
 }
 
 
+MINUS = "\u2212"  # typographic minus, same glyph Vega's "+.2f" format used
+
+
+def format_contribution(value: float) -> str:
+    """Bar label for one score part: "+0.26", "\u22120.12", or "0".
+
+    Anything that rounds to 0.00 prints as plain "0". Penalties are stored
+    as negated values, so a zero penalty is -0.0 and Vega printed it as
+    "\u22120.00".
+    """
+    rounded = round(float(value), 2)
+    if rounded == 0:
+        return "0"
+    sign = "+" if rounded > 0 else MINUS
+    return f"{sign}{abs(rounded):.2f}"
+
+
 def match_percent(score: float) -> int:
     """Score as a percentage of the best possible score, for the "Match" badge.
 
@@ -93,10 +110,13 @@ def score_breakdown(row: pd.Series) -> pd.DataFrame:
         "Crowds": -float(row["crowd_penalty"]),
         "Season": -float(row.get("month_penalty", 0.0)),
     }
+    # `+ 0.0` turns a zero penalty's -0.0 into 0.0.
+    values = {part: value + 0.0 for part, value in values.items()}
     return pd.DataFrame(
         {
             "part": PART_ORDER,
             "value": [values[part] for part in PART_ORDER],
+            "label": [format_contribution(values[part]) for part in PART_ORDER],
             "kind": ["Loss" if values[part] < 0 else "Gain" for part in PART_ORDER],
             "max": [PART_MAX[part] for part in PART_ORDER],
         }

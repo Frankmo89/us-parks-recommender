@@ -273,18 +273,18 @@ def why_chart(breakdown: pd.DataFrame) -> alt.Chart:
             scale=alt.Scale(domain=["Gain", "Loss"], range=["#0ca30c", "#d03b3b"]),
             legend=alt.Legend(title=None, orient="bottom", labelColor="#d7cbb3"),
         ),
-        tooltip=[alt.Tooltip("part:N", title="Part"), alt.Tooltip("value:Q", title="Contribution", format="+.2f")],
+        tooltip=[alt.Tooltip("part:N", title="Part"), alt.Tooltip("label:N", title="Contribution")],
     )
     zero_rule = alt.Chart(pd.DataFrame({"x": [0]})).mark_rule(color="#4a5a4e", strokeWidth=1).encode(x="x:Q")
     labels_pos = (
         base.transform_filter(alt.datum.value >= 0)
         .mark_text(align="left", dx=5, color="#f7f1e4", fontSize=11)
-        .encode(text=alt.Text("value:Q", format="+.2f"))
+        .encode(text="label:N")
     )
     labels_neg = (
         base.transform_filter(alt.datum.value < 0)
         .mark_text(align="right", dx=-5, color="#f7f1e4", fontSize=11)
-        .encode(text=alt.Text("value:Q", format="+.2f"))
+        .encode(text="label:N")
     )
     return (
         (zero_rule + bars + labels_pos + labels_neg)

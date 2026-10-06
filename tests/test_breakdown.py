@@ -4,7 +4,15 @@ import altair as alt
 import pandas as pd
 import pytest
 
-from app.breakdown import MAX_SCORE, VALUE_AXIS_LABELS, match_percent, score_breakdown, why_sentence
+from app.breakdown import (
+    MAX_SCORE,
+    MINUS,
+    VALUE_AXIS_LABELS,
+    format_contribution,
+    match_percent,
+    score_breakdown,
+    why_sentence,
+)
 from src.features import UserProfile
 from src.recommender import W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, ParkRecommender
 
@@ -156,6 +164,39 @@ def test_value_axis_labels_work_at_any_width():
     assert axis["tickCount"] == VALUE_AXIS_LABELS["tickCount"]
     assert axis["labelOverlap"] == "greedy"
     assert axis["format"] == ".2~f"
+
+
+@pytest.mark.parametrize(
+    ("value", "label"),
+    [
+        (-0.0, "0"),
+        (0.0, "0"),
+        (-0.004, "0"),
+        (0.004, "0"),
+        (0.2552, "+0.26"),
+        (0.08, "+0.08"),
+        (-0.12, f"{MINUS}0.12"),
+        (-0.2333, f"{MINUS}0.23"),
+    ],
+)
+def test_format_contribution_never_prints_negative_zero(value, label):
+    assert format_contribution(value) == label
+
+
+def test_zero_penalties_are_labeled_zero_not_negative_zero():
+    breakdown = score_breakdown(_row(crowd_penalty=0.0, month_penalty=0.0))
+    zero = breakdown.set_index("part").loc[["Crowds", "Season"]]
+    assert list(zero["label"]) == ["0", "0"]
+    assert all(math.copysign(1.0, value) == 1.0 for value in zero["value"])  # no -0.0 left
+    assert not any(label.startswith(("-", MINUS)) and set(label[1:]) <= set("0.") for label in breakdown["label"])
+
+
+def test_labels_match_values_for_gains_and_losses():
+    breakdown = score_breakdown(_row(content=0.4639, crowd_penalty=0.12, month_penalty=0.0583))
+    labels = breakdown.set_index("part")["label"]
+    assert labels["Terrain & activities"] == "+0.26"
+    assert labels["Crowds"] == f"{MINUS}0.12"
+    assert labels["Season"] == f"{MINUS}0.06"
 
 
 def test_badge_order_matches_ranking_order():
