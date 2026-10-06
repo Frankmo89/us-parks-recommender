@@ -5,7 +5,7 @@
     "Regenerate with `python scripts/generate_engine_fixtures.py` after intentional, version-bumped engine changes.",
     "Includes the 18 eval profiles plus 10 edge cases. Eval 'relevant' labels are not included."
   ],
-  "engine_version": "0.4.0",
+  "engine_version": "0.5.0",
   "weights": {
     "W_CONTENT": 0.55,
     "W_DAYS": 0.18,
@@ -44,7 +44,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -347,7 +347,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -653,7 +653,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -955,7 +955,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1181,18 +1181,18 @@
           },
           {
             "rank": 5,
-            "score": 0.39657,
-            "match_percent": 42,
+            "score": 0.382975,
+            "match_percent": 40,
             "tied_with_neighbors": false,
             "breakdown": {
-              "content": 0.121036,
+              "content": 0.096317,
               "days": 1.0,
               "difficulty": 0.5,
               "budget": 1.0,
               "crowd_penalty": 0.0,
               "month_penalty": 0.0,
               "weighted": {
-                "content": 0.06657,
+                "content": 0.052975,
                 "days": 0.18,
                 "difficulty": 0.07,
                 "budget": 0.08,
@@ -1205,11 +1205,11 @@
               "name": "National Park of American Samoa",
               "states": "AS",
               "biomes": [
-                "rainforest"
+                "rainforest",
+                "coast"
               ],
               "tags": [
                 "hiking",
-                "coast",
                 "wildlife",
                 "family"
               ],
@@ -1228,7 +1228,7 @@
               "permit_likely": false,
               "access": "flight",
               "nps_url": "https://www.nps.gov/npsa/",
-              "why": "rainforest \u00b7 hiking \u00b7 family \u00b7 2-3 day trip \u00b7 low crowds \u00b7 flight needed",
+              "why": "rainforest \u00b7 coast \u00b7 hiking \u00b7 family \u00b7 2-3 day trip \u00b7 low crowds \u00b7 flight needed",
               "drive_hours": null
             }
           }
@@ -1262,7 +1262,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1562,7 +1562,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1867,7 +1867,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2170,7 +2170,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2471,7 +2471,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2781,7 +2781,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
@@ -3027,7 +3027,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3335,7 +3335,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3638,7 +3638,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3812,18 +3812,18 @@
           },
           {
             "rank": 4,
-            "score": 0.251226,
+            "score": 0.250043,
             "match_percent": 26,
             "tied_with_neighbors": false,
             "breakdown": {
-              "content": 0.038592,
+              "content": 0.036441,
               "days": 0.666667,
               "difficulty": 0.5,
               "budget": 0.5,
               "crowd_penalty": 0.0,
               "month_penalty": 0.0,
               "weighted": {
-                "content": 0.021226,
+                "content": 0.020043,
                 "days": 0.12,
                 "difficulty": 0.07,
                 "budget": 0.04,
@@ -3836,14 +3836,14 @@
               "name": "Pinnacles National Park",
               "states": "CA",
               "biomes": [
-                "chaparral"
+                "chaparral",
+                "cave"
               ],
               "tags": [
                 "hiking",
                 "climbing",
                 "wildlife",
-                "family",
-                "cave"
+                "family"
               ],
               "difficulty": "moderate",
               "days_needed": "1",
@@ -3860,7 +3860,7 @@
               "permit_likely": false,
               "access": "road",
               "nps_url": "https://www.nps.gov/pinn/",
-              "why": "chaparral \u00b7 hiking \u00b7 family \u00b7 ~6.6h drive",
+              "why": "chaparral \u00b7 cave \u00b7 hiking \u00b7 family \u00b7 ~6.6h drive",
               "drive_hours": 6.6394
             }
           },
@@ -3948,7 +3948,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -4110,6 +4110,59 @@
           },
           {
             "rank": 4,
+            "score": 0.590529,
+            "match_percent": 62,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.346417,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.190529,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "npsa",
+              "name": "National Park of American Samoa",
+              "states": "AS",
+              "biomes": [
+                "rainforest",
+                "coast"
+              ],
+              "tags": [
+                "hiking",
+                "wildlife",
+                "family"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "low",
+              "budget_tier": "high",
+              "best_months": [
+                "5",
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "remote": true,
+              "permit_likely": false,
+              "access": "flight",
+              "nps_url": "https://www.nps.gov/npsa/",
+              "why": "rainforest \u00b7 coast \u00b7 wildlife \u00b7 2-3 day trip \u00b7 low crowds \u00b7 flight needed",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 5,
             "score": 0.529423,
             "match_percent": 56,
             "tied_with_neighbors": false,
@@ -4160,62 +4213,6 @@
               "why": "forest \u00b7 wildlife \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds",
               "drive_hours": null
             }
-          },
-          {
-            "rank": 5,
-            "score": 0.519394,
-            "match_percent": 55,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.395869,
-              "days": 1.0,
-              "difficulty": 1.0,
-              "budget": 0.5,
-              "crowd_penalty": 0.0,
-              "month_penalty": 0.058333,
-              "weighted": {
-                "content": 0.217728,
-                "days": 0.18,
-                "difficulty": 0.14,
-                "budget": 0.04,
-                "crowd_penalty": 0.0,
-                "month_penalty": -0.058333
-              }
-            },
-            "facts": {
-              "park_code": "chis",
-              "name": "Channel Islands National Park",
-              "states": "CA",
-              "biomes": [
-                "island",
-                "coast"
-              ],
-              "tags": [
-                "hiking",
-                "wildlife",
-                "water",
-                "boat",
-                "backpacking",
-                "kayak"
-              ],
-              "difficulty": "moderate",
-              "days_needed": "2-3",
-              "crowd": "low",
-              "budget_tier": "mid",
-              "best_months": [
-                "4",
-                "5",
-                "6",
-                "9",
-                "10"
-              ],
-              "remote": true,
-              "permit_likely": true,
-              "access": "boat",
-              "nps_url": "https://www.nps.gov/chis/",
-              "why": "island \u00b7 coast \u00b7 wildlife \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds \u00b7 boat needed",
-              "drive_hours": null
-            }
           }
         ]
       }
@@ -4247,7 +4244,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
@@ -4506,7 +4503,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -4812,7 +4809,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 2,
         "empty": false,
@@ -4957,7 +4954,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5249,7 +5246,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5567,7 +5564,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5867,7 +5864,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 2,
         "empty": false,
@@ -6009,7 +6006,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6311,7 +6308,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6618,7 +6615,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 0,
         "empty": true,
@@ -6655,7 +6652,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6953,7 +6950,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -7264,7 +7261,7 @@
         ]
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -7580,7 +7577,7 @@
         ]
       },
       "output": {
-        "engine_version": "0.4.0",
+        "engine_version": "0.5.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,

@@ -1,6 +1,6 @@
 {
-  "engine_version": "0.4.0",
-  "content_hash": "d2ff602edc30e895c9b4296e56433183ba6d1deffa15d22261f20074e83e4e57",
+  "engine_version": "0.5.0",
+  "content_hash": "7f42f74cee9aba2e07921a5f82bea0f6cb3c4a65f5a24c9543493af87591e4c5",
   "weights": {
     "W_CONTENT": 0.55,
     "W_DAYS": 0.18,
@@ -225,11 +225,11 @@
       "name": "National Park of American Samoa",
       "states": "AS",
       "biomes": [
-        "rainforest"
+        "rainforest",
+        "coast"
       ],
       "tags": [
         "hiking",
-        "coast",
         "wildlife",
         "family"
       ],
@@ -974,12 +974,12 @@
       "name": "Great Basin National Park",
       "states": "NV",
       "biomes": [
-        "alpine"
+        "alpine",
+        "cave"
       ],
       "tags": [
         "hiking",
         "stargazing",
-        "cave",
         "scenic_drive"
       ],
       "difficulty": "moderate",
@@ -1692,14 +1692,14 @@
       "name": "Pinnacles National Park",
       "states": "CA",
       "biomes": [
-        "chaparral"
+        "chaparral",
+        "cave"
       ],
       "tags": [
         "hiking",
         "climbing",
         "wildlife",
-        "family",
-        "cave"
+        "family"
       ],
       "difficulty": "moderate",
       "days_needed": "1",
