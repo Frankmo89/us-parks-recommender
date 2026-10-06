@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import csv
+import io
 from pathlib import Path
+
+OUT_PATH = Path(__file__).resolve().parents[1] / "data" / "parks.csv"
 
 # Columns used by the recommender. Biomes and tags are pipe-separated.
 # biomes: one or more of src.features.BIOMES; tags never repeat a park's own biome
@@ -12,6 +15,11 @@ from pathlib import Path
 # budget_tier: low | mid | high  (travel cost to reach + stay, not entrance fee)
 # days_needed: 1 | 2-3 | 4-7 | 7+
 # remote: 1 if typically requires flight / ferry / long dirt road
+# access: road | boat | flight -- how a traveler from the U.S. mainland gets
+#   there (checked against NPS Directions). Added per row by access_for().
+
+FLIGHT_ACCESS = frozenset({"hale", "havo", "npsa", "viis", "gaar", "glba", "katm", "kova", "lacl"})
+BOAT_ACCESS = frozenset({"chis", "drto", "isro"})
 
 PARKS = [
     # code, name, states, lat, lon, biomes, tags, difficulty, days, months, crowd, permit, budget, remote
@@ -95,20 +103,43 @@ FIELDS = [
     "permit_likely",
     "budget_tier",
     "remote",
+    "access",
 ]
 
 
-def main() -> None:
-    out = Path(__file__).resolve().parents[1] / "data" / "parks.csv"
-    out.parent.mkdir(parents=True, exist_ok=True)
+def access_for(park_code: str) -> str:
+    """road / boat / flight for a park code (everything not listed is road)."""
+    if park_code in FLIGHT_ACCESS:
+        return "flight"
+    if park_code in BOAT_ACCESS:
+        return "boat"
+    return "road"
+
+
+def build_rows() -> list[tuple]:
+    """PARKS rows with the access column appended, in FIELDS order."""
     assert len(PARKS) == 63, f"expected 63 parks, got {len(PARKS)}"
     codes = [row[0] for row in PARKS]
     assert len(codes) == len(set(codes)), "duplicate park codes"
-    with out.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f, lineterminator="\n")
-        writer.writerow(FIELDS)
-        writer.writerows(PARKS)
-    print(f"wrote {len(PARKS)} parks → {out}")
+    unknown = (FLIGHT_ACCESS | BOAT_ACCESS) - set(codes)
+    assert not unknown, f"access lists name unknown parks: {sorted(unknown)}"
+    return [(*row, access_for(row[0])) for row in PARKS]
+
+
+def render_csv() -> str:
+    """The full parks.csv text this script writes."""
+    buf = io.StringIO()
+    writer = csv.writer(buf, lineterminator="\n")
+    writer.writerow(FIELDS)
+    writer.writerows(build_rows())
+    return buf.getvalue()
+
+
+def main() -> None:
+    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    text = render_csv()
+    OUT_PATH.write_text(text, encoding="utf-8", newline="")
+    print(f"wrote {len(PARKS)} parks → {OUT_PATH}")
 
 
 if __name__ == "__main__":
