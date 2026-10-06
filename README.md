@@ -67,6 +67,7 @@ user study. Train/holdout splits and more baselines are in
   `external` split, used only for testing.
 - Fit the score weights from labeled data instead of setting them by hand,
   then test them on the outside labels.
+- Goal: beat content-only on nDCG@5, which the hand-set weights do not do today.
 
 ## Score
 
