@@ -147,6 +147,20 @@ traveler starting in Hawaii (e.g. ZIP 96720) with a drive limit loses the
 Hawaii parks they could drive to, because `flight` parks always drop out
 under a drive limit. Use Anywhere (no drive limit) to see them.
 
+## NPS monthly visits
+
+`data/raw/nps_recreation_visits_by_month_{2023,2024,2025}.json` hold monthly
+recreation visits for all 63 parks, one calendar year per file, saved
+verbatim from the NPS Visitor Use Statistics REST endpoint
+(https://irma.nps.gov/Stats/; `https://irmaservices.nps.gov/v3/rest/stats/visitation`
+with `startMonth=1&endMonth=12` for the year). Downloaded 2026-10-05.
+Catalog `seki` (Sequoia) is NPS unit `SEQU`; Kings Canyon (`KICA`) is
+reported separately. October–November 2025 counts are low or zero for some
+parks because of the federal government shutdown (Oct 1–Nov 12, 2025).
+`python scripts/build_peak_months.py` prints peak months under candidate
+cutoffs (analysis only; the engine does not use them yet). Refetch a year
+with `--download 2025`.
+
 ## Layout
 
 ```
@@ -154,11 +168,13 @@ data/parks.csv
 data/zcta_centroids.csv
 data/eval_profiles.json
 data/engine_fixtures.json
+data/raw/nps_recreation_visits_by_month_*.json
 docs/engine-contract.md
 web/engine_data.json
 scripts/export_engine_data.py
 scripts/check_engine_version_bump.py
 scripts/build_zcta_table.py
+scripts/build_peak_months.py
 ts/
 src/features.py
 src/recommender.py
