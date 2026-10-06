@@ -52,3 +52,34 @@ def test_yellowstone_lists_alpine_and_forest():
     parks = ParkRecommender().parks.set_index("park_code")
     biomes = set(str(parks.loc["yell", "biomes"]).split("|"))
     assert biomes == {"alpine", "forest"}
+
+
+def test_invalid_access_value_names_park_code():
+    frame = ParkRecommender().parks.head(1).copy()
+    code = frame.iloc[0]["park_code"]
+    frame.loc[frame.index[0], "access"] = "ferry"
+    with pytest.raises(ValueError, match=rf"Park {code}: access must be one of"):
+        validate_parks(frame)
+
+
+def test_missing_access_value_is_rejected():
+    frame = ParkRecommender().parks.head(1).copy()
+    code = frame.iloc[0]["park_code"]
+    frame.loc[frame.index[0], "access"] = None
+    with pytest.raises(ValueError, match=rf"Park {code}: access must be one of"):
+        validate_parks(frame)
+
+
+def test_access_column_is_required():
+    frame = ParkRecommender().parks.head(1).drop(columns=["access"])
+    with pytest.raises(ValueError, match=r"missing columns: \['access'\]"):
+        validate_parks(frame)
+
+
+def test_access_matches_approved_list():
+    parks = ParkRecommender().parks.set_index("park_code")
+    flight = {"hale", "havo", "npsa", "viis", "gaar", "glba", "katm", "kova", "lacl"}
+    boat = {"chis", "drto", "isro"}
+    assert set(parks.index[parks["access"] == "flight"]) == flight
+    assert set(parks.index[parks["access"] == "boat"]) == boat
+    assert set(parks["access"].unique()) == {"road", "boat", "flight"}

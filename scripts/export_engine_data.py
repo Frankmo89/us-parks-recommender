@@ -78,6 +78,7 @@ def build_export() -> dict:
                 "best_months": sorted(parse_months(row["best_months"]), key=int),
                 "remote": bool(int(row["remote"])),
                 "permit_likely": bool(int(row["permit_likely"])),
+                "access": str(row["access"]),
                 "lat": float(row["lat"]),
                 "lon": float(row["lon"]),
                 "nps_url": nps_url(code),
