@@ -16,7 +16,9 @@ from .features import (
     closeness,
     drive_hours,
     month_distance,
+    normalize_states,
     parse_biomes,
+    parse_states,
     parse_tags,
     park_content_vector,
     tag_idf,
@@ -174,7 +176,7 @@ class ParkRecommender:
         return ranked
 
     def candidates(self, profile: UserProfile) -> pd.DataFrame:
-        """Parks that pass hard filters (remote, permits, drive hours, access).
+        """Parks that pass hard filters (remote, permits, states, drive hours, access).
 
         With a drive limit set (origin + max_drive_hours), flight-access parks
         are dropped: you cannot drive to them. Boat-access parks stay in the
@@ -186,6 +188,10 @@ class ParkRecommender:
             frame = frame.loc[frame["remote"] == 0]
         if not profile.allow_permits:
             frame = frame.loc[frame["permit_likely"] == 0]
+        wanted = normalize_states(profile.states)
+        if wanted:
+            keep = set(wanted)
+            frame = frame.loc[frame["states"].map(lambda raw: not keep.isdisjoint(parse_states(raw)))]
         if has_drive_limit(profile):
             frame = frame.loc[frame["access"] != "flight"]
             hours = [
