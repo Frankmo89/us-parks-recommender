@@ -54,6 +54,26 @@ describe("states filter", () => {
     expect(new Set(got)).toEqual(new Set(["mora", "noca", "olym", "crla"]));
   });
 
+  // Parks that cross state lines are listed under every state they span (per NPS).
+  test.each([
+    [["MT"], ["yell", "glac"]],
+    [["ID"], ["yell"]],
+    [["WY"], ["yell", "grte"]],
+    [["NC"], ["grsm"]],
+    [["TN"], ["grsm"]],
+    [["NV"], ["deva", "grba"]],
+  ])("states %j returns multi-state parks %j", (states, expected) => {
+    const got = codes({ biomes: [], tags: [], states }, 63);
+    expect(new Set(got)).toEqual(new Set(expected));
+  });
+
+  test("export keeps multi-state parks as comma-separated strings", () => {
+    const byCode = Object.fromEntries(engineData.catalog.map((p) => [p.park_code, p.states]));
+    expect(byCode.yell).toBe("WY,MT,ID");
+    expect(byCode.grsm).toBe("TN,NC");
+    expect(byCode.deva).toBe("CA,NV");
+  });
+
   test("valid code without parks returns empty", () => {
     const got = recommend(engineData, { ...UTAH_CANYONS, states: ["DE"] });
     expect(got.empty).toBe(true);

@@ -97,3 +97,27 @@ def test_comma_separated_catalog_states_match_any_code(model, tmp_path):
     alt = ParkRecommender(path)
     codes = set(alt.candidates(UserProfile(biomes=[], tags=[], states=["MT"]))["park_code"])
     assert codes == {"glac", "yell"}
+
+
+# Parks that cross state lines are listed under every state they span (per NPS).
+@pytest.mark.parametrize(
+    "states, expected",
+    [
+        (["MT"], {"yell", "glac"}),
+        (["ID"], {"yell"}),
+        (["WY"], {"yell", "grte"}),
+        (["NC"], {"grsm"}),
+        (["TN"], {"grsm"}),
+        (["NV"], {"deva", "grba"}),
+    ],
+)
+def test_multi_state_parks_match_every_state_they_span(model, states, expected):
+    ranked = model.recommend(UserProfile(biomes=[], tags=[], states=states), k=63)
+    assert set(ranked["park_code"]) == expected
+
+
+def test_multi_state_parks_in_catalog(model):
+    states = model.parks.set_index("park_code")["states"]
+    assert states["yell"] == "WY,MT,ID"
+    assert states["grsm"] == "TN,NC"
+    assert states["deva"] == "CA,NV"
