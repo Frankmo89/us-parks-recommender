@@ -116,9 +116,10 @@ How access interacts with the drive limit (origin + `max_drive_hours` set):
 `stargazing`, `sunrise`, `water`, `waterfalls`, `wilderness`, `wildflowers`,
 `wildlife`, `winter`
 
-Catalog rows may also carry annotation tokens (`low_crowd`, `permits`, `remote`,
-or biome names used as tags elsewhere). Those are **not** in the scored tag
-vocab; do not put them in the profile.
+Catalog rows may also carry biome names used as tags (today `coast` on npsa
+and `cave` on grba and pinn). Those are **not** in the scored tag vocab; do
+not put them in the profile. Remoteness, crowds and permits live only in the
+`remote`, `crowd` and `permit_likely` columns, not in tags.
 
 ### How an LLM should fill the profile from a vague request
 

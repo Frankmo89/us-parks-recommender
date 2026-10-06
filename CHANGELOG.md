@@ -1,5 +1,29 @@
 # Changelog
 
+## 2026-10-05 — drop note tags the scorer ignored (data)
+
+- Why: `remote` (gaar, glba, katm, kova, lacl, wrst), `low_crowd` (grba,
+  gumo, noca, thro) and `permits` (zion) sat in `tags` but are not in
+  `TAG_VOCAB`, so scoring silently dropped them. They repeat the `remote`,
+  `crowd` and `permit_likely` columns: all 11 parks agree with their column
+  (remote=1, crowd=low, permit_likely=1), and many other parks with the same
+  column value never had the tag.
+- Removed them from `scripts/build_parks_csv.py` and regenerated
+  `data/parks.csv`. No column changed.
+- Hypothesis: no score, rank or metric moves, because the tokens were never
+  scored (IDF only counts `TAG_VOCAB` tags and the park count is unchanged).
+- Result: `src.evaluate` output byte-identical. Fixtures: only `facts.tags`
+  loses the token in 20 park entries across 13 profiles; ranks, scores,
+  breakdowns, `why`, drive hours and tie groups identical. The export drops
+  the tokens from `catalog[].tags` (11 parks) and gets a new `content_hash`.
+  Metrics before / after (unedited, identical):
+  - model train: R-Prec **0.708**, nDCG@5 **0.764** → **0.708** / **0.764**
+  - model holdout: R-Prec **0.794**, nDCG@5 **0.813** → **0.794** / **0.813**
+  - model all: **0.737** / **0.781** → **0.737** / **0.781**
+  - popularity, random and content-only baselines also unchanged.
+- Still out of vocab, pending a decision: biome names used as tags, `coast`
+  on npsa and `cave` on grba and pinn.
+
 ## 2026-10-05 — states filter (engine_version 0.3.0 → 0.4.0)
 
 - Why: a "Utah canyons" trip returned Death Valley, Black Canyon and Big Bend
