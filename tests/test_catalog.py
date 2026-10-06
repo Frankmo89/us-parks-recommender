@@ -95,6 +95,7 @@ def _one_park(**overrides) -> pd.DataFrame:
         "biomes": "desert",
         "tags": "hiking|stargazing",
         "best_months": "3,4,10",
+        "peak_months": "4,5,6",
         "access": "road",
     }
     row.update(overrides)
@@ -131,3 +132,31 @@ def test_real_catalog_tags_are_all_in_tag_vocab():
         if tag not in TAG_VOCAB
     )
     assert bad == []
+
+
+@pytest.mark.parametrize(
+    "raw, message",
+    [
+        ("", "peak_months is empty"),
+        ("4,13", "bad peak_months token '13'"),
+        ("4,x", "bad peak_months token 'x'"),
+        ("4,4", "peak_months repeats a month"),
+    ],
+)
+def test_bad_peak_months_are_rejected(raw, message):
+    with pytest.raises(ValueError, match=rf"Park test: {message}"):
+        validate_parks(_one_park(peak_months=raw))
+
+
+def test_peak_months_column_is_required():
+    with pytest.raises(ValueError, match="peak_months"):
+        validate_parks(_one_park().drop(columns=["peak_months"]))
+
+
+def test_real_catalog_peak_months_match_nps_visits():
+    from src import visits
+
+    parks = pd.read_csv(DATA_PATH, dtype=str)
+    monthly = visits.load_monthly(list(parks["park_code"]))
+    for code, raw in zip(parks["park_code"], parks["peak_months"]):
+        assert [int(m) for m in raw.split(",")] == visits.peak_months(monthly[code]), code

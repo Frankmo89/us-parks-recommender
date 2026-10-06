@@ -25,7 +25,7 @@ ACCESS_VALUES = ("road", "boat", "flight")
 
 def validate_parks(parks: pd.DataFrame) -> None:
     """Raise ValueError naming the bad park_code if a row is invalid."""
-    required = {"park_code", "states", "biomes", "tags", "best_months", "access"}
+    required = {"park_code", "states", "biomes", "tags", "best_months", "peak_months", "access"}
     missing = required - set(parks.columns)
     if missing:
         raise ValueError(f"parks catalog missing columns: {sorted(missing)}")
@@ -72,3 +72,16 @@ def validate_parks(parks: pd.DataFrame) -> None:
         for token in tokens:
             if not token.isdigit() or not (1 <= int(token) <= 12):
                 raise ValueError(f"Park {code}: bad best_months token {token!r}")
+
+        # Peak-visitation months (NPS visits >= 0.7 x the busiest month). The
+        # busiest month always qualifies, so the list is never empty.
+        raw_peak = getattr(row, "peak_months", "")
+        raw_peak = "" if pd.isna(raw_peak) else str(raw_peak)
+        peak = [part.strip() for part in raw_peak.split(",") if part.strip()]
+        if not peak:
+            raise ValueError(f"Park {code}: peak_months is empty")
+        for token in peak:
+            if not token.isdigit() or not (1 <= int(token) <= 12):
+                raise ValueError(f"Park {code}: bad peak_months token {token!r}")
+        if len(set(peak)) != len(peak):
+            raise ValueError(f"Park {code}: peak_months repeats a month")
