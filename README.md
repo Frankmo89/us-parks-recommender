@@ -127,6 +127,17 @@ raise R-Precision by about 0.07 but do not improve nDCG@5. On holdout,
 content-only beats the full model on nDCG@5 (0.804 vs 0.763), but n=4 is too
 small to conclude anything.
 
+**Crowd finding (0.6.0):** month-aware crowd lowered train metrics
+(R-Prec 0.708 → 0.685, nDCG@5 0.764 → 0.739). In both profiles that lost, a
+park that matches the trip less well gains 0.12 from off-peak crowd relief
+and passes a relevant park that is at peak. In `quiet_canyon` (October),
+White Sands (desert, not a canyon) passes Capitol Reef. In
+`avoid_permits_and_flights` (April), Cuyahoga Valley and Great Sand Dunes
+push Saguaro out of the top 5. The visit data is right; the hand-set weights
+let the crowd term outweigh terrain match, the same pattern as the
+content-only ablation above. Weights are unchanged for now; a later task
+will fit them from data.
+
 See `CHANGELOG.md` for the 50 mph drive bug. Those older figures are retired.
 
 Yosemite `best_months` was missing July/August in the catalog; that is a

@@ -95,6 +95,25 @@
     0.67 (whsa, off-peak in October, passes care); `avoid_permits_and_flights`
     R 0.60 → 0.40, nDCG 0.64 → 0.47; `stargazing_desert` R 0.50 → 0.75,
     nDCG 0.71 → 0.61.
+  - Why train dropped: in both losing profiles, a park that matches the
+    trip less well gains 0.12 from off-peak crowd relief and passes a
+    relevant park that is at peak.
+    - `quiet_canyon` (October): White Sands (desert, not a canyon; content
+      0.427) loses its 0.12 crowd penalty because October is not one of its
+      peak months (3, 4), and its score goes 0.515 → 0.635. That passes
+      Capitol Reef (content 0.701, score 0.605), which is at peak in October
+      and keeps its 0.12 penalty. Capitol Reef drops from #3 to #4.
+    - `avoid_permits_and_flights` (April): Cuyahoga Valley (forest, content
+      0.184) and Great Sand Dunes (desert, content 0.151) each gain 0.12
+      (0.323 → 0.443 and 0.305 → 0.425) and enter at #3 and #4. That pushes
+      Saguaro (content 0.204, score 0.392), at peak in April, from #5 to #7
+      and out of the top 5. Both parks do match a biome the profile lists;
+      they just match the whole trip less well than Saguaro.
+    - The visit data is right. The hand-set weights let the crowd term
+      (0.12 per level) outweigh terrain match differences, the same pattern
+      as the content-only ablation, where content alone beats the full
+      model on nDCG@5. Weights are not changed here; Task 9 will fit them
+      from data.
   - Protocol note: holdout was read in the same single final run as train
     (no tuning loop; rule and cutoff were approved beforehand). Holdout up
     while train is down is a finding, not a reason to keep the change.
