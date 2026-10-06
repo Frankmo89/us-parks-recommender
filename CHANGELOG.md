@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-10-05 — access cleanup: catalog build script and remote toggle
+
+- `scripts/build_parks_csv.py` had drifted from `data/parks.csv` (single
+  `biome` column, tags that repeat biome names, an old Yosemite
+  `best_months`, CRLF line endings), so running it would have undone the
+  multi-biome and tag cleanups. Its table now mirrors the committed catalog,
+  and it writes the `access` column (flight: hale, havo, npsa, viis, gaar,
+  glba, katm, kova, lacl; boat: chis, drto, isro; all others: road). A new
+  test checks its output matches `data/parks.csv` byte for byte. The script
+  needs no network or API key.
+- App: the toggle "Include remote parks (AK, HI, ferry)" is now
+  "Include remote parks", with help text explaining that results say when a
+  park needs a boat or a flight.
+- No engine, scoring, catalog, fixture, export or version change. Metrics
+  unchanged: train 0.708 / 0.764, holdout 0.794 / 0.813.
+
+
 ## 2026-10-05 — park access: no drive times for parks you cannot drive to
 
 - Why: the drive filter treated every park as drivable. From Los Angeles,
