@@ -9,6 +9,7 @@ from pathlib import Path
 OUT_PATH = Path(__file__).resolve().parents[1] / "data" / "parks.csv"
 
 # Columns used by the recommender. Biomes and tags are pipe-separated.
+# states: comma-separated USPS codes, main state first ("WY,MT,ID"), per NPS
 # biomes: one or more of src.features.BIOMES; tags never repeat a park's own biome
 # crowd: low | medium | high
 # difficulty: easy | moderate | challenging
@@ -38,7 +39,7 @@ PARKS = [
     ("cong", "Congaree National Park", "SC", 33.78, -80.78, "wetland", "hiking|family|wildlife|water|boardwalk", "easy", "1", "3,4,10,11", "low", 0, "low", 0),
     ("crla", "Crater Lake National Park", "OR", 42.94, -122.1, "alpine|forest", "hiking|scenic_drive|family|photography|winter", "easy", "1", "7,8,9", "medium", 0, "mid", 0),
     ("cuva", "Cuyahoga Valley National Park", "OH", 41.24, -81.55, "forest", "hiking|family|scenic_drive|easy_walk|biking", "easy", "1", "5,6,9,10", "medium", 0, "low", 0),
-    ("deva", "Death Valley National Park", "CA", 36.24, -116.82, "desert", "hiking|scenic_drive|stargazing|photography|family", "moderate", "2-3", "11,12,1,2,3", "medium", 0, "mid", 0),
+    ("deva", "Death Valley National Park", "CA,NV", 36.24, -116.82, "desert", "hiking|scenic_drive|stargazing|photography|family", "moderate", "2-3", "11,12,1,2,3", "medium", 0, "mid", 0),
     ("dena", "Denali National Park", "AK", 63.33, -150.5, "tundra|alpine", "wildlife|scenic_drive|hiking|backpacking|photography", "challenging", "4-7", "6,7,8", "medium", 1, "high", 1),
     ("drto", "Dry Tortugas National Park", "FL", 24.63, -82.87, "island", "water|wildlife|boat|history|snorkeling", "easy", "1", "12,1,2,3,4", "low", 1, "high", 1),
     ("ever", "Everglades National Park", "FL", 25.32, -80.93, "wetland", "wildlife|water|hiking|family|boat|birding", "easy", "2-3", "12,1,2,3", "medium", 0, "mid", 0),
@@ -50,7 +51,7 @@ PARKS = [
     ("grte", "Grand Teton National Park", "WY", 43.73, -110.8, "alpine|forest", "hiking|wildlife|scenic_drive|backpacking|photography", "moderate", "2-3", "6,7,8,9", "high", 0, "mid", 0),
     ("grba", "Great Basin National Park", "NV", 38.98, -114.3, "alpine", "hiking|stargazing|cave|scenic_drive|low_crowd", "moderate", "2-3", "6,7,8,9", "low", 0, "low", 1),
     ("grsa", "Great Sand Dunes National Park", "CO", 37.73, -105.51, "desert", "hiking|family|stargazing|sand|photography", "easy", "1", "5,6,9", "medium", 0, "low", 0),
-    ("grsm", "Great Smoky Mountains National Park", "TN", 35.68, -83.53, "forest", "hiking|scenic_drive|family|wildlife|waterfalls|camping", "easy", "2-3", "4,5,6,9,10", "high", 1, "low", 0),
+    ("grsm", "Great Smoky Mountains National Park", "TN,NC", 35.68, -83.53, "forest", "hiking|scenic_drive|family|wildlife|waterfalls|camping", "easy", "2-3", "4,5,6,9,10", "high", 1, "low", 0),
     ("gumo", "Guadalupe Mountains National Park", "TX", 31.92, -104.87, "desert", "hiking|backpacking|low_crowd", "challenging", "2-3", "3,4,10,11", "low", 0, "low", 1),
     ("hale", "Haleakala National Park", "HI", 20.72, -156.17, "volcano", "hiking|sunrise|scenic_drive|stargazing", "moderate", "1", "1,2,3,4,5,6,7,8,9,10,11,12", "high", 1, "high", 1),
     ("havo", "Hawaii Volcanoes National Park", "HI", 19.38, -155.2, "volcano", "hiking|family|scenic_drive|photography", "easy", "2-3", "1,2,3,4,5,6,7,8,9,10,11,12", "medium", 0, "high", 1),
@@ -83,7 +84,7 @@ PARKS = [
     ("whsa", "White Sands National Park", "NM", 32.78, -106.17, "desert", "hiking|family|sand|photography|stargazing", "easy", "1", "3,4,10,11", "medium", 0, "low", 0),
     ("wica", "Wind Cave National Park", "SD", 43.57, -103.48, "prairie|cave", "wildlife|hiking|family", "easy", "1", "5,6,9,10", "low", 1, "low", 0),
     ("wrst", "Wrangell-St. Elias National Park", "AK", 61.0, -142.0, "alpine", "wilderness|backpacking|remote|glacier|wildlife", "challenging", "7+", "6,7,8", "low", 0, "high", 1),
-    ("yell", "Yellowstone National Park", "WY", 44.6, -110.5, "alpine|forest", "wildlife|scenic_drive|family|hiking|geothermal|camping", "easy", "4-7", "5,6,7,8,9", "high", 0, "mid", 0),
+    ("yell", "Yellowstone National Park", "WY,MT,ID", 44.6, -110.5, "alpine|forest", "wildlife|scenic_drive|family|hiking|geothermal|camping", "easy", "4-7", "5,6,7,8,9", "high", 0, "mid", 0),
     ("yose", "Yosemite National Park", "CA", 37.75, -119.6, "alpine|forest", "hiking|scenic_drive|family|waterfalls|backpacking|climbing|photography", "moderate", "2-3", "5,6,7,8,9,10", "high", 1, "mid", 0),
     ("zion", "Zion National Park", "UT", 37.3, -113.05, "canyon", "hiking|family|photography|scenic_drive|permits", "moderate", "2-3", "3,4,5,10,11", "high", 1, "mid", 0),
 ]
