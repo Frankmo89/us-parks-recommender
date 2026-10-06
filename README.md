@@ -140,6 +140,11 @@ PO-box-only or brand-new ZIP may be missing. Rebuild with
 `python scripts/build_zcta_table.py --year 2026` (downloads the file) or
 `--source path/to/2026_Gaz_zcta_national.zip`.
 
+Known limit: `access` assumes the trip starts on the U.S. mainland. A
+traveler starting in Hawaii (e.g. ZIP 96720) with a drive limit loses the
+Hawaii parks they could drive to, because `flight` parks always drop out
+under a drive limit. Use Anywhere (no drive limit) to see them.
+
 ## Layout
 
 ```

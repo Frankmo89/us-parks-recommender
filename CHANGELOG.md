@@ -19,6 +19,9 @@
   See parks.
 - CLI: new `--zip`, mutually exclusive with the `--origin` presets (kept).
   A bad ZIP exits with "ZIP not found".
+- README notes a known limit: `access` assumes a U.S. mainland start, so a
+  traveler starting in Hawaii with a drive limit loses Hawaii parks they
+  could drive to.
 - No engine, scoring, fixture, export or version change; the engine still
   takes lat/lon. Metrics unchanged: train 0.708 / 0.764, holdout
   0.794 / 0.813.
