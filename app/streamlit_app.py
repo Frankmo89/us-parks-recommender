@@ -3,9 +3,9 @@ import pandas as pd
 import streamlit as st
 
 from app.breakdown import PART_ORDER, card_meta, match_percent, nps_url, score_breakdown, why_sentence
+from app.origin import FOUND, NOT_FOUND, drive_limit, zip_origin
 from src.evaluate import run as run_evaluation
 from src.features import DRIVE_DETOUR, DRIVE_MPH, UserProfile, parse_biomes
-from src.origins import ORIGINS
 from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, W_MONTH_PENALTY, ParkRecommender
 
 st.set_page_config(page_title="Find your park", page_icon="🌲", layout="wide", initial_sidebar_state="collapsed")
@@ -99,18 +99,6 @@ MONTHS = [
 ]
 MONTH_LABELS = ["Any"] + [label for _, label in MONTHS]
 MONTH_NUMBER = {label: number for number, label in MONTHS}
-
-ORIGIN_LABELS = {
-    "san_diego": "San Diego",
-    "los_angeles": "Los Angeles",
-    "phoenix": "Phoenix",
-    "denver": "Denver",
-    "seattle": "Seattle",
-    "salt_lake": "Salt Lake City",
-    "nyc": "New York City",
-}
-ORIGIN_CHOICES = ["Anywhere"] + sorted(ORIGIN_LABELS.values())
-ORIGIN_KEY_BY_LABEL = {label: code for code, label in ORIGIN_LABELS.items()}
 
 STEPS = ["welcome", "terrain", "vibe", "pace", "when", "from", "results"]
 
@@ -214,7 +202,7 @@ DEFAULT_ANSWERS = {
     "crowd": "medium",
     "budget": "mid",
     "month_pills": "November",
-    "origin_label": "Anywhere",
+    "origin_zip": "",
     "max_hours": 8,
     "allow_remote": False,
     "allow_permits": True,
@@ -378,7 +366,8 @@ def render_how_it_works(model: ParkRecommender) -> None:
         "&mdash; a highway sketch, not turn-by-turn directions. Parks you can only fly to "
         "drop out when you set a drive limit. Boat parks (Channel Islands, Dry Tortugas, "
         "Isle Royale) show the drive to the park area plus &ldquo;+ boat&rdquo;.</li>"
-        "<li><b>Anywhere</b> keeps every park; cards say &ldquo;flight needed&rdquo; or "
+        "<li><b>Starting point</b> is a 5-digit ZIP code, placed at its Census ZCTA center. "
+        "Leave it empty for <b>Anywhere</b>: every park stays in, and cards say &ldquo;flight needed&rdquo; or "
         "&ldquo;boat needed&rdquo; when a car alone will not get you there.</li>"
         "</ul>",
         unsafe_allow_html=True,
@@ -570,14 +559,23 @@ with st.container(key="app_shell"):
 
         elif step == "from":
             st.markdown('<p class="quiz-title">Are you driving, or is anywhere fine?</p>', unsafe_allow_html=True)
-            st.selectbox(
-                "Driving from",
-                ORIGIN_CHOICES,
-                index=ORIGIN_CHOICES.index(st.session_state.origin_label),
-                key="origin_label",
+            st.text_input(
+                "Starting ZIP code",
+                value=st.session_state.origin_zip,
+                key="origin_zip",
+                max_chars=10,
+                placeholder="e.g. 02108 (leave empty for Anywhere)",
+                help="Any 5-digit U.S. ZIP code. Leave it empty for Anywhere: no drive limit, "
+                "and parks you need to fly to stay in.",
             )
-            if st.session_state.origin_label != "Anywhere":
+            origin = zip_origin(st.session_state.origin_zip)
+            if origin.status == NOT_FOUND:
+                st.error(origin.message)
+            elif origin.status == FOUND:
+                st.caption(f"Driving from ZIP {origin.zip_code}.")
                 st.slider("Max drive hours", 2, 16, value=st.session_state.max_hours, key="max_hours")
+            else:
+                st.caption("Anywhere: no starting point, no drive limit.")
             st.toggle(
                 "Include remote parks",
                 value=st.session_state.allow_remote,
@@ -589,16 +587,19 @@ with st.container(key="app_shell"):
             c1, c2 = st.columns(2)
             if c1.button("Back", width="stretch"):
                 go("when")
-            if c2.button("See parks", type="primary", width="stretch"):
+            if c2.button("See parks", type="primary", width="stretch", disabled=origin.status == NOT_FOUND):
                 go("results")
 
         elif step == "results":
             st.markdown('<p class="quiz-title">These parks fit the trip.</p>', unsafe_allow_html=True)
-            origin_label = st.session_state.origin_label
-            origin_lat = origin_lon = drive = None
-            if origin_label != "Anywhere":
-                origin_lat, origin_lon = ORIGINS[ORIGIN_KEY_BY_LABEL[origin_label]]
-                drive = float(st.session_state.max_hours)
+            origin = zip_origin(st.session_state.origin_zip)
+            if origin.status == NOT_FOUND:
+                st.error(f"{origin.message}. Change answers to fix the starting point.")
+                if st.button("Change answers", width="stretch"):
+                    go("from")
+                st.stop()
+            origin_lat, origin_lon = origin.lat, origin.lon
+            drive = drive_limit(origin, st.session_state.max_hours)
             ranked = model.recommend(
                 UserProfile(
                     biomes=st.session_state.biomes_pills,
