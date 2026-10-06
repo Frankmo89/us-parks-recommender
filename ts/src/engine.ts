@@ -34,6 +34,12 @@ export type EngineData = {
   catalog: ParkRecord[];
 };
 
+/**
+ * How a traveler from the U.S. mainland reaches the park (contract §1):
+ * road = drive in, boat = drive to a port then a boat, flight = fly.
+ */
+export type Access = "road" | "boat" | "flight";
+
 export type ParkRecord = {
   park_code: string;
   name: string;
@@ -47,6 +53,7 @@ export type ParkRecord = {
   best_months: string[];
   remote: boolean;
   permit_likely: boolean;
+  access: Access;
   lat: number;
   lon: number;
   nps_url: string;
@@ -173,6 +180,7 @@ export type ParkFacts = {
   best_months: string[];
   remote: boolean;
   permit_likely: boolean;
+  access: Access;
   nps_url: string;
   why: string;
   drive_hours: number | null;
@@ -313,10 +321,27 @@ function whyBlurb(
     bits.push(`${park.days_needed} day trip`);
   }
   if (park.crowd === "low") bits.push("low crowds");
-  if (driveHoursValue !== null) {
-    bits.push(`~${driveHoursValue.toFixed(1)}h drive`);
-  }
+  const access = accessLabel(park.access, driveHoursValue);
+  if (access) bits.push(access);
   return bits.join(" · ");
+}
+
+/**
+ * Short travel note for a ranked park ("" when there is nothing to say).
+ * Mirrors src.recommender.access_label: with a drive limit, "~Xh drive" or
+ * "~Xh drive + boat"; without one, "boat needed" / "flight needed".
+ */
+export function accessLabel(
+  access: Access,
+  driveHoursValue: number | null,
+): string {
+  if (driveHoursValue !== null) {
+    const label = `~${driveHoursValue.toFixed(1)}h drive`;
+    return access === "boat" ? `${label} + boat` : label;
+  }
+  if (access === "boat") return "boat needed";
+  if (access === "flight") return "flight needed";
+  return "";
 }
 
 type RequiredProfile = {
@@ -419,6 +444,9 @@ export function recommend(
 
     let drive: number | null = null;
     if (useDrive) {
+      // A drive limit drops parks you can only fly to. Boat parks keep the
+      // drive filter: drive to the port = drive to the park's coordinates.
+      if (park.access === "flight") continue;
       drive = driveHours(
         profile.origin_lat!,
         profile.origin_lon!,
@@ -529,6 +557,7 @@ export function recommend(
         best_months: [...row.park.best_months],
         remote: row.park.remote,
         permit_likely: row.park.permit_likely,
+        access: row.park.access,
         nps_url: row.park.nps_url,
         why: whyBlurb(row.park, profile, row.drive_hours),
         drive_hours: row.drive_hours,
