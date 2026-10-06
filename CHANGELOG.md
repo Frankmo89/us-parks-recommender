@@ -31,6 +31,15 @@
   - popularity, random and content-only baselines also unchanged.
 - The label importer marks a flight park picked under a drive limit as
   unreachable with reason `drive`.
+- Breaking change, `engine_version` 0.2.0 → 0.3.0 (`pyproject.toml`,
+  `ts/package.json` + lockfile, fixture stamps, `web/engine_data.json`,
+  `docs/engine-contract.md`). New `scripts/generate_engine_fixtures.py`
+  regenerates `data/engine_fixtures.json` (it reproduced the 0.2.0 file byte
+  for byte first). Fixture diff: no park order, score, tie group or
+  drive_hours changed in the 26 profiles; 7 profiles without a drive limit
+  gain "flight needed" / "boat needed" in `why`, and every park gains
+  `facts.access`. The TS engine mirrors the filter and labels; TS parity now
+  also checks `why` and `access`. The export carries `access` per park.
 
 ## 2026-10-05 — Apps Script generator for the label form
 

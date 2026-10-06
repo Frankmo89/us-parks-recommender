@@ -42,11 +42,6 @@ FIXTURES_PATH = ROOT / "data" / "engine_fixtures.json"
 SCORE_DP = 6
 DRIVE_DP = 4
 
-# Catalog-derived facts copied onto each ranked park, in output order.
-# Only columns present in the catalog are emitted, so older catalogs work too.
-OPTIONAL_FACT_COLUMNS: tuple[str, ...] = ()
-
-
 def engine_version() -> str:
     with (ROOT / "pyproject.toml").open("rb") as handle:
         return tomllib.load(handle)["project"]["version"]
@@ -89,10 +84,8 @@ def build_output(model: ParkRecommender, profile: dict, k: int, version: str) ->
             "best_months": _months(row["best_months"]),
             "remote": bool(int(row["remote"])),
             "permit_likely": bool(int(row["permit_likely"])),
+            "access": str(row["access"]),
         }
-        for column in OPTIONAL_FACT_COLUMNS:
-            if column in row:
-                facts[column] = str(row[column])
         facts["nps_url"] = nps_url(str(row["park_code"]))
         facts["why"] = str(row["why"])
         facts["drive_hours"] = _drive(row.get("drive_hours"))

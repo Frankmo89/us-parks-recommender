@@ -2,10 +2,10 @@
   "notes": [
     "Parity fixtures for a future TypeScript (or other) port of the ranking engine.",
     "Generated from the Python ParkRecommender; do not hand-edit scores.",
-    "Regen by re-running the fixture generator after intentional scoring changes.",
+    "Regenerate with `python scripts/generate_engine_fixtures.py` after intentional, version-bumped engine changes.",
     "Includes the 18 eval profiles plus 8 edge cases. Eval 'relevant' labels are not included."
   ],
-  "engine_version": "0.2.0",
+  "engine_version": "0.3.0",
   "weights": {
     "W_CONTENT": 0.55,
     "W_DAYS": 0.18,
@@ -43,7 +43,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -96,6 +96,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/blca/",
               "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 stargazing \u00b7 1 day trip \u00b7 low crowds",
               "drive_hours": null
@@ -148,6 +149,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/brca/",
               "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 stargazing \u00b7 1 day trip",
               "drive_hours": null
@@ -200,6 +202,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/care/",
               "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 stargazing",
               "drive_hours": null
@@ -254,6 +257,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/arch/",
               "why": "desert \u00b7 hiking \u00b7 photography \u00b7 stargazing \u00b7 1 day trip",
               "drive_hours": null
@@ -306,6 +310,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/whsa/",
               "why": "desert \u00b7 hiking \u00b7 photography \u00b7 stargazing \u00b7 1 day trip",
               "drive_hours": null
@@ -340,7 +345,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -395,6 +400,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/redw/",
               "why": "rainforest \u00b7 coast \u00b7 wildlife \u00b7 scenic_drive \u00b7 family",
               "drive_hours": null
@@ -448,6 +454,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/romo/",
               "why": "alpine \u00b7 forest \u00b7 wildlife \u00b7 scenic_drive \u00b7 family",
               "drive_hours": null
@@ -499,6 +506,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/thro/",
               "why": "prairie \u00b7 wildlife \u00b7 scenic_drive \u00b7 family \u00b7 low crowds",
               "drive_hours": null
@@ -551,6 +559,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/glac/",
               "why": "alpine \u00b7 forest \u00b7 wildlife \u00b7 scenic_drive \u00b7 4-7 day trip",
               "drive_hours": null
@@ -606,6 +615,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/yell/",
               "why": "alpine \u00b7 forest \u00b7 wildlife \u00b7 scenic_drive \u00b7 family \u00b7 4-7 day trip",
               "drive_hours": null
@@ -641,7 +651,7 @@
         "allow_permits": false
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -695,6 +705,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/care/",
               "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 scenic_drive",
               "drive_hours": null
@@ -746,6 +757,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/blca/",
               "why": "canyon \u00b7 hiking \u00b7 scenic_drive \u00b7 1 day trip \u00b7 low crowds",
               "drive_hours": null
@@ -798,6 +810,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/pefo/",
               "why": "desert \u00b7 hiking \u00b7 scenic_drive \u00b7 1 day trip",
               "drive_hours": null
@@ -850,6 +863,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/cong/",
               "why": "wetland \u00b7 hiking \u00b7 1 day trip \u00b7 low crowds",
               "drive_hours": null
@@ -903,6 +917,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/sagu/",
               "why": "desert \u00b7 hiking \u00b7 1 day trip",
               "drive_hours": null
@@ -937,7 +952,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -998,8 +1013,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/havo/",
-              "why": "volcano \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip",
+              "why": "volcano \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -1049,6 +1065,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/lavo/",
               "why": "volcano \u00b7 forest \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 low crowds",
               "drive_hours": null
@@ -1102,6 +1119,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/redw/",
               "why": "rainforest \u00b7 coast \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip",
               "drive_hours": null
@@ -1153,6 +1171,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/thro/",
               "why": "prairie \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 low crowds",
               "drive_hours": null
@@ -1205,8 +1224,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/npsa/",
-              "why": "rainforest \u00b7 hiking \u00b7 family \u00b7 2-3 day trip \u00b7 low crowds",
+              "why": "rainforest \u00b7 hiking \u00b7 family \u00b7 2-3 day trip \u00b7 low crowds \u00b7 flight needed",
               "drive_hours": null
             }
           }
@@ -1239,7 +1259,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1292,6 +1312,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/maca/",
               "why": "cave \u00b7 family \u00b7 easy_walk \u00b7 history \u00b7 1 day trip",
               "drive_hours": null
@@ -1342,6 +1363,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/jeff/",
               "why": "urban \u00b7 family \u00b7 easy_walk \u00b7 history \u00b7 1 day trip",
               "drive_hours": null
@@ -1393,6 +1415,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/cave/",
               "why": "cave \u00b7 family \u00b7 easy_walk \u00b7 1 day trip",
               "drive_hours": null
@@ -1445,6 +1468,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/hosp/",
               "why": "forest \u00b7 family \u00b7 easy_walk \u00b7 history \u00b7 1 day trip",
               "drive_hours": null
@@ -1498,6 +1522,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/sagu/",
               "why": "desert \u00b7 family \u00b7 easy_walk \u00b7 1 day trip",
               "drive_hours": null
@@ -1533,7 +1558,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1588,6 +1613,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/redw/",
               "why": "rainforest \u00b7 coast \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip",
               "drive_hours": null
@@ -1643,6 +1669,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/acad/",
               "why": "coast \u00b7 forest \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip",
               "drive_hours": null
@@ -1694,6 +1721,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/thro/",
               "why": "prairie \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 low crowds",
               "drive_hours": null
@@ -1745,6 +1773,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/lavo/",
               "why": "volcano \u00b7 forest \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 low crowds",
               "drive_hours": null
@@ -1798,6 +1827,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/kica/",
               "why": "forest \u00b7 alpine \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip",
               "drive_hours": null
@@ -1833,7 +1863,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1888,6 +1918,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/zion/",
               "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 scenic_drive \u00b7 2-3 day trip",
               "drive_hours": null
@@ -1941,6 +1972,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/deva/",
               "why": "desert \u00b7 hiking \u00b7 photography \u00b7 scenic_drive \u00b7 2-3 day trip",
               "drive_hours": null
@@ -1992,6 +2024,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/blca/",
               "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 scenic_drive \u00b7 low crowds",
               "drive_hours": null
@@ -2044,6 +2077,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/grca/",
               "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 scenic_drive \u00b7 2-3 day trip",
               "drive_hours": null
@@ -2096,6 +2130,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/care/",
               "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip",
               "drive_hours": null
@@ -2131,7 +2166,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2188,8 +2223,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/gaar/",
-              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 wildlife \u00b7 7+ day trip \u00b7 low crowds",
+              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 wildlife \u00b7 7+ day trip \u00b7 low crowds \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -2238,8 +2274,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/kova/",
-              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 wildlife \u00b7 7+ day trip \u00b7 low crowds",
+              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 wildlife \u00b7 7+ day trip \u00b7 low crowds \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -2289,8 +2326,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/lacl/",
-              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 wildlife \u00b7 low crowds",
+              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 wildlife \u00b7 low crowds \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -2340,6 +2378,7 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/wrst/",
               "why": "alpine \u00b7 backpacking \u00b7 wilderness \u00b7 wildlife \u00b7 7+ day trip \u00b7 low crowds",
               "drive_hours": null
@@ -2394,8 +2433,9 @@
               ],
               "remote": true,
               "permit_likely": true,
+              "access": "boat",
               "nps_url": "https://www.nps.gov/isro/",
-              "why": "island \u00b7 forest \u00b7 backpacking \u00b7 wilderness \u00b7 wildlife \u00b7 low crowds",
+              "why": "island \u00b7 forest \u00b7 backpacking \u00b7 wilderness \u00b7 wildlife \u00b7 low crowds \u00b7 boat needed",
               "drive_hours": null
             }
           }
@@ -2430,7 +2470,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2484,6 +2524,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/bisc/",
               "why": "coast \u00b7 wildlife \u00b7 water \u00b7 boat",
               "drive_hours": null
@@ -2537,6 +2578,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/ever/",
               "why": "wetland \u00b7 wildlife \u00b7 water \u00b7 boat \u00b7 2-3 day trip",
               "drive_hours": null
@@ -2590,8 +2632,9 @@
               ],
               "remote": true,
               "permit_likely": true,
+              "access": "boat",
               "nps_url": "https://www.nps.gov/drto/",
-              "why": "island \u00b7 wildlife \u00b7 water \u00b7 boat \u00b7 low crowds",
+              "why": "island \u00b7 wildlife \u00b7 water \u00b7 boat \u00b7 low crowds \u00b7 boat needed",
               "drive_hours": null
             }
           },
@@ -2643,8 +2686,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/viis/",
-              "why": "coast \u00b7 water \u00b7 2-3 day trip",
+              "why": "coast \u00b7 water \u00b7 2-3 day trip \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -2698,8 +2742,9 @@
               ],
               "remote": true,
               "permit_likely": true,
+              "access": "boat",
               "nps_url": "https://www.nps.gov/chis/",
-              "why": "island \u00b7 coast \u00b7 wildlife \u00b7 water \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds",
+              "why": "island \u00b7 coast \u00b7 wildlife \u00b7 water \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds \u00b7 boat needed",
               "drive_hours": null
             }
           }
@@ -2734,7 +2779,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
@@ -2787,6 +2832,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/indu/",
               "why": "coast \u00b7 prairie \u00b7 family \u00b7 hiking \u00b7 easy_walk \u00b7 1 day trip \u00b7 ~0.6h drive",
               "drive_hours": 0.6336
@@ -2839,6 +2885,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/cuva/",
               "why": "forest \u00b7 family \u00b7 hiking \u00b7 easy_walk \u00b7 1 day trip \u00b7 ~6.1h drive",
               "drive_hours": 6.1032
@@ -2890,6 +2937,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/maca/",
               "why": "cave \u00b7 family \u00b7 hiking \u00b7 easy_walk \u00b7 1 day trip \u00b7 ~6.4h drive",
               "drive_hours": 6.4386
@@ -2940,6 +2988,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/jeff/",
               "why": "urban \u00b7 family \u00b7 easy_walk \u00b7 1 day trip \u00b7 ~5.0h drive",
               "drive_hours": 5.038
@@ -2975,7 +3024,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3030,6 +3079,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/kica/",
               "why": "forest \u00b7 alpine \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~3.7h drive",
               "drive_hours": 3.6694
@@ -3082,6 +3132,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/seki/",
               "why": "forest \u00b7 alpine \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~3.3h drive",
               "drive_hours": 3.2606
@@ -3139,6 +3190,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/yose/",
               "why": "alpine \u00b7 forest \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~5.1h drive",
               "drive_hours": 5.1294
@@ -3192,6 +3244,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/zion/",
               "why": "canyon \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~7.1h drive",
               "drive_hours": 7.0712
@@ -3244,6 +3297,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/grca/",
               "why": "canyon \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~7.2h drive",
               "drive_hours": 7.1506
@@ -3278,7 +3332,7 @@
         "allow_permits": false
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3333,6 +3387,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/deva/",
               "why": "desert \u00b7 stargazing \u00b7 hiking \u00b7 photography \u00b7 2-3 day trip",
               "drive_hours": null
@@ -3384,6 +3439,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/blca/",
               "why": "canyon \u00b7 stargazing \u00b7 hiking \u00b7 photography \u00b7 low crowds",
               "drive_hours": null
@@ -3436,6 +3492,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/care/",
               "why": "canyon \u00b7 desert \u00b7 stargazing \u00b7 hiking \u00b7 2-3 day trip",
               "drive_hours": null
@@ -3488,6 +3545,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/whsa/",
               "why": "desert \u00b7 stargazing \u00b7 hiking \u00b7 photography",
               "drive_hours": null
@@ -3541,6 +3599,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/sagu/",
               "why": "desert \u00b7 stargazing \u00b7 hiking",
               "drive_hours": null
@@ -3575,7 +3634,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3630,6 +3689,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/deva/",
               "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 family \u00b7 2-3 day trip \u00b7 ~4.7h drive",
               "drive_hours": 4.6919
@@ -3683,6 +3743,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/sagu/",
               "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 family \u00b7 ~7.5h drive",
               "drive_hours": 7.4895
@@ -3739,6 +3800,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/jotr/",
               "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 family \u00b7 2-3 day trip \u00b7 ~2.0h drive",
               "drive_hours": 1.9953
@@ -3792,6 +3854,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/pinn/",
               "why": "chaparral \u00b7 hiking \u00b7 family \u00b7 ~6.6h drive",
               "drive_hours": 6.6394
@@ -3845,6 +3908,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/zion/",
               "why": "canyon \u00b7 hiking \u00b7 family \u00b7 2-3 day trip \u00b7 ~7.6h drive",
               "drive_hours": 7.5506
@@ -3880,7 +3944,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3933,8 +3997,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/glba/",
-              "why": "coast \u00b7 wildlife \u00b7 photography \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds",
+              "why": "coast \u00b7 wildlife \u00b7 photography \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -3984,6 +4049,7 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/kefj/",
               "why": "coast \u00b7 wildlife \u00b7 photography \u00b7 boat \u00b7 2-3 day trip",
               "drive_hours": null
@@ -4034,8 +4100,9 @@
               ],
               "remote": true,
               "permit_likely": true,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/katm/",
-              "why": "tundra \u00b7 wildlife \u00b7 photography \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds",
+              "why": "tundra \u00b7 wildlife \u00b7 photography \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -4086,6 +4153,7 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/voya/",
               "why": "forest \u00b7 wildlife \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds",
               "drive_hours": null
@@ -4141,8 +4209,9 @@
               ],
               "remote": true,
               "permit_likely": true,
+              "access": "boat",
               "nps_url": "https://www.nps.gov/chis/",
-              "why": "island \u00b7 coast \u00b7 wildlife \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds",
+              "why": "island \u00b7 coast \u00b7 wildlife \u00b7 boat \u00b7 2-3 day trip \u00b7 low crowds \u00b7 boat needed",
               "drive_hours": null
             }
           }
@@ -4175,7 +4244,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
@@ -4234,6 +4303,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/neri/",
               "why": "forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~8.1h drive",
               "drive_hours": 8.0598
@@ -4286,6 +4356,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/cuva/",
               "why": "forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 ~7.6h drive",
               "drive_hours": 7.5943
@@ -4341,6 +4412,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/acad/",
               "why": "coast \u00b7 forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~7.5h drive",
               "drive_hours": 7.4562
@@ -4394,6 +4466,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/shen/",
               "why": "forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~5.3h drive",
               "drive_hours": 5.302
@@ -4429,7 +4502,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -4483,6 +4556,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/care/",
               "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~6.4h drive",
               "drive_hours": 6.3854
@@ -4536,6 +4610,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/zion/",
               "why": "canyon \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~5.2h drive",
               "drive_hours": 5.2245
@@ -4590,6 +4665,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/cany/",
               "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~6.7h drive",
               "drive_hours": 6.7188
@@ -4643,6 +4719,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/deva/",
               "why": "desert \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~6.4h drive",
               "drive_hours": 6.3683
@@ -4695,6 +4772,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/grca/",
               "why": "canyon \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~3.5h drive",
               "drive_hours": 3.4688
@@ -4730,7 +4808,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 2,
         "empty": false,
@@ -4784,6 +4862,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/mora/",
               "why": "alpine \u00b7 forest \u00b7 hiking \u00b7 family \u00b7 wildflowers \u00b7 2-3 day trip \u00b7 ~1.1h drive",
               "drive_hours": 1.1374
@@ -4836,6 +4915,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/olym/",
               "why": "rainforest \u00b7 coast \u00b7 hiking \u00b7 family \u00b7 ~1.3h drive",
               "drive_hours": 1.2507
@@ -4872,7 +4952,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -4925,6 +5005,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/maca/",
               "why": "cave \u00b7 family \u00b7 history \u00b7 easy_walk \u00b7 1 day trip",
               "drive_hours": null
@@ -4975,6 +5056,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/jeff/",
               "why": "urban \u00b7 family \u00b7 history \u00b7 easy_walk \u00b7 1 day trip",
               "drive_hours": null
@@ -5027,6 +5109,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/hosp/",
               "why": "forest \u00b7 family \u00b7 history \u00b7 easy_walk \u00b7 1 day trip",
               "drive_hours": null
@@ -5078,6 +5161,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/cave/",
               "why": "cave \u00b7 family \u00b7 easy_walk \u00b7 1 day trip",
               "drive_hours": null
@@ -5130,6 +5214,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/cuva/",
               "why": "forest \u00b7 family \u00b7 easy_walk \u00b7 1 day trip",
               "drive_hours": null
@@ -5158,7 +5243,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5223,6 +5308,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/ever/",
               "why": "wetland \u00b7 2-3 day trip",
               "drive_hours": null
@@ -5276,6 +5362,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/redw/",
               "why": "rainforest \u00b7 coast \u00b7 2-3 day trip",
               "drive_hours": null
@@ -5328,6 +5415,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/care/",
               "why": "canyon \u00b7 desert \u00b7 2-3 day trip",
               "drive_hours": null
@@ -5387,8 +5475,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/havo/",
-              "why": "volcano \u00b7 2-3 day trip",
+              "why": "volcano \u00b7 2-3 day trip \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -5438,6 +5527,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/lavo/",
               "why": "volcano \u00b7 forest \u00b7 2-3 day trip \u00b7 low crowds",
               "drive_hours": null
@@ -5470,7 +5560,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5523,6 +5613,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/cave/",
               "why": "cave \u00b7 family \u00b7 easy_walk",
               "drive_hours": null
@@ -5576,6 +5667,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/sagu/",
               "why": "desert \u00b7 hiking \u00b7 family \u00b7 easy_walk",
               "drive_hours": null
@@ -5627,6 +5719,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/maca/",
               "why": "cave \u00b7 hiking \u00b7 family \u00b7 easy_walk",
               "drive_hours": null
@@ -5678,6 +5771,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/indu/",
               "why": "coast \u00b7 prairie \u00b7 hiking \u00b7 family \u00b7 easy_walk",
               "drive_hours": null
@@ -5730,6 +5824,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/cuva/",
               "why": "forest \u00b7 hiking \u00b7 family \u00b7 easy_walk",
               "drive_hours": null
@@ -5764,7 +5859,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 2,
         "empty": false,
@@ -5819,6 +5914,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/romo/",
               "why": "alpine \u00b7 forest \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~1.1h drive",
               "drive_hours": 1.0625
@@ -5870,6 +5966,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/grsa/",
               "why": "desert \u00b7 hiking \u00b7 ~2.7h drive",
               "drive_hours": 2.7246
@@ -5903,7 +6000,7 @@
         "allow_permits": false
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5958,6 +6055,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/sagu/",
               "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 1 day trip",
               "drive_hours": null
@@ -6010,6 +6108,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/care/",
               "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 stargazing",
               "drive_hours": null
@@ -6061,6 +6160,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/blca/",
               "why": "canyon \u00b7 hiking \u00b7 stargazing \u00b7 1 day trip \u00b7 low crowds",
               "drive_hours": null
@@ -6114,6 +6214,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/deva/",
               "why": "desert \u00b7 hiking \u00b7 stargazing",
               "drive_hours": null
@@ -6166,6 +6267,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/whsa/",
               "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 1 day trip",
               "drive_hours": null
@@ -6199,7 +6301,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6254,6 +6356,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/zion/",
               "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 2-3 day trip",
               "drive_hours": null
@@ -6305,6 +6408,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/blca/",
               "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 low crowds",
               "drive_hours": null
@@ -6357,6 +6461,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/grca/",
               "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 2-3 day trip",
               "drive_hours": null
@@ -6410,6 +6515,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/deva/",
               "why": "desert \u00b7 hiking \u00b7 photography \u00b7 2-3 day trip",
               "drive_hours": null
@@ -6469,8 +6575,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/havo/",
-              "why": "volcano \u00b7 hiking \u00b7 photography \u00b7 2-3 day trip",
+              "why": "volcano \u00b7 hiking \u00b7 photography \u00b7 2-3 day trip \u00b7 flight needed",
               "drive_hours": null
             }
           }
@@ -6501,7 +6608,7 @@
         "allow_permits": false
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 0,
         "empty": true,
@@ -6537,7 +6644,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6594,8 +6701,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/gaar/",
-              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 7+ day trip \u00b7 low crowds",
+              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 7+ day trip \u00b7 low crowds \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -6644,8 +6752,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/kova/",
-              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 7+ day trip \u00b7 low crowds",
+              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 7+ day trip \u00b7 low crowds \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -6698,8 +6807,9 @@
               ],
               "remote": true,
               "permit_likely": true,
+              "access": "boat",
               "nps_url": "https://www.nps.gov/isro/",
-              "why": "island \u00b7 forest \u00b7 backpacking \u00b7 wilderness \u00b7 hiking \u00b7 low crowds",
+              "why": "island \u00b7 forest \u00b7 backpacking \u00b7 wilderness \u00b7 hiking \u00b7 low crowds \u00b7 boat needed",
               "drive_hours": null
             }
           },
@@ -6749,8 +6859,9 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "flight",
               "nps_url": "https://www.nps.gov/lacl/",
-              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 low crowds",
+              "why": "tundra \u00b7 backpacking \u00b7 wilderness \u00b7 low crowds \u00b7 flight needed",
               "drive_hours": null
             }
           },
@@ -6800,6 +6911,7 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/wrst/",
               "why": "alpine \u00b7 backpacking \u00b7 wilderness \u00b7 7+ day trip \u00b7 low crowds",
               "drive_hours": null
@@ -6833,7 +6945,7 @@
         "allow_permits": true
       },
       "output": {
-        "engine_version": "0.2.0",
+        "engine_version": "0.3.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6888,6 +7000,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/deva/",
               "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 2-3 day trip",
               "drive_hours": null
@@ -6940,6 +7053,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/care/",
               "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 stargazing \u00b7 2-3 day trip",
               "drive_hours": null
@@ -6994,6 +7108,7 @@
               ],
               "remote": false,
               "permit_likely": true,
+              "access": "road",
               "nps_url": "https://www.nps.gov/arch/",
               "why": "desert \u00b7 hiking \u00b7 stargazing",
               "drive_hours": null
@@ -7047,6 +7162,7 @@
               ],
               "remote": false,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/sagu/",
               "why": "desert \u00b7 hiking \u00b7 stargazing",
               "drive_hours": null
@@ -7101,6 +7217,7 @@
               ],
               "remote": true,
               "permit_likely": false,
+              "access": "road",
               "nps_url": "https://www.nps.gov/bibe/",
               "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 low crowds",
               "drive_hours": null
