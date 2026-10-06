@@ -8,7 +8,7 @@ This document is the API contract. It does not change scoring. A future
 TypeScript (or other) port must match the Python behavior pinned in
 `data/engine_fixtures.json`.
 
-Current `engine_version`: **`0.4.0`** (same as `pyproject.toml`).
+Current `engine_version`: **`0.5.0`** (same as `pyproject.toml`).
 
 ---
 
@@ -116,9 +116,9 @@ How access interacts with the drive limit (origin + `max_drive_hours` set):
 `stargazing`, `sunrise`, `water`, `waterfalls`, `wilderness`, `wildflowers`,
 `wildlife`, `winter`
 
-Catalog rows may also carry annotation tokens (`low_crowd`, `permits`, `remote`,
-or biome names used as tags elsewhere). Those are **not** in the scored tag
-vocab; do not put them in the profile.
+Every catalog tag is in this vocab; since 0.5.0 the catalog rejects any other
+tag at load time. Biome names belong in `biomes`, and remoteness, crowds and
+permits live only in the `remote`, `crowd` and `permit_likely` columns.
 
 ### How an LLM should fill the profile from a vague request
 
@@ -331,6 +331,13 @@ fails if the committed fixtures drift from the live engine.
 
 Version notes:
 
+- **0.5.0** (breaking): catalog tag cleanup. Tags outside the scored vocab are
+  gone (`remote`, `low_crowd`, `permits`, which repeated their columns), and the
+  catalog now rejects any tag outside `TAG_VOCAB`. Biome names used as tags
+  moved into `biomes`: npsa `rainforest|coast`, grba `alpine|cave`, pinn
+  `chaparral|cave`. This changes scored features for those three parks
+  (`alaska_wildlife` now lists npsa at #4 instead of chis at #5). `facts.tags`
+  only carries scored tags. Train/holdout metrics unchanged.
 - **0.4.0** (breaking): new optional profile field `states` (hard filter,
   validated against 56 USPS codes; `null` / `[]` = no filter). With `states`
   null, scores and order are unchanged for every existing profile. Fixtures

@@ -1,9 +1,11 @@
 """Catalog load-time validation."""
 
+import pandas as pd
 import pytest
 
 from src.catalog import validate_parks
-from src.recommender import ParkRecommender
+from src.features import TAG_VOCAB, parse_tags
+from src.recommender import DATA_PATH, ParkRecommender
 
 
 def test_real_catalog_passes_validation():
@@ -83,3 +85,49 @@ def test_access_matches_approved_list():
     assert set(parks.index[parks["access"] == "flight"]) == flight
     assert set(parks.index[parks["access"] == "boat"]) == boat
     assert set(parks["access"].unique()) == {"road", "boat", "flight"}
+
+
+def _one_park(**overrides) -> pd.DataFrame:
+    """A minimal valid one-row catalog, independent of data/parks.csv."""
+    row = {
+        "park_code": "test",
+        "states": "UT",
+        "biomes": "desert",
+        "tags": "hiking|stargazing",
+        "best_months": "3,4,10",
+        "access": "road",
+    }
+    row.update(overrides)
+    return pd.DataFrame([row])
+
+
+def test_minimal_catalog_row_passes():
+    validate_parks(_one_park())
+
+
+def test_every_tag_vocab_tag_is_accepted():
+    validate_parks(_one_park(tags="|".join(TAG_VOCAB)))
+
+
+@pytest.mark.parametrize("tag", ["remote", "low_crowd", "permits"])
+def test_note_tags_are_rejected(tag):
+    with pytest.raises(ValueError, match=rf"Park test: unknown tag '{tag}' \(not in TAG_VOCAB"):
+        validate_parks(_one_park(tags=f"hiking|{tag}"))
+
+
+@pytest.mark.parametrize("biome", ["cave", "coast"])
+def test_biome_name_used_as_tag_is_rejected(biome):
+    # The park's own biome is desert, so this is a biome name used as a tag.
+    with pytest.raises(ValueError, match=rf"Park test: unknown tag '{biome}' \(not in TAG_VOCAB"):
+        validate_parks(_one_park(tags=f"hiking|{biome}"))
+
+
+def test_real_catalog_tags_are_all_in_tag_vocab():
+    parks = pd.read_csv(DATA_PATH)
+    bad = sorted(
+        (code, tag)
+        for code, raw in zip(parks["park_code"], parks["tags"])
+        for tag in parse_tags(raw)
+        if tag not in TAG_VOCAB
+    )
+    assert bad == []

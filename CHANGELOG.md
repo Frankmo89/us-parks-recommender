@@ -1,5 +1,50 @@
 # Changelog
 
+## 2026-10-05 — catalog tag cleanup (engine_version 0.4.0 → 0.5.0)
+
+- Why: 14 tag entries in `data/parks.csv` were not in `TAG_VOCAB`, so scoring
+  silently dropped them: note tags `remote` (gaar, glba, katm, kova, lacl,
+  wrst), `low_crowd` (grba, gumo, noca, thro) and `permits` (zion), and biome
+  names used as tags, `coast` (npsa) and `cave` (grba, pinn).
+- Note tags removed. They repeat the `remote`, `crowd` and `permit_likely`
+  columns; all 11 parks agree with their column (remote=1, crowd=low,
+  permit_likely=1), and no column changed. On their own they move no score:
+  `src.evaluate` output byte-identical, fixtures differ only in `facts.tags`.
+- Biome tags moved into `biomes`, per NPS: npsa `rainforest|coast` (27 km of
+  coastline, coral reefs, Ofu beaches), grba `alpine|cave` (Lehman Caves),
+  pinn `chaparral|cave` (Bear Gulch and Balconies talus caves).
+- `src/catalog.py` now rejects any tag outside `TAG_VOCAB`, naming the park
+  and tag (`Park npsa: unknown tag 'coast' (not in TAG_VOCAB, so scoring
+  would ignore it)`).
+- Hypothesis (stated before the biome change, measured on a scratch copy):
+  the biome edit changes content scores only for npsa, grba and pinn; no eval
+  metric moves because none of them is in a relevant list it could enter or
+  leave.
+- Evidence: a plain cave search (`biomes=["cave"]`, no tags) before: wica
+  0.633, cave 0.524, maca 0.465, ever 0.400, redw 0.400; after: wica 0.633,
+  grba 0.548, cave 0.524, maca 0.465, pinn 0.411.
+- Fixture changes (28 profiles):
+  - `alaska_wildlife`: `glba, kefj, katm, voya, chis` →
+    `glba, kefj, katm, npsa, voya` (npsa 0.5905 at #4; chis 0.5194 drops
+    out; other scores unchanged).
+  - `volcano_family`: npsa score 0.39657 → 0.382975 (match 42% → 40%), still
+    #5; `why` adds "coast".
+  - `desert_weekend_from_sd`: pinn score 0.251226 → 0.250043, still #4;
+    `why` adds "cave".
+  - `facts.tags` loses the removed tokens in 20 park entries across 13
+    profiles, and `facts.biomes` gains coast/cave for npsa and pinn.
+- Result: metrics before / after (unedited, identical). Only the
+  `alaska_wildlife` top-5 line changes in the eval output (R 0.75, nDCG 0.83
+  both before and after; neither npsa nor chis is relevant there).
+  - model train: R-Prec **0.708**, nDCG@5 **0.764** → **0.708** / **0.764**
+  - model holdout: R-Prec **0.794**, nDCG@5 **0.813** → **0.794** / **0.813**
+  - model all: **0.737** / **0.781** → **0.737** / **0.781**
+  - popularity, random and content-only baselines also unchanged.
+- Version 0.5.0 in `pyproject.toml`, `ts/package.json` + lockfile, fixture
+  stamps, export and contract. The TS engine needs no change (it reads tags,
+  biomes and version from the export).
+
+
 ## 2026-10-05 — states filter (engine_version 0.3.0 → 0.4.0)
 
 - Why: a "Utah canyons" trip returned Death Valley, Black Canyon and Big Bend

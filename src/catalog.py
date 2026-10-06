@@ -1,7 +1,8 @@
 """Validate parks.csv at catalog load time.
 
-Scoring still ignores tags outside TAG_VOCAB; this check only guards data
-quality so unknown tokens fail loudly instead of silently.
+Scoring ignores tags outside TAG_VOCAB, so the catalog rejects them: every
+tag must be a scored TAG_VOCAB tag. Unknown tokens fail loudly at load time
+instead of being dropped silently.
 """
 
 from __future__ import annotations
@@ -10,11 +11,9 @@ import pandas as pd
 
 from .features import BIOMES, STATE_CODES, TAG_VOCAB, parse_biomes, parse_months, parse_states, parse_tags
 
-# Other biome names may appear as tags on a park only if they are not one of
-# that park's own biomes. Catalog annotations (low_crowd, permits, remote) are
-# also allowed as tags but are not activity features — scoring ignores them
-# via TAG_VOCAB.
-KNOWN_TAGS = set(TAG_VOCAB) | set(BIOMES) | {"low_crowd", "permits", "remote"}
+# Tags must be scored activity tags. Biome names belong in `biomes`;
+# remoteness, crowds and permits live in their own columns.
+KNOWN_TAGS = frozenset(TAG_VOCAB)
 KNOWN_BIOMES = set(BIOMES)
 
 # How a traveler from the U.S. mainland reaches the park:
@@ -49,7 +48,9 @@ def validate_parks(parks: pd.DataFrame) -> None:
                 )
         for tag in tags:
             if tag not in KNOWN_TAGS:
-                raise ValueError(f"Park {code}: unknown tag {tag!r}")
+                raise ValueError(
+                    f"Park {code}: unknown tag {tag!r} (not in TAG_VOCAB, so scoring would ignore it)"
+                )
 
         states = parse_states(getattr(row, "states", ""))
         if not states:
