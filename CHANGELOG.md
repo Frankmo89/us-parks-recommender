@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-10-05 — NPS monthly visits and peak-month analysis (data, no model change)
+
+- Why: crowd levels are fixed per park, so Yosemite gets the same crowd
+  penalty in January as in July. A month-aware crowd needs real visitation
+  data first.
+- Added `data/raw/nps_recreation_visits_by_month_{2023,2024,2025}.json`: NPS
+  Visitor Use Statistics monthly recreation visits for all 63 parks, saved
+  verbatim from the IRMA REST endpoint (downloaded 2026-10-05). Catalog
+  `seki` maps to NPS unit `SEQU`. October–November 2025 counts are low or
+  zero for some parks (federal shutdown Oct 1–Nov 12, 2025).
+- Added `scripts/build_peak_months.py` (analysis only) to print peak months
+  under candidate cutoffs. No catalog, engine or evaluation change; metrics
+  unchanged (train 0.708 / 0.764, holdout 0.794 / 0.813).
+
 ## 2026-10-05 — catalog tag cleanup (engine_version 0.4.0 → 0.5.0)
 
 - Why: 14 tag entries in `data/parks.csv` were not in `TAG_VOCAB`, so scoring
