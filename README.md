@@ -1,18 +1,72 @@
 # US Parks Recommender
 
+Describe the trip you want and it ranks all 63 U.S. National Parks for that
+trip, with the reason behind every score. It is built for travelers who are
+choosing which park to visit.
+
 **Live demo:** https://us-national-parks-recommender.streamlit.app
 
-Content-based recommender for the **63 U.S. National Parks**.
+![Live demo: the trip quiz and ranked park cards](docs/demo.png)
 
-A trip profile (terrain, days, crowds, month, driving radius) is scored against
-every park. Content overlap uses cosine similarity on biome + **IDF-weighted**
-activity tags. Trip length, difficulty and budget use closeness
-(`1 − |Δ| / max`). Crowds are a penalty. Month is a soft circular penalty on
-distance to `best_months` (not a hard filter). Remote parks and permits are
-hard filters.
+## How it works
+
+- **Trip profile in:** terrain, activities, days, difficulty, budget, crowd
+  preference, month, and optionally a starting point with a driving limit.
+- **Match:** cosine similarity between the trip and each park on terrain
+  (biomes) and activity tags, with common tags such as hiking weighted down
+  (IDF). Days, difficulty and budget score by closeness.
+- **Penalties:** parks busier than you want lose points. A park counts one
+  crowd level quieter outside its peak months, which come from NPS monthly
+  visit data. Months far from a park's best season lose points too.
+- **Hard filters:** driving time from your start, access (parks you can only
+  fly to drop out when you set a drive limit), states, permits and remote
+  parks.
+- **Every score explained:** each result shows how much each part added or
+  subtracted, plus a one-line reason.
 
 The catalog is the official set of 63 national parks with structured tags.
 This repo does not copy editorial content from any product site.
+
+## Results
+
+On all 18 hand-labeled test profiles (train + holdout), from
+`python -m src.evaluate`. Higher is better.
+
+| Method | R-Precision | nDCG@5 |
+|---|---|---|
+| Model | 0.721 | 0.773 |
+| Content-only (terrain and activity match alone) | 0.656 | 0.790 |
+| Popularity (most NPS visits first) | 0.246 | 0.266 |
+| Random | 0.252 | 0.289 |
+
+The profiles are hand-written, so treat this as a regression suite, not a
+user study. Train/holdout splits and more baselines are in
+[Metrics](#metrics).
+
+## What I learned
+
+- **Baselines matter.** Ranking by popularity (most NPS visits first) scores
+  no better than random (R-Precision 0.246 vs 0.252, nDCG@5 0.266 vs 0.289).
+  Trip fit matters more than fame.
+- **Check what the test can measure.** In two holdout profiles, every park
+  left after the hard filters was relevant, so any order scores 1.0. They lift
+  holdout R-Precision to 0.794; without them it is 0.692, close to train
+  (0.685).
+- **Hand-set weights are the weak spot.** Content match alone beats the full
+  model on nDCG@5 (0.764 vs 0.745 without the filter-only profiles), although
+  the full model leads on R-Precision (0.686 vs 0.614). Adding month-aware
+  crowds from NPS data lowered train R-Precision from 0.708 to 0.685. The
+  0.12 crowd relief let weaker terrain matches pass better ones, e.g. White
+  Sands passed Capitol Reef for a canyon trip in October. The visit data was
+  right; the hand-set weights gave crowds too much say.
+
+## What's next
+
+- Collect outside labels: a Google Form (`docs/label-form.md`) where other
+  people describe a trip and pick their top 3 parks. These become the
+  `external` split, used only for testing.
+- Fit the score weights from labeled data instead of setting them by hand,
+  then test them on the outside labels.
 
 ## Score
 
