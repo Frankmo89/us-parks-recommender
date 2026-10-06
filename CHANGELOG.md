@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-10-05 — README top for a quick read (docs only)
+
+- New README top: one-sentence summary, live demo link and screenshot
+  (`docs/demo.png`), "How it works" (5 bullets checked against the code), a
+  short results table on all 18 profiles (model 0.721 / 0.773, content-only
+  0.656 / 0.790, popularity 0.246 / 0.266, random 0.252 / 0.289; copied
+  from `python -m src.evaluate`), "What I learned" and "What's next" (goal:
+  beat content-only on nDCG@5).
+- Removed the old intro paragraph that the new top duplicates. The
+  editorial-content note moved to License; all other sections unchanged.
+- `docs/demo.png`: phone screenshot of the last quiz step, resized from
+  1206 × 1644 to 900 × 1227 and saved as a 256-color PNG (173 KB). It shows
+  the See parks button before the contrast fix in the previous entry.
+- No code or engine change; metrics unchanged (train 0.685 / 0.739, holdout
+  0.794 / 0.842, unedited).
+
 ## 2026-10-05 — app: readable primary buttons (app only)
 
 - Why: Start, Next and See parks had light text on cream and were hard to
