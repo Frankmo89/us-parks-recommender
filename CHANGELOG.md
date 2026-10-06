@@ -40,6 +40,9 @@
   gain "flight needed" / "boat needed" in `why`, and every park gains
   `facts.access`. The TS engine mirrors the filter and labels; TS parity now
   also checks `why` and `access`. The export carries `access` per park.
+- The Streamlit result card shows the same travel note next to the state:
+  "~Xh drive + boat", "boat needed" or "flight needed".
+
 
 ## 2026-10-05 — Apps Script generator for the label form
 
