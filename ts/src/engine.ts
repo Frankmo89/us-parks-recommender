@@ -24,6 +24,8 @@ export type EngineData = {
     biomes: string[];
     tags: string[];
     tag_idf: Record<string, number>;
+    /** Two-letter codes accepted in TripProfile.states (contract §1). */
+    states: string[];
   };
   ordinals: {
     days: Record<string, number>;
@@ -72,7 +74,12 @@ export type TripProfile = {
   max_drive_hours?: number | null;
   allow_remote?: boolean;
   allow_permits?: boolean;
+  /** Keep only parks in these states; null / [] = no state filter. */
+  states?: string[] | null;
 };
+
+const STATES_ALLOWED =
+  "null, or a list of two-letter USPS codes (50 states, DC, AS, GU, MP, PR, VI)";
 
 /** Thrown when an enum / month / drive field is illegal (never a silent NaN). */
 export class InvalidProfileError extends Error {
@@ -148,6 +155,42 @@ export function validateProfile(profile: RequiredProfile, data: EngineData): voi
       );
     }
   }
+
+  profile.states = normalizeStates(profile.states, data);
+}
+
+/**
+ * Trimmed, uppercased, de-duplicated state codes; null or [] -> null.
+ * Mirrors src.features.normalize_states (same field / value on errors).
+ */
+export function normalizeStates(
+  states: unknown,
+  data: EngineData,
+): string[] | null {
+  if (states === null || states === undefined) return null;
+  if (!Array.isArray(states)) {
+    throw new InvalidProfileError("states", states, STATES_ALLOWED);
+  }
+  const allowed = new Set(data.vocab.states);
+  const out: string[] = [];
+  for (const code of states) {
+    if (typeof code !== "string") {
+      throw new InvalidProfileError("states", code, STATES_ALLOWED);
+    }
+    const norm = code.trim().toUpperCase();
+    if (!allowed.has(norm)) {
+      throw new InvalidProfileError("states", code, STATES_ALLOWED);
+    }
+    if (!out.includes(norm)) out.push(norm);
+  }
+  return out.length > 0 ? out : null;
+}
+
+function parkStates(raw: string): string[] {
+  return raw
+    .split(",")
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0);
 }
 
 export type Breakdown = {
@@ -357,6 +400,7 @@ type RequiredProfile = {
   max_drive_hours: number | null;
   allow_remote: boolean;
   allow_permits: boolean;
+  states: string[] | null;
 };
 
 function normalizeProfile(profile: TripProfile): RequiredProfile {
@@ -376,6 +420,7 @@ function normalizeProfile(profile: TripProfile): RequiredProfile {
     max_drive_hours: profile.max_drive_hours ?? null,
     allow_remote: profile.allow_remote ?? true,
     allow_permits: profile.allow_permits ?? true,
+    states: profile.states ?? null,
   };
 }
 
@@ -437,10 +482,15 @@ export function recommend(
     profile.origin_lon !== null &&
     profile.max_drive_hours !== null;
 
+  const wantedStates = profile.states ? new Set(profile.states) : null;
+
   const candidates: Scored[] = [];
   for (const park of data.catalog) {
     if (!profile.allow_remote && park.remote) continue;
     if (!profile.allow_permits && park.permit_likely) continue;
+    if (wantedStates && !parkStates(park.states).some((code) => wantedStates.has(code))) {
+      continue;
+    }
 
     let drive: number | null = null;
     if (useDrive) {

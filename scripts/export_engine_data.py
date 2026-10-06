@@ -25,6 +25,7 @@ from src.features import (
     DRIVE_DETOUR,
     DRIVE_MPH,
     EARTH_RADIUS_MILES,
+    STATE_CODES,
     TAG_VOCAB,
     parse_biomes,
     parse_months,
@@ -105,6 +106,7 @@ def build_export() -> dict:
             "biomes": list(BIOMES),
             "tags": list(TAG_VOCAB),
             "tag_idf": tag_idf_map,
+            "states": list(STATE_CODES),
         },
         "ordinals": {
             "days": dict(DAYS_ORD),
