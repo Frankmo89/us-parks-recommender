@@ -1,5 +1,66 @@
 # Changelog
 
+## 2026-10-05 — app: readable primary buttons (app only)
+
+- Why: Start, Next and See parks had light text on cream and were hard to
+  read on a phone. Streamlit draws primary buttons in the theme
+  `primaryColor` (#e8d9b8) with white text.
+- Contrast before → after (WCAG AA for text is 4.5:1; measured in Chrome at
+  390 px wide, computed with the WCAG formula):
+  - normal: white on #e8d9b8 **1.40** → #16210f on #e8d9b8 **11.96**
+  - hover and keyboard focus: white on #d6bb80 **1.86** → #16210f on
+    #d6bb80 **8.96**; focus also gets a 2 px #f7f1e4 outline
+  - pressed: white on #e8d9b8 **1.40** → #16210f on #c9a96a **7.44**
+  - disabled (Next with no terrain, See parks with an unknown ZIP): no
+    fill, #f7f1e4 at 40% opacity on the quiz card, **3.06–3.47** → solid
+    #b3ad9f, **5.26–8.86**, plus a dashed border so it still looks
+    disabled. The range is the card (rgba(6, 14, 10, .82)) over a white vs
+    a black photo.
+- Colors and the contrast math live in `app/contrast.py`, which builds the
+  CSS. `tests/test_contrast.py` checks every state is at least 4.5:1 and
+  that the theme `primaryColor` is the cream the ratios assume.
+- No engine change: `data/engine_fixtures.json` (`--check`) and
+  `web/engine_data.json` unchanged, and `src.evaluate` output is identical.
+  Metrics (unedited, unchanged):
+  - model train: R-Prec **0.685**, nDCG@5 **0.739** → **0.685** / **0.739**
+  - model holdout: **0.794** / **0.842** → **0.794** / **0.842**
+  - popularity, random and content-only baselines also unchanged.
+
+## 2026-10-05 — app: why-sentence wording, phone chart axis, no self demo link (app only)
+
+- Why sentence (`app/breakdown.py`): it said "lost points for terrain" even
+  when terrain was the biggest gain on the chart. Example: desert, hiking,
+  easy, 2-3 days, mid budget, medium crowds, November. Death Valley's
+  breakdown is terrain +0.26 (of 0.55), days +0.18, effort +0.07, budget
+  +0.08, crowds 0, season 0.
+  - Before: "Strong fit on length and budget; lost points for terrain."
+  - After: "Strong fit on length and budget; partial match on terrain."
+  - Now "lost points" is only for negative parts (crowds, season). A fit
+    part that is positive but below the strong cutoff reads "partial match
+    on <part>", and a fit part at 0.00 reads "no match on <part>".
+  - The second clause no longer names a part that is already in "Strong
+    fit". Before, terrain's 0.55 ceiling gave it the biggest absolute gap,
+    which produced "Strong fit on terrain, length, and budget; lost points
+    for terrain."
+- Why chart: on a phone-width screen the x-axis labels ran together
+  ("0.000.05"). Vega drew 0.05 steps despite `tickCount=4`. The axis now
+  uses `tickCount=3`, `labelOverlap="greedy"`, `labelFlush=True`, font 10
+  and format `.2~f` ("0.1", not "0.10"), which works at any width since
+  Streamlit cannot see the screen size. Settings live in
+  `VALUE_AXIS_LABELS`.
+- Start screen: removed the "Live demo" link, which pointed at the app
+  itself. The README keeps it.
+- Tests: Death Valley case from the real engine, the bug-report numbers,
+  strong parts not named in the second clause, zero fit, negative parts
+  still "lost points" (crowds, season), and the axis settings.
+- No engine change: `data/engine_fixtures.json` (`--check`) and
+  `web/engine_data.json` unchanged, and `src.evaluate` output is identical.
+  Metrics (unedited, unchanged):
+  - model train: R-Prec **0.685**, nDCG@5 **0.739** → **0.685** / **0.739**
+  - model holdout: **0.794** / **0.842** → **0.794** / **0.842**
+  - model all: **0.721** / **0.773** → **0.721** / **0.773**
+  - popularity, random and content-only baselines also unchanged.
+
 ## 2026-10-05 — month-aware crowd from NPS peak months (engine_version 0.5.0 → 0.6.0)
 
 - Why: crowd is one fixed level per park, so Yosemite in January paid the
