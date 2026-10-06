@@ -1,5 +1,40 @@
 # Changelog
 
+## 2026-10-05 — app: results card polish (app only)
+
+Measured in Chrome at 390 px wide (phone), before → after:
+- Zero parts: Crowds and Season printed "−0.00" (a zero penalty is stored
+  as −0.0) → "0". Labels now come from `format_contribution` in
+  `app/breakdown.py` ("+0.26", "−0.12", "0"); the tooltip uses the same text.
+- Bar spacing: the whole chart was 160 px tall including axis, title and
+  legend, so 6 rows got ~13 px each while bars were a fixed 16 px and
+  overlapped → each row is a 30 px step with bars at 60% of it
+  (`paddingInner` 0.4), so bars are separate and labels no longer touch the
+  next row's bar.
+- Width and axis: the chart was 200 px wide on a 390 px phone (five nested
+  paddings) and the axis ran to a nice 0.3 with no label plan → narrow
+  screens trim the shell, panel, card and expander side padding, so the
+  chart is 285 px wide, and the x bounds come from the data
+  (`value_domain`), keeping 28% of the plot free for value labels on each
+  side that has bars. The #24 axis settings (3 ticks, overlap removal) stay;
+  no axis labels overlap at 390 px.
+- Card header: "A fit score, not a probability. ·" wrapped and left a
+  dangling dot → the states/drive line (`card_meta_html`) is its own line,
+  with no-break spaces around every "·".
+- `docs/demo.png`: new screenshot from a local run (Chromium, 390 px CSS
+  width, device scale 3) of the quiz with canyon + hiking, easy, 2-3 days,
+  medium crowds, mid budget, April, Anywhere: Capitol Reef National Park,
+  Match 65%, why chart open. Clipped from the "These parks fit the trip."
+  heading to the card bottom with an 8 px margin (1020 × 1947), resized to
+  900 × 1718, 256-color PNG via libimagequant (141 KB). README alt text
+  updated.
+- No engine change: `data/engine_fixtures.json` (`--check`) and
+  `web/engine_data.json` unchanged, and `src.evaluate` output is identical.
+  Metrics (unedited, unchanged):
+  - model train: R-Prec **0.685**, nDCG@5 **0.739** → **0.685** / **0.739**
+  - model holdout: **0.794** / **0.842** → **0.794** / **0.842**
+  - popularity, random and content-only baselines also unchanged.
+
 ## 2026-10-05 — demo screenshot: results card (docs only)
 
 - `docs/demo.png` now shows a live-app results card after #24/#25 (Arches
