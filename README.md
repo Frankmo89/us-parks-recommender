@@ -55,7 +55,11 @@ pytest
 streamlit run app/streamlit_app.py
 ```
 
-Origins: `san_diego`, `los_angeles`, `phoenix`, `denver`, `seattle`, `salt_lake`, `nyc`.
+Starting point: `--zip 02108` (any 5-digit U.S. ZIP in the table below; ZIP+4
+like `92101-1234` uses the first five digits) or a
+city preset `--origin` (`san_diego`, `los_angeles`, `phoenix`, `denver`,
+`seattle`, `salt_lake`, `nyc`). Passing both is an error. A bad ZIP stops
+with `ZIP not found`. `--max-hours` only applies with a starting point.
 
 ## Metrics
 
@@ -124,22 +128,42 @@ CSV export with `scripts/import_form_labels.py`. Those profiles get
 `split: "external"` and appear on their own evaluate lines. They are for
 testing only — never tune on them. The `all` aggregate stays train + holdout.
 
+## ZIP origins
+
+`data/zcta_centroids.csv` maps 5-digit ZIP codes to coordinates (`zip,lat,lon`,
+33,791 rows). It comes from the U.S. Census Bureau **2026 Gazetteer Files**,
+ZIP Code Tabulation Areas national file (public domain):
+https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2026_Gazetteer/2026_Gaz_zcta_national.zip
+(index: https://www.census.gov/geographies/reference-files/time-series/geo/gazetteer-files.html).
+Each row is the ZCTA's internal point. ZCTAs approximate USPS ZIP codes; a
+PO-box-only or brand-new ZIP may be missing. Rebuild with
+`python scripts/build_zcta_table.py --year 2026` (downloads the file) or
+`--source path/to/2026_Gaz_zcta_national.zip`.
+
+Known limit: `access` assumes the trip starts on the U.S. mainland. A
+traveler starting in Hawaii (e.g. ZIP 96720) with a drive limit loses the
+Hawaii parks they could drive to, because `flight` parks always drop out
+under a drive limit. Use Anywhere (no drive limit) to see them.
+
 ## Layout
 
 ```
 data/parks.csv
+data/zcta_centroids.csv
 data/eval_profiles.json
 data/engine_fixtures.json
 docs/engine-contract.md
 web/engine_data.json
 scripts/export_engine_data.py
 scripts/check_engine_version_bump.py
+scripts/build_zcta_table.py
 ts/
 src/features.py
 src/recommender.py
 src/evaluate.py
 src/cli.py
 src/origins.py
+src/zipcodes.py
 app/streamlit_app.py
 .github/workflows/ci.yml
 ```
