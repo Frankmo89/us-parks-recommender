@@ -578,7 +578,13 @@ with st.container(key="app_shell"):
             )
             if st.session_state.origin_label != "Anywhere":
                 st.slider("Max drive hours", 2, 16, value=st.session_state.max_hours, key="max_hours")
-            st.toggle("Include remote parks (AK, HI, ferry)", value=st.session_state.allow_remote, key="allow_remote")
+            st.toggle(
+                "Include remote parks",
+                value=st.session_state.allow_remote,
+                key="allow_remote",
+                help="Hard-to-reach parks with few roads or services. "
+                "Results say when a park needs a boat or a flight.",
+            )
             st.toggle("OK with timed entry / permits", value=st.session_state.allow_permits, key="allow_permits")
             c1, c2 = st.columns(2)
             if c1.button("Back", width="stretch"):
