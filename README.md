@@ -25,7 +25,6 @@ choosing which park to visit.
   subtracted, plus a one-line reason.
 
 The catalog is the official set of 63 national parks with structured tags.
-This repo does not copy editorial content from any product site.
 
 ## Results
 
@@ -267,3 +266,4 @@ app/streamlit_app.py
 ## License
 
 MIT. Park names are used descriptively. NPS logos and photography are not bundled.
+This repo does not copy editorial content from any product site.
