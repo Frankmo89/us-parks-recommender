@@ -25,7 +25,7 @@ Python today; consumers should not send them.
 | `tags` | `string[]` | See tag vocab below | _(required)_ | **yes** | Multi-hot; empty `[]` allowed. Unknown tags are ignored in scoring. |
 | `difficulty` | `string` | `easy`, `moderate`, `challenging` | `"easy"` | no | Ordinal closeness vs park difficulty. |
 | `days_needed` | `string` | `1`, `2-3`, `4-7`, `7+` | `"2-3"` | no | Trip length bin. |
-| `crowd_pref` | `string` | `low`, `medium`, `high` | `"medium"` | no | Parks busier than this pay a crowd penalty. |
+| `crowd_pref` | `string` | `low`, `medium`, `high` | `"medium"` | no | Parks busier than this pay a crowd penalty. With a `month` set, a park counts one crowd level quieter in months outside its `peak_months` (0.6.0). |
 | `budget_tier` | `string` | `low`, `mid`, `high` | `"mid"` | no | Travel cost to reach + stay (not entrance fee). |
 | `month` | `integer` \| `null` | `1`–`12`, or omit/`null` | `null` | no | Soft season penalty vs park `best_months`. `null` → no season penalty. |
 | `origin_lat` | `number` \| `null` | WGS84 latitude | `null` | no | With `origin_lon` + `max_drive_hours`, enables the drive hard filter (which also drops flight-access parks; see Park access). |
@@ -211,6 +211,7 @@ Every successful response includes `engine_version` and a `parks` array
         "crowd": "low",
         "budget_tier": "low",
         "best_months": ["11", "12", "1", "2", "3"],
+        "peak_months": ["2", "3", "4", "5", "11", "12"],
         "remote": false,
         "permit_likely": false,
         "access": "road",
@@ -240,7 +241,7 @@ score = 0.55 * content
 | `days` | Closeness on days bin | `[0, 1]` (fit) |
 | `difficulty` | Closeness on difficulty | `[0, 1]` (fit) |
 | `budget` | Closeness on budget | `[0, 1]` (fit) |
-| `crowd_penalty` | `max(0, park_crowd − wanted) * 0.12` | ≥ 0 (subtracted) |
+| `crowd_penalty` | `max(0, effective_crowd − wanted) * 0.12`, where `effective_crowd` is the catalog crowd, one level lower (high → medium, medium → low; low stays low) when `month` is set and not in `facts.peak_months` | ≥ 0 (subtracted) |
 | `month_penalty` | `(month_distance / 6) * 0.35` | ≥ 0 (subtracted); 0 if `month` is null |
 | `weighted.*` | Same parts in **score units** (weights applied; penalties negated) | Sum equals `score` |
 
@@ -264,7 +265,7 @@ the catalog. `facts.why` ends with a travel label built from `access` and
 | Field | Audience |
 |---|---|
 | `facts.name`, `facts.park_code`, `facts.states`, `facts.nps_url` | **Safe** — primary identity |
-| `facts.biomes`, `facts.tags`, `facts.difficulty`, `facts.days_needed`, `facts.crowd`, `facts.budget_tier`, `facts.best_months` | **Safe** — catalog attributes the user can understand (label plainly; note budget is travel cost, not entrance fee) |
+| `facts.biomes`, `facts.tags`, `facts.difficulty`, `facts.days_needed`, `facts.crowd`, `facts.budget_tier`, `facts.best_months`, `facts.peak_months` | **Safe** — catalog attributes the user can understand (label plainly; note budget is travel cost, not entrance fee) |
 | `facts.why` | **Safe** — short human blurb already used in the CLI/UI |
 | `facts.drive_hours` | **Safe** when present — say it is an estimate, not Google Maps; for boat parks it is the drive to the port only |
 | `facts.access` | **Safe** — say plainly when a boat or flight is needed |
@@ -331,6 +332,14 @@ fails if the committed fixtures drift from the live engine.
 
 Version notes:
 
+- **0.6.0** (breaking): month-aware crowd. New catalog column and output
+  field `facts.peak_months`: months whose NPS recreation visits are at least
+  0.7 × the park's busiest month (2023–2025 average; October and November use
+  2023–2024 only because of the Oct 1–Nov 12, 2025 federal shutdown). With
+  `month` set and not a peak month, the crowd penalty uses one crowd level
+  lower; with no month nothing changes. `facts.crowd` stays the catalog
+  value. Fixtures add `near_tie_no_month` and `off_peak_crowd_zion_march`
+  (30 profiles). Train metrics drop (see `CHANGELOG.md`).
 - **0.5.0** (breaking): catalog tag cleanup. Tags outside the scored vocab are
   gone (`remote`, `low_crowd`, `permits`, which repeated their columns), and the
   catalog now rejects any tag outside `TAG_VOCAB`. Biome names used as tags

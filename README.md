@@ -21,7 +21,7 @@ score = 0.55 * cosine(biome + IDF(tags))
       + 0.18 * days_closeness
       + 0.14 * difficulty_closeness
       + 0.08 * budget_closeness
-      − 0.12 * max(0, park_crowd − wanted_crowd)
+      − 0.12 * max(0, effective_crowd − wanted_crowd)
       − 0.35 * (month_distance / 6)
 ```
 
@@ -32,6 +32,16 @@ The last term is `W_MONTH_PENALTY * (month_distance / 6)` with
 the optional `states` list (two-letter codes, e.g. `["UT"]`) stay hard
 filters. Parks that cross state lines are listed under every state they
 span, per NPS (Yellowstone `WY,MT,ID`), so `["MT"]` returns Yellowstone.
+
+`effective_crowd` is the park's catalog crowd, except that with a trip month
+outside the park's `peak_months` it counts one level quieter (high → medium,
+medium → low). No month: catalog crowd. A month is a peak month when its NPS
+recreation visits are at least **70% of the park's busiest month**, using the
+2023–2025 average. The federal shutdown (Oct 1–Nov 12, 2025) counts as
+missing data, not low visits: October and November average 2023 and 2024
+only, for every park. Known limit: a single spike month can define the whole
+peak, e.g. Gateway Arch peaks only in July (Fourth of July) and Shenandoah
+only in October (fall color), so their other months count as quieter.
 
 Drive time is `great_circle_miles × 1.25 / 65 mph`. That is a highway sketch,
 not Google Maps. Each park has an `access` value (`road`, `boat`, `flight`).
@@ -70,7 +80,8 @@ holdout or a user study. The holdout was seen during development. Labels were
 revised once on 2026-09-21. Weights were not retuned after that pass.
 
 Baselines and ablations use the same hard filters as the model (remote,
-permits, drive hours). **Popularity** ranks by crowd high→low (ties by
+permits, drive hours). **Popularity** ranks by average annual NPS
+recreation visits, 2023–2025, with the same shutdown handling (ties by
 `park_code`). **Random** is the mean of 100 shuffles of the filtered parks
 (seeds 0–99). **Content-only** ranks by cosine similarity alone (no days,
 difficulty, budget, crowd, or month terms). A profile is **filter-only** when
@@ -79,23 +90,23 @@ ranking cannot change the score.
 
 Holdout averages about 22 candidates after hard filters versus about 42 on
 train. Two holdout profiles (`washington_alpine`, `beginner_family_east`) are
-filter-only and lift the holdout average; excluding them, holdout no longer
-beats train on R-Precision.
+filter-only and lift the holdout average; excluding them, holdout and train
+R-Precision are close (0.692 vs 0.685).
 
 | Method | Split | n | R-Precision | nDCG@5 |
 |---|---|---|---|---|
-| Model | Train | 12 | 0.708 | 0.764 |
-| Model | Holdout | 6 | 0.794 | 0.813 |
-| Model | All | 18 | 0.737 | 0.781 |
-| Model (excl. filter-only) | Train | 12 | 0.708 | 0.764 |
-| Model (excl. filter-only) | Holdout | 4 | 0.692 | 0.720 |
-| Model (excl. filter-only) | All | 16 | 0.704 | 0.753 |
-| Popularity | Train | 12 | 0.124 | 0.153 |
-| Popularity | Holdout | 6 | 0.442 | 0.425 |
-| Popularity | All | 18 | 0.230 | 0.243 |
-| Popularity (excl. filter-only) | Train | 12 | 0.124 | 0.153 |
-| Popularity (excl. filter-only) | Holdout | 4 | 0.163 | 0.137 |
-| Popularity (excl. filter-only) | All | 16 | 0.133 | 0.149 |
+| Model | Train | 12 | 0.685 | 0.739 |
+| Model | Holdout | 6 | 0.794 | 0.842 |
+| Model | All | 18 | 0.721 | 0.773 |
+| Model (excl. filter-only) | Train | 12 | 0.685 | 0.739 |
+| Model (excl. filter-only) | Holdout | 4 | 0.692 | 0.763 |
+| Model (excl. filter-only) | All | 16 | 0.686 | 0.745 |
+| Popularity | Train | 12 | 0.149 | 0.160 |
+| Popularity | Holdout | 6 | 0.442 | 0.479 |
+| Popularity | All | 18 | 0.246 | 0.266 |
+| Popularity (excl. filter-only) | Train | 12 | 0.149 | 0.160 |
+| Popularity (excl. filter-only) | Holdout | 4 | 0.163 | 0.218 |
+| Popularity (excl. filter-only) | All | 16 | 0.152 | 0.174 |
 | Random | Train | 12 | 0.136 | 0.185 |
 | Random | Holdout | 6 | 0.483 | 0.498 |
 | Random | All | 18 | 0.252 | 0.289 |
@@ -110,10 +121,10 @@ beats train on R-Precision.
 | Content-only (excl. filter-only) | All | 16 | 0.614 | 0.764 |
 
 **Ablation finding (weights unchanged):** Excluding filter-only profiles
-(n=16), the full model scores R-Prec 0.704 / nDCG@5 0.753, and content-only
+(n=16), the full model scores R-Prec 0.686 / nDCG@5 0.745, and content-only
 scores 0.614 / 0.764. The days, difficulty, budget, crowd, and month terms
-raise R-Precision by about 0.09 but do not improve nDCG@5. On holdout,
-content-only beats the full model on nDCG@5 (0.804 vs 0.720), but n=4 is too
+raise R-Precision by about 0.07 but do not improve nDCG@5. On holdout,
+content-only beats the full model on nDCG@5 (0.804 vs 0.763), but n=4 is too
 small to conclude anything.
 
 See `CHANGELOG.md` for the 50 mph drive bug. Those older figures are retired.
@@ -157,9 +168,10 @@ with `startMonth=1&endMonth=12` for the year). Downloaded 2026-10-05.
 Catalog `seki` (Sequoia) is NPS unit `SEQU`; Kings Canyon (`KICA`) is
 reported separately. October–November 2025 counts are low or zero for some
 parks because of the federal government shutdown (Oct 1–Nov 12, 2025).
-`python scripts/build_peak_months.py` prints peak months under candidate
-cutoffs (analysis only; the engine does not use them yet). Refetch a year
-with `--download 2025`.
+They feed `peak_months` in `data/parks.csv` (see Score) and the popularity
+baseline. `python scripts/build_peak_months.py` prints the peak months and
+`--check` confirms the table in `scripts/build_parks_csv.py` matches the raw
+data. Refetch a year with `--download 2025`.
 
 ## Layout
 
