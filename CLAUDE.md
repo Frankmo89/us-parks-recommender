@@ -23,6 +23,9 @@ regression labels. Other fields in that file (profile inputs, notes) may be
 edited if the task calls for it, but relevant-list edits require explicit
 user approval.
 
+If you change data/parks.csv, update scripts/build_parks_csv.py to match; a
+test checks that they agree byte for byte.
+
 ## Required checks
 After every change, run:
 
