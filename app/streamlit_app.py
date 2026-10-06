@@ -4,6 +4,7 @@ import streamlit as st
 
 from app.breakdown import PART_ORDER, card_meta, match_percent, nps_url, score_breakdown, why_sentence
 from app.origin import FOUND, NOT_FOUND, drive_limit, zip_origin
+from app.states import state_choices, state_label, states_filter
 from src.evaluate import run as run_evaluation
 from src.features import DRIVE_DETOUR, DRIVE_MPH, UserProfile, parse_biomes
 from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, W_MONTH_PENALTY, ParkRecommender
@@ -203,6 +204,7 @@ DEFAULT_ANSWERS = {
     "budget": "mid",
     "month_pills": "November",
     "origin_zip": "",
+    "states_pick": [],
     "max_hours": 8,
     "allow_remote": False,
     "allow_permits": True,
@@ -576,6 +578,14 @@ with st.container(key="app_shell"):
                 st.slider("Max drive hours", 2, 16, value=st.session_state.max_hours, key="max_hours")
             else:
                 st.caption("Anywhere: no starting point, no drive limit.")
+            st.multiselect(
+                "Which states?",
+                state_choices(model.parks),
+                key="states_pick",
+                format_func=state_label,
+                placeholder="All states",
+                help="Only show parks in these states. Leave empty for all states.",
+            )
             st.toggle(
                 "Include remote parks",
                 value=st.session_state.allow_remote,
@@ -614,11 +624,12 @@ with st.container(key="app_shell"):
                     max_drive_hours=drive,
                     allow_remote=st.session_state.allow_remote,
                     allow_permits=st.session_state.allow_permits,
+                    states=states_filter(st.session_state.states_pick),
                 ),
                 k=5,
             )
             if ranked.empty:
-                st.warning("Nothing matched. Loosen month, distance, or the remote filter.")
+                st.warning("Nothing matched. Loosen month, distance, states, or the remote filter.")
             else:
                 render_top_card(ranked.iloc[0])
                 rest = ranked.iloc[1:]

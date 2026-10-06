@@ -132,10 +132,12 @@ def why_sentence(breakdown: pd.DataFrame) -> str:
 def card_meta(row: pd.Series) -> str:
     """States plus the travel note shown next to the Match badge.
 
+    Multi-state parks read "WY, MT, ID" (the catalog stores "WY,MT,ID").
+
     Same label the engine puts at the end of `why` (src.recommender.access_label):
     "~Xh drive", "~Xh drive + boat", "boat needed", "flight needed", or none.
     """
-    bits = [str(row["states"])]
+    bits = [", ".join(code.strip() for code in str(row["states"]).split(","))]
     travel = access_label(row.get("access"), row.get("drive_hours"))
     if travel:
         bits.append(travel)

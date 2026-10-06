@@ -78,6 +78,18 @@ DAYS_VALUES = tuple(DAYS_ORD.keys())
 CROWD_VALUES = tuple(CROWD_RANK.keys())
 BUDGET_VALUES = tuple(BUDGET_ORD.keys())
 
+# Two-letter USPS codes accepted in UserProfile.states: the 50 states, DC,
+# and the five inhabited territories. A valid code with no park in the
+# catalog (e.g. "DE") is allowed and simply matches nothing.
+STATE_CODES = (
+    "AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID",
+    "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC",
+    "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD",
+    "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY",
+    "AS", "GU", "MP", "PR", "VI",
+)
+STATES_ALLOWED = "null, or a list of two-letter USPS codes (50 states, DC, AS, GU, MP, PR, VI)"
+
 # Explicit null/None on these fields means "not specified" — same as omit.
 ENUM_DEFAULTS = {
     "difficulty": "easy",
@@ -113,6 +125,8 @@ def validate_profile(profile: UserProfile) -> None:
     Explicit None on difficulty / days_needed / crowd_pref / budget_tier means
     "not specified" and is replaced with the documented default (same as omit).
     Unknown biomes and tags are intentionally not checked — scoring ignores them.
+    ``states`` is normalized in place: codes are trimmed and uppercased,
+    duplicates dropped, and an empty list becomes None (no state filter).
     """
     for field, default in ENUM_DEFAULTS.items():
         if getattr(profile, field) is None:
@@ -146,6 +160,35 @@ def validate_profile(profile: UserProfile) -> None:
                 max_hours,
                 allowed="null or a positive number",
             )
+
+    profile.states = normalize_states(profile.states)
+
+
+def normalize_states(states: object) -> list[str] | None:
+    """Trimmed, uppercased, de-duplicated state codes; [] or None -> None.
+
+    Raises InvalidProfileError for a non-list value or any code outside
+    STATE_CODES.
+    """
+    if states is None:
+        return None
+    if isinstance(states, (str, bytes)) or not isinstance(states, (list, tuple)):
+        raise InvalidProfileError("states", states, allowed=STATES_ALLOWED)
+    out: list[str] = []
+    for code in states:
+        if not isinstance(code, str):
+            raise InvalidProfileError("states", code, allowed=STATES_ALLOWED)
+        norm = code.strip().upper()
+        if norm not in STATE_CODES:
+            raise InvalidProfileError("states", code, allowed=STATES_ALLOWED)
+        if norm not in out:
+            out.append(norm)
+    return out or None
+
+
+def parse_states(raw: str) -> list[str]:
+    """Comma-separated state codes from parks.csv ("CA,NV")."""
+    return [part.strip() for part in str(raw).split(",") if part.strip()]
 
 
 def _require_enum(field: str, value: object, allowed: tuple[str, ...]) -> None:
@@ -256,6 +299,7 @@ class UserProfile:
     max_drive_hours: float | None = None
     allow_remote: bool = True
     allow_permits: bool = True
+    states: list[str] | None = None
 
     def content_vector(self, idf: np.ndarray | None = None) -> np.ndarray:
         return content_vector_from_parts(self.biomes, self.tags, idf=idf)

@@ -1,6 +1,6 @@
 {
-  "engine_version": "0.3.0",
-  "content_hash": "13b158b78aec8a58a878869f4da5526cee853aea2d31d99e5503830b72b35dfc",
+  "engine_version": "0.4.0",
+  "content_hash": "d9cc89fff0af2a71cc0d10dea9c95612e7fd4e30398c0bf9ba4a85e1525ecaa7",
   "weights": {
     "W_CONTENT": 0.55,
     "W_DAYS": 0.18,
@@ -102,7 +102,65 @@
       "wildflowers": 3.4657359027997265,
       "wildlife": 0.7248958788745256,
       "winter": 3.4657359027997265
-    }
+    },
+    "states": [
+      "AK",
+      "AL",
+      "AR",
+      "AZ",
+      "CA",
+      "CO",
+      "CT",
+      "DC",
+      "DE",
+      "FL",
+      "GA",
+      "HI",
+      "IA",
+      "ID",
+      "IL",
+      "IN",
+      "KS",
+      "KY",
+      "LA",
+      "MA",
+      "MD",
+      "ME",
+      "MI",
+      "MN",
+      "MO",
+      "MS",
+      "MT",
+      "NC",
+      "ND",
+      "NE",
+      "NH",
+      "NJ",
+      "NM",
+      "NV",
+      "NY",
+      "OH",
+      "OK",
+      "OR",
+      "PA",
+      "RI",
+      "SC",
+      "SD",
+      "TN",
+      "TX",
+      "UT",
+      "VA",
+      "VT",
+      "WA",
+      "WI",
+      "WV",
+      "WY",
+      "AS",
+      "GU",
+      "MP",
+      "PR",
+      "VI"
+    ]
   },
   "ordinals": {
     "days": {
@@ -607,7 +665,7 @@
     {
       "park_code": "deva",
       "name": "Death Valley National Park",
-      "states": "CA",
+      "states": "CA,NV",
       "biomes": [
         "desert"
       ],
@@ -977,7 +1035,7 @@
     {
       "park_code": "grsm",
       "name": "Great Smoky Mountains National Park",
-      "states": "TN",
+      "states": "TN,NC",
       "biomes": [
         "forest"
       ],
@@ -2015,7 +2073,7 @@
     {
       "park_code": "yell",
       "name": "Yellowstone National Park",
-      "states": "WY",
+      "states": "WY,MT,ID",
       "biomes": [
         "alpine",
         "forest"

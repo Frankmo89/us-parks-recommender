@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from .features import BIOMES, TAG_VOCAB, parse_biomes, parse_months, parse_tags
+from .features import BIOMES, STATE_CODES, TAG_VOCAB, parse_biomes, parse_months, parse_states, parse_tags
 
 # Other biome names may appear as tags on a park only if they are not one of
 # that park's own biomes. Catalog annotations (low_crowd, permits, remote) are
@@ -26,7 +26,7 @@ ACCESS_VALUES = ("road", "boat", "flight")
 
 def validate_parks(parks: pd.DataFrame) -> None:
     """Raise ValueError naming the bad park_code if a row is invalid."""
-    required = {"park_code", "biomes", "tags", "best_months", "access"}
+    required = {"park_code", "states", "biomes", "tags", "best_months", "access"}
     missing = required - set(parks.columns)
     if missing:
         raise ValueError(f"parks catalog missing columns: {sorted(missing)}")
@@ -50,6 +50,13 @@ def validate_parks(parks: pd.DataFrame) -> None:
         for tag in tags:
             if tag not in KNOWN_TAGS:
                 raise ValueError(f"Park {code}: unknown tag {tag!r}")
+
+        states = parse_states(getattr(row, "states", ""))
+        if not states:
+            raise ValueError(f"Park {code}: states is empty")
+        for state in states:
+            if state not in STATE_CODES:
+                raise ValueError(f"Park {code}: unknown state code {state!r}")
 
         access = getattr(row, "access", None)
         if not isinstance(access, str) or access not in ACCESS_VALUES:

@@ -104,6 +104,8 @@ def recommend_from_export(data: dict, profile: dict, k: int = 5) -> dict:
     max_drive_hours = profile.get("max_drive_hours")
     allow_remote = True if profile.get("allow_remote") is None else profile.get("allow_remote")
     allow_permits = True if profile.get("allow_permits") is None else profile.get("allow_permits")
+    # states: trimmed + uppercased; null or [] means no state filter.
+    wanted_states = {str(code).strip().upper() for code in (profile.get("states") or [])}
 
     user_vec = _l2_normalize(_content_vector(user_biomes, user_tags, data))
     days_u = float(ord_days[days_needed])
@@ -117,6 +119,10 @@ def recommend_from_export(data: dict, profile: dict, k: int = 5) -> dict:
             continue
         if not allow_permits and park["permit_likely"]:
             continue
+        if wanted_states:
+            park_states = {code.strip() for code in park["states"].split(",") if code.strip()}
+            if wanted_states.isdisjoint(park_states):
+                continue
         drive = None
         if origin_lat is not None and origin_lon is not None and max_drive_hours is not None:
             # A drive limit drops parks you can only fly to; boat parks keep
@@ -242,7 +248,7 @@ def test_export_has_required_keys(engine_data: dict):
 def test_export_json_only_matches_live_recommend_for_all_fixtures(
     engine_data: dict, fixtures: dict, live_model: ParkRecommender
 ):
-    assert len(fixtures["profiles"]) == 26
+    assert len(fixtures["profiles"]) == 28
     for item in fixtures["profiles"]:
         profile = {key: item["profile"][key] for key in PROFILE_FIELDS}
         live = live_model.recommend(UserProfile(**profile), k=fixtures["k"])

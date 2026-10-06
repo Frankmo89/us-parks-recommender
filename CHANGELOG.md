@@ -1,5 +1,51 @@
 # Changelog
 
+## 2026-10-05 — states filter (engine_version 0.3.0 → 0.4.0)
+
+- Why: a "Utah canyons" trip returned Death Valley, Black Canyon and Big Bend
+  in its top 5 and left Arches and Bryce at ranks 6–7. There was no way to
+  say "Utah".
+- New optional profile field `states` (list of two-letter codes, default
+  null): a hard filter that keeps parks whose catalog `states` shares at least
+  one code. Allowed codes: an explicit list of the 50 states, DC, AS, GU, MP,
+  PR and VI (`STATE_CODES`); codes are trimmed and uppercased, duplicates
+  dropped; `[]` means no filter, like null; anything else raises
+  `InvalidProfileError` on field `states`. The catalog now validates its own
+  state codes against the same list.
+- Hypothesis (stated before coding): with `states` null, scores and order are
+  identical for all existing profiles; the field only removes parks outside
+  the listed states. Metrics should not move because no eval profile uses
+  `states`.
+- Evidence (canyon + desert, hiking / photography / stargazing, moderate,
+  4–7 days, October): top 5 without states `deva, blca, care, bibe, cany`;
+  with `states=["UT"]` `care, cany, arch, brca, zion`, same scores as before.
+- Result: all 26 existing fixture outputs identical apart from the version
+  stamp and the multi-state `facts.states` strings (below); no eval profile
+  changed. Metrics before / after (unedited,
+  identical):
+  - model train: R-Prec **0.708**, nDCG@5 **0.764** → **0.708** / **0.764**
+  - model holdout: R-Prec **0.794**, nDCG@5 **0.813** → **0.794** / **0.813**
+  - model all: **0.737** / **0.781** → **0.737** / **0.781**
+  - popularity, random and content-only baselines also unchanged.
+- TS engine mirrors validation and filter; `web/engine_data.json` adds
+  `vocab.states`. The fixture generator now owns its profile list (eval
+  inputs from `data/eval_profiles.json`, edge cases in code) and pins two new
+  profiles, `utah_canyons_states` and `pacific_northwest_states` (28 total).
+  Version 0.4.0 in `pyproject.toml`, `ts/package.json` + lockfile, fixture
+  stamps, export and contract.
+- App: optional "Which states?" multiselect (states with parks, by name);
+  empty means no filter.
+- Multi-state parks: the catalog now lists every state a park spans, checked
+  against the NPS API (`developer.nps.gov/api/v1/parks`, `fields=states`):
+  Yellowstone `WY,MT,ID`, Great Smoky Mountains `TN,NC`, Death Valley
+  `CA,NV` (comma-separated, main state first, the format the filter, TS
+  engine and export already parse). `["MT"]` and `["ID"]` now return
+  Yellowstone, `["NC"]` the Smokies, `["NV"]` Death Valley. The other 60
+  parks are single-state per NPS (Kings Canyon via the joint `seki` entry,
+  CA). Fixture outputs change only in `facts.states` (deva in 7 profiles,
+  yell in 1); no score, order or metric change. The app shows "WY, MT, ID".
+
+
 ## 2026-10-05 — ZIP code starting point
 
 - Why: the app and CLI only offered 7 city presets, so most U.S. travelers

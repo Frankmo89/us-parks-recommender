@@ -8,7 +8,7 @@ This document is the API contract. It does not change scoring. A future
 TypeScript (or other) port must match the Python behavior pinned in
 `data/engine_fixtures.json`.
 
-Current `engine_version`: **`0.3.0`** (same as `pyproject.toml`).
+Current `engine_version`: **`0.4.0`** (same as `pyproject.toml`).
 
 ---
 
@@ -33,6 +33,7 @@ Python today; consumers should not send them.
 | `max_drive_hours` | `number` \| `null` | positive hours | `null` | no | Hard filter. Drive model: great-circle miles × 1.25 / 65 mph. Flight parks never pass; boat parks are measured to the park's coordinates (the drive to the port). |
 | `allow_remote` | `boolean` | `true` / `false` | `true` | no | `false` drops parks with `remote=1` (AK, HI, ferry, etc.). |
 | `allow_permits` | `boolean` | `true` / `false` | `true` | no | `false` drops parks with `permit_likely=1`. |
+| `states` | `string[]` \| `null` | Two-letter USPS codes: the 50 states, `DC`, `AS`, `GU`, `MP`, `PR`, `VI` | `null` | no | Hard filter (added in 0.4.0): keep only parks whose catalog `states` shares at least one code. Parks that cross state lines list every state they span, comma-separated (`"WY,MT,ID"`), so `["MT"]` matches Yellowstone. Codes are trimmed and uppercased (`"ut"` → `"UT"`); duplicates are dropped. `null` and `[]` both mean no state filter. A valid code with no park (e.g. `"DE"`) is allowed and matches nothing. |
 
 **Required** means the field must be present for a well-formed profile.
 `biomes` and `tags` may be empty arrays. Ordinal / filter fields may be omitted;
@@ -57,6 +58,7 @@ value; that is unchanged.
 | `difficulty`, `days_needed`, `crowd_pref`, `budget_tier` | **Raise** if non-null and not in the allowed enum list; `null` → default |
 | `month` | **Raise** if not `null` and not an integer `1`–`12` |
 | `max_drive_hours` | **Raise** if set and not a positive number |
+| `states` | **Raise** if not `null` / a list, or if any entry (after trim + uppercase) is not one of the 56 allowed codes; field `states`, value = the bad entry. `[]` → no filter |
 | `biomes` entries outside biome vocab | **Silently ignored** in scoring (multi-hot miss) |
 | `tags` entries outside tag vocab | **Silently ignored** in scoring (multi-hot miss) |
 | Unknown top-level keys | **Ignored** by Python today; do not send them |
@@ -151,7 +153,14 @@ while filling the profile.
    flight-access parks, so do not add one just to mean "no flights".
 9. **Remote / permits** — "no flights / lower 48 only" → `allow_remote: false`.
    "no timed entry / no permits" → `allow_permits: false`. Default both `true`.
-10. **Do not invent constraints** the user did not imply. Prefer defaults over
+10. **States** — only when the user names states or a region. The concierge
+    turns regions into state lists; the engine only takes two-letter codes:
+    "Utah" → `["UT"]`; "Pacific Northwest" → `["WA", "OR"]` (add `"ID"` if
+    they include it); "Four Corners" → `["AZ", "CO", "NM", "UT"]`; "New
+    England" → `["CT", "MA", "ME", "NH", "RI", "VT"]`. Leave `states` null
+    when no place is named. Do not use states for distance ("near Denver" is
+    origin + `max_drive_hours`, not `["CO"]`).
+11. **Do not invent constraints** the user did not imply. Prefer defaults over
     guesses that hard-filter the catalog to empty.
 
 ---
@@ -278,6 +287,8 @@ the catalog. `facts.why` ends with a travel label built from `access` and
 2. **Hard filters** — A returned park always satisfies:
    - `allow_remote=false` ⇒ `remote=0`
    - `allow_permits=false` ⇒ `permit_likely=0`
+   - `states` set (non-empty) ⇒ the park's `facts.states` shares at least one
+     code with `states`
    - origin + `max_drive_hours` set ⇒ `drive_hours ≤ max_drive_hours` and
      `access ≠ "flight"` (boat parks are measured to the park coordinates)
    Soft signals (month, crowds) never remove a park; they only change score.
@@ -288,7 +299,8 @@ the catalog. `facts.why` ends with a travel label built from `access` and
    treat tied parks as effectively equal (do not oversell tiny rank gaps).
 
 Empty `parks` is a valid outcome when filters leave no candidates. Clients
-should ask the user to loosen drive radius, remote/permit flags, or constraints.
+should ask the user to loosen drive radius, states, remote/permit flags, or
+constraints.
 A drive limit also excludes flight-access parks; if the user is willing to
 fly, drop the drive limit.
 
@@ -319,6 +331,13 @@ fails if the committed fixtures drift from the live engine.
 
 Version notes:
 
+- **0.4.0** (breaking): new optional profile field `states` (hard filter,
+  validated against 56 USPS codes; `null` / `[]` = no filter). With `states`
+  null, scores and order are unchanged for every existing profile. Fixtures
+  carry `states` on every profile and add `utah_canyons_states` and
+  `pacific_northwest_states` (28 profiles). `web/engine_data.json` adds
+  `vocab.states`. Parks that cross state lines list every state in
+  `facts.states` (comma-separated, main state first, e.g. `"WY,MT,ID"`).
 - **0.3.0** (breaking): catalog `access` column. Under a drive limit, flight
   parks drop out of the hard filter; boat parks stay in it and get a
   "~Xh drive + boat" label. Without a drive limit, `why` says
@@ -340,12 +359,12 @@ stamps and `notes`) against the PR's base branch. If the fixtures differ,
 
 1. **JSON export** — `python scripts/export_engine_data.py` writes
    `web/engine_data.json` with catalog rows, weight / drive constants,
-   biome + tag vocab and IDF, ordinal maps, `engine_version`, and a
+   biome + tag vocab and IDF, allowed state codes, ordinal maps, `engine_version`, and a
    `content_hash` of `data/parks.csv`. CI regenerates the file and fails on
    drift. Values come from the live Python engine, not a hand copy.
 2. **TypeScript port** — `ts/` loads `web/engine_data.json` at runtime and
    exposes `recommend(data, profile, k)`. Pure functions; no framework.
-   Vitest asserts all 26 fixture profiles against the Python snapshot.
+   Vitest asserts all 28 fixture profiles against the Python snapshot.
 3. **CI parity** — The `typescript` CI job runs `npm ci && npm test` in `ts/`.
    Fixture checks cover park order, scores, breakdown, drive hours,
    `facts.access`, `facts.why`, and `tie_groups`.
@@ -370,7 +389,13 @@ exports and fixtures.
 5. **Drive times** — Quote as approximate highway estimates only. For boat
    parks it is the drive to the port; say a boat is needed. Never quote a
    drive time for a flight-access park.
-6. **No trail picks** — Stay at park level (see below).
+6. **States, not regions** — Turn regions ("Pacific Northwest", "Four
+   Corners", "the Southwest") into a `states` list before calling; the engine
+   only takes two-letter codes. Say which states you used. The catalog lists
+   every state a park spans, per NPS (Yellowstone `WY,MT,ID`, Great Smoky
+   Mountains `TN,NC`, Death Valley `CA,NV`), so a park that crosses a border
+   matches each of its states.
+7. **No trail picks** — Stay at park level (see below).
 
 ---
 

@@ -110,8 +110,9 @@ def test_card_meta_no_drive_limit_flight_and_boat_needed():
     profile = UserProfile(biomes=["volcano", "island"], tags=["hiking"])
     assert card_meta(_ranked_row(profile, "havo")).endswith(" · flight needed")
     assert card_meta(_ranked_row(profile, "chis")).endswith(" · boat needed")
-    # Road park with no drive limit: states only.
-    assert card_meta(_ranked_row(profile, "yell")) == str(_ranked_row(profile, "yell")["states"])
+    # Road park with no drive limit: states only, multi-state spaced out.
+    assert card_meta(_ranked_row(profile, "yell")) == "WY, MT, ID"
+    assert card_meta(_ranked_row(profile, "olym")) == "WA"
 
 
 def test_card_meta_road_park_with_drive_limit():
