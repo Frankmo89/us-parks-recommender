@@ -33,7 +33,7 @@ Python today; consumers should not send them.
 | `max_drive_hours` | `number` \| `null` | positive hours | `null` | no | Hard filter. Drive model: great-circle miles × 1.25 / 65 mph. Flight parks never pass; boat parks are measured to the park's coordinates (the drive to the port). |
 | `allow_remote` | `boolean` | `true` / `false` | `true` | no | `false` drops parks with `remote=1` (AK, HI, ferry, etc.). |
 | `allow_permits` | `boolean` | `true` / `false` | `true` | no | `false` drops parks with `permit_likely=1`. |
-| `states` | `string[]` \| `null` | Two-letter USPS codes: the 50 states, `DC`, `AS`, `GU`, `MP`, `PR`, `VI` | `null` | no | Hard filter (added in 0.4.0): keep only parks whose catalog `states` shares at least one code. Codes are trimmed and uppercased (`"ut"` → `"UT"`); duplicates are dropped. `null` and `[]` both mean no state filter. A valid code with no park (e.g. `"DE"`) is allowed and matches nothing. |
+| `states` | `string[]` \| `null` | Two-letter USPS codes: the 50 states, `DC`, `AS`, `GU`, `MP`, `PR`, `VI` | `null` | no | Hard filter (added in 0.4.0): keep only parks whose catalog `states` shares at least one code. Parks that cross state lines list every state they span, comma-separated (`"WY,MT,ID"`), so `["MT"]` matches Yellowstone. Codes are trimmed and uppercased (`"ut"` → `"UT"`); duplicates are dropped. `null` and `[]` both mean no state filter. A valid code with no park (e.g. `"DE"`) is allowed and matches nothing. |
 
 **Required** means the field must be present for a well-formed profile.
 `biomes` and `tags` may be empty arrays. Ordinal / filter fields may be omitted;
@@ -336,7 +336,8 @@ Version notes:
   null, scores and order are unchanged for every existing profile. Fixtures
   carry `states` on every profile and add `utah_canyons_states` and
   `pacific_northwest_states` (28 profiles). `web/engine_data.json` adds
-  `vocab.states`.
+  `vocab.states`. Parks that cross state lines list every state in
+  `facts.states` (comma-separated, main state first, e.g. `"WY,MT,ID"`).
 - **0.3.0** (breaking): catalog `access` column. Under a drive limit, flight
   parks drop out of the hard filter; boat parks stay in it and get a
   "~Xh drive + boat" label. Without a drive limit, `why` says
@@ -391,8 +392,9 @@ exports and fixtures.
 6. **States, not regions** — Turn regions ("Pacific Northwest", "Four
    Corners", "the Southwest") into a `states` list before calling; the engine
    only takes two-letter codes. Say which states you used. The catalog lists
-   each park under its main state (e.g. Yellowstone is `WY` only), so a
-   park that crosses a border may not match a neighboring state.
+   every state a park spans, per NPS (Yellowstone `WY,MT,ID`, Great Smoky
+   Mountains `TN,NC`, Death Valley `CA,NV`), so a park that crosses a border
+   matches each of its states.
 7. **No trail picks** — Stay at park level (see below).
 
 ---

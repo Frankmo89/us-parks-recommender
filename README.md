@@ -30,7 +30,8 @@ The last term is `W_MONTH_PENALTY * (month_distance / 6)` with
 `month_distance` is the circular months to the nearest `best_months` entry
 (December wraps to January). Max distance is 6. Remote parks, permits and
 the optional `states` list (two-letter codes, e.g. `["UT"]`) stay hard
-filters.
+filters. Parks that cross state lines are listed under every state they
+span, per NPS (Yellowstone `WY,MT,ID`), so `["MT"]` returns Yellowstone.
 
 Drive time is `great_circle_miles × 1.25 / 65 mph`. That is a highway sketch,
 not Google Maps. Each park has an `access` value (`road`, `boat`, `flight`).

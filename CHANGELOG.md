@@ -20,7 +20,8 @@
   4–7 days, October): top 5 without states `deva, blca, care, bibe, cany`;
   with `states=["UT"]` `care, cany, arch, brca, zion`, same scores as before.
 - Result: all 26 existing fixture outputs identical apart from the version
-  stamp; no eval profile changed. Metrics before / after (unedited,
+  stamp and the multi-state `facts.states` strings (below); no eval profile
+  changed. Metrics before / after (unedited,
   identical):
   - model train: R-Prec **0.708**, nDCG@5 **0.764** → **0.708** / **0.764**
   - model holdout: R-Prec **0.794**, nDCG@5 **0.813** → **0.794** / **0.813**
@@ -34,8 +35,15 @@
   stamps, export and contract.
 - App: optional "Which states?" multiselect (states with parks, by name);
   empty means no filter.
-- Known limit: the catalog lists each park under one state (e.g. Yellowstone
-  is `WY` only), so `["MT"]` does not return Yellowstone.
+- Multi-state parks: the catalog now lists every state a park spans, checked
+  against the NPS API (`developer.nps.gov/api/v1/parks`, `fields=states`):
+  Yellowstone `WY,MT,ID`, Great Smoky Mountains `TN,NC`, Death Valley
+  `CA,NV` (comma-separated, main state first, the format the filter, TS
+  engine and export already parse). `["MT"]` and `["ID"]` now return
+  Yellowstone, `["NC"]` the Smokies, `["NV"]` Death Valley. The other 60
+  parks are single-state per NPS (Kings Canyon via the joint `seki` entry,
+  CA). Fixture outputs change only in `facts.states` (deva in 7 profiles,
+  yell in 1); no score, order or metric change. The app shows "WY, MT, ID".
 
 
 ## 2026-10-05 — ZIP code starting point
