@@ -174,17 +174,20 @@ class ParkRecommender:
         return ranked
 
     def candidates(self, profile: UserProfile) -> pd.DataFrame:
-        """Parks that pass hard filters (remote, permits, drive hours)."""
+        """Parks that pass hard filters (remote, permits, drive hours, access).
+
+        With a drive limit set (origin + max_drive_hours), flight-access parks
+        are dropped: you cannot drive to them. Boat-access parks stay in the
+        drive filter, using the drive to the park's coordinates as the drive
+        to the port.
+        """
         frame = self.parks.copy()
         if not profile.allow_remote:
             frame = frame.loc[frame["remote"] == 0]
         if not profile.allow_permits:
             frame = frame.loc[frame["permit_likely"] == 0]
-        if (
-            profile.origin_lat is not None
-            and profile.origin_lon is not None
-            and profile.max_drive_hours is not None
-        ):
+        if has_drive_limit(profile):
+            frame = frame.loc[frame["access"] != "flight"]
             hours = [
                 drive_hours(profile.origin_lat, profile.origin_lon, row.lat, row.lon)
                 for row in frame.itertuples()
@@ -203,6 +206,35 @@ class ParkRecommender:
             bits.append(f"{row['days_needed']} day trip")
         if row["crowd"] == "low":
             bits.append("low crowds")
-        if pd.notna(row.get("drive_hours")):
-            bits.append(f"~{row['drive_hours']:.1f}h drive")
+        access_bit = access_label(row.get("access"), row.get("drive_hours"))
+        if access_bit:
+            bits.append(access_bit)
         return " · ".join(bits)
+
+
+def has_drive_limit(profile: UserProfile) -> bool:
+    """True when origin and max_drive_hours are all set (the drive filter runs)."""
+    return (
+        profile.origin_lat is not None
+        and profile.origin_lon is not None
+        and profile.max_drive_hours is not None
+    )
+
+
+def access_label(access: object, hours: object) -> str:
+    """Short travel note for a ranked park ("" when there is nothing to say).
+
+    With a drive limit, drive_hours is set: "~Xh drive" for road parks and
+    "~Xh drive + boat" for boat parks (drive to the port, then a boat).
+    Flight parks never pass a drive limit. Without a drive limit, drive_hours
+    is unset: boat and flight parks say "boat needed" / "flight needed",
+    road parks say nothing.
+    """
+    if hours is not None and pd.notna(hours):
+        label = f"~{float(hours):.1f}h drive"
+        return f"{label} + boat" if access == "boat" else label
+    if access == "boat":
+        return "boat needed"
+    if access == "flight":
+        return "flight needed"
+    return ""

@@ -156,3 +156,21 @@ def test_evaluate_all_excludes_external(tmp_path, import_mod):
     assert with_external["external"]["n"] == 2
     assert baseline["external"]["n"] == 0
     assert with_external["external_unreachable"]["parks"] == 0
+
+
+def test_flight_park_under_long_drive_limit_is_unreachable_by_drive(import_mod):
+    """havo is ~47.7h from LA, but it needs a flight: any drive limit excludes it."""
+    from src.features import UserProfile
+    from src.recommender import ParkRecommender
+
+    model = ParkRecommender()
+    profile = UserProfile(
+        biomes=["volcano"],
+        tags=["hiking"],
+        origin_lat=34.05,
+        origin_lon=-118.24,
+        max_drive_hours=60,
+    )
+    relevant, unreachable = import_mod.split_reachable_picks(model, profile, ["havo", "chis"])
+    assert relevant == ["chis"]
+    assert unreachable == [{"park_code": "havo", "reasons": ["drive"]}]
