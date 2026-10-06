@@ -4,7 +4,17 @@ import altair as alt
 import pandas as pd
 import pytest
 
-from app.breakdown import MAX_SCORE, VALUE_AXIS_LABELS, match_percent, score_breakdown, why_sentence
+from app.breakdown import (
+    MAX_SCORE,
+    MINUS,
+    LABEL_SHARE,
+    VALUE_AXIS_LABELS,
+    format_contribution,
+    match_percent,
+    score_breakdown,
+    value_domain,
+    why_sentence,
+)
 from src.features import UserProfile
 from src.recommender import W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, ParkRecommender
 
@@ -158,6 +168,62 @@ def test_value_axis_labels_work_at_any_width():
     assert axis["format"] == ".2~f"
 
 
+@pytest.mark.parametrize(
+    ("value", "label"),
+    [
+        (-0.0, "0"),
+        (0.0, "0"),
+        (-0.004, "0"),
+        (0.004, "0"),
+        (0.2552, "+0.26"),
+        (0.08, "+0.08"),
+        (-0.12, f"{MINUS}0.12"),
+        (-0.2333, f"{MINUS}0.23"),
+    ],
+)
+def test_format_contribution_never_prints_negative_zero(value, label):
+    assert format_contribution(value) == label
+
+
+def test_zero_penalties_are_labeled_zero_not_negative_zero():
+    breakdown = score_breakdown(_row(crowd_penalty=0.0, month_penalty=0.0))
+    zero = breakdown.set_index("part").loc[["Crowds", "Season"]]
+    assert list(zero["label"]) == ["0", "0"]
+    assert all(math.copysign(1.0, value) == 1.0 for value in zero["value"])  # no -0.0 left
+    assert not any(label.startswith(("-", MINUS)) and set(label[1:]) <= set("0.") for label in breakdown["label"])
+
+
+def test_labels_match_values_for_gains_and_losses():
+    breakdown = score_breakdown(_row(content=0.4639, crowd_penalty=0.12, month_penalty=0.0583))
+    labels = breakdown.set_index("part")["label"]
+    assert labels["Terrain & activities"] == "+0.26"
+    assert labels["Crowds"] == f"{MINUS}0.12"
+    assert labels["Season"] == f"{MINUS}0.06"
+
+
+def test_value_domain_leaves_label_room_right_of_the_longest_bar():
+    breakdown = score_breakdown(_row(content=0.4639, days_fit=1.0, diff_fit=0.5, budget_fit=1.0))
+    lo, hi = value_domain(breakdown)
+    top = breakdown["value"].max()
+    assert lo == 0.0  # no penalties: axis starts at 0, no empty left side
+    assert (hi - top) / (hi - lo) >= LABEL_SHARE - 1e-9
+
+
+def test_value_domain_leaves_label_room_on_both_sides_with_a_penalty():
+    breakdown = score_breakdown(_row(content=0.6, crowd_penalty=0.24, month_penalty=0.0))
+    lo, hi = value_domain(breakdown)
+    low, top = breakdown["value"].min(), breakdown["value"].max()
+    assert lo < low < 0 < top < hi
+    assert (low - lo) / (hi - lo) >= LABEL_SHARE - 1e-9
+    assert (hi - top) / (hi - lo) >= LABEL_SHARE - 1e-9
+
+
+def test_value_domain_all_zero_still_has_a_width():
+    breakdown = score_breakdown(_row(content=0.0, days_fit=0.0, diff_fit=0.0, budget_fit=0.0))
+    lo, hi = value_domain(breakdown)
+    assert lo == 0.0 and hi > 0
+
+
 def test_badge_order_matches_ranking_order():
     model = ParkRecommender()
     ranked = model.recommend(PROFILE, k=5)
@@ -199,3 +265,28 @@ def test_card_meta_road_park_with_drive_limit():
 
     row = _ranked_row(PROFILE, "jotr")
     assert card_meta(row) == f"CA · ~{row['drive_hours']:.1f}h drive"
+
+
+def test_card_meta_html_separators_cannot_wrap_and_text_matches_card_meta():
+    from app.breakdown import META_SEPARATOR, card_meta, card_meta_html
+
+    profile = UserProfile(
+        biomes=["island"], tags=["kayaking"], origin_lat=34.05, origin_lon=-118.24, max_drive_hours=8
+    )
+    row = _ranked_row(profile, "chis")
+    meta = card_meta_html(row)
+    assert meta == f"CA{META_SEPARATOR}~{row['drive_hours']:.1f}h drive + boat"
+    # Every "·" is glued to its neighbors with no-break spaces, so no line
+    # can start or end with a dot; breaks can only fall inside the parts.
+    for i, char in enumerate(meta):
+        if char == "·":
+            assert meta[i - 1] == "\u00a0" and meta[i + 1] == "\u00a0"
+    assert not meta.startswith(("·", " ", "\u00a0")) and not meta.endswith(("·", " ", "\u00a0"))
+    assert meta.replace("\u00a0", " ") == card_meta(row)
+
+
+def test_card_meta_html_single_part_has_no_separator_and_is_escaped():
+    from app.breakdown import card_meta_html
+
+    assert card_meta_html(pd.Series({"states": "WY,MT,ID", "access": "road", "drive_hours": None})) == "WY, MT, ID"
+    assert card_meta_html(pd.Series({"states": "<b>", "access": "road", "drive_hours": None})) == "&lt;b&gt;"

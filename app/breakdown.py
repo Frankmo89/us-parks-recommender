@@ -8,6 +8,8 @@ already computed.
 
 from __future__ import annotations
 
+import html
+
 import pandas as pd
 
 from src.features import CROWD_RANK
@@ -65,6 +67,45 @@ VALUE_AXIS_LABELS = {
 }
 
 
+MINUS = "\u2212"  # typographic minus, same glyph Vega's "+.2f" format used
+
+
+def format_contribution(value: float) -> str:
+    """Bar label for one score part: "+0.26", "\u22120.12", or "0".
+
+    Anything that rounds to 0.00 prints as plain "0". Penalties are stored
+    as negated values, so a zero penalty is -0.0 and Vega printed it as
+    "\u22120.00".
+    """
+    rounded = round(float(value), 2)
+    if rounded == 0:
+        return "0"
+    sign = "+" if rounded > 0 else MINUS
+    return f"{sign}{abs(rounded):.2f}"
+
+
+# Share of the plot width kept free for value labels on each side that has
+# bars: "+0.26" at 11 px is ~37 px with its offset, about 28% of the
+# ~135 px plot on a 390 px phone.
+LABEL_SHARE = 0.28
+ROW_STEP = 30  # px per chart row; bars fill 60% of it
+
+
+def value_domain(breakdown: pd.DataFrame) -> tuple[float, float]:
+    """x-axis bounds that fit the bars plus room for their value labels.
+
+    Positive labels sit right of their bar (zero parts too, at x=0), so
+    the right side always gets label room; the left side gets it only when
+    a part is negative.
+    """
+    lo = min(0.0, float(breakdown["value"].min()))
+    hi = max(0.0, float(breakdown["value"].max()))
+    span = (hi - lo) or 0.1
+    sides = 2 if lo < 0 else 1
+    pad = span * LABEL_SHARE / (1 - sides * LABEL_SHARE)
+    return (lo - pad if lo < 0 else 0.0, hi + pad)
+
+
 def match_percent(score: float) -> int:
     """Score as a percentage of the best possible score, for the "Match" badge.
 
@@ -93,10 +134,13 @@ def score_breakdown(row: pd.Series) -> pd.DataFrame:
         "Crowds": -float(row["crowd_penalty"]),
         "Season": -float(row.get("month_penalty", 0.0)),
     }
+    # `+ 0.0` turns a zero penalty's -0.0 into 0.0.
+    values = {part: value + 0.0 for part, value in values.items()}
     return pd.DataFrame(
         {
             "part": PART_ORDER,
             "value": [values[part] for part in PART_ORDER],
+            "label": [format_contribution(values[part]) for part in PART_ORDER],
             "kind": ["Loss" if values[part] < 0 else "Gain" for part in PART_ORDER],
             "max": [PART_MAX[part] for part in PART_ORDER],
         }
@@ -155,19 +199,32 @@ def why_sentence(breakdown: pd.DataFrame) -> str:
     return f"{fit_clause}; {gap_clause}."
 
 
+def _meta_bits(row: pd.Series) -> list[str]:
+    bits = [", ".join(code.strip() for code in str(row["states"]).split(","))]
+    travel = access_label(row.get("access"), row.get("drive_hours"))
+    if travel:
+        bits.append(travel)
+    return bits
+
+
 def card_meta(row: pd.Series) -> str:
-    """States plus the travel note shown next to the Match badge.
+    """States plus the travel note shown under the Match badge.
 
     Multi-state parks read "WY, MT, ID" (the catalog stores "WY,MT,ID").
 
     Same label the engine puts at the end of `why` (src.recommender.access_label):
     "~Xh drive", "~Xh drive + boat", "boat needed", "flight needed", or none.
     """
-    bits = [", ".join(code.strip() for code in str(row["states"]).split(","))]
-    travel = access_label(row.get("access"), row.get("drive_hours"))
-    if travel:
-        bits.append(travel)
-    return " · ".join(bits)
+    return " · ".join(_meta_bits(row))
+
+
+# No-break spaces on both sides, so a wrapped line never starts or ends with "·".
+META_SEPARATOR = "\u00a0·\u00a0"
+
+
+def card_meta_html(row: pd.Series) -> str:
+    """`card_meta` for HTML: escaped, with separators that cannot wrap."""
+    return META_SEPARATOR.join(html.escape(bit) for bit in _meta_bits(row))
 
 
 def nps_url(park_code: str) -> str:
