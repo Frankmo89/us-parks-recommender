@@ -1,9 +1,9 @@
 """Regenerate data/engine_fixtures.json from the live Python engine.
 
-The profile list (ids, kinds, splits, notes, profile inputs) is read from the
-existing fixture file and kept as is. Only each profile's ``output`` block and
-the version stamps are rebuilt from ``ParkRecommender.recommend()``. Eval
-``relevant`` labels are never written here.
+The profile list is defined here: every eval profile's inputs from
+data/eval_profiles.json (never its frozen ``relevant`` labels), then the
+EDGE_PROFILES below. Each profile's ``output`` block and the version stamps
+come from ``ParkRecommender.recommend()``.
 
 Run after an intentional, version-bumped engine change
 (docs/engine-contract.md §4):
@@ -39,6 +39,183 @@ from src.recommender import (  # noqa: E402
 )
 
 FIXTURES_PATH = ROOT / "data" / "engine_fixtures.json"
+EVAL_PROFILES_PATH = ROOT / "data" / "eval_profiles.json"
+K = 5
+
+# Every fixture profile carries all fields in this order (null when unset).
+PROFILE_ORDER = (
+    "biomes",
+    "tags",
+    "difficulty",
+    "days_needed",
+    "crowd_pref",
+    "budget_tier",
+    "month",
+    "origin_lat",
+    "origin_lon",
+    "max_drive_hours",
+    "allow_remote",
+    "allow_permits",
+)
+
+EVAL_NOTES = "From data/eval_profiles.json; relevant list is frozen and not part of the engine API."
+
+# Edge cases pinned for parity. Append new ones at the end.
+EDGE_PROFILES: list[dict] = [
+    {
+        "id": "empty_content_defaults",
+        "notes": "Empty biomes/tags; all ordinal defaults. Checks defaults and content=0 handling.",
+        "profile": {
+            "biomes": [],
+            "tags": [],
+            "difficulty": "easy",
+            "days_needed": "2-3",
+            "crowd_pref": "medium",
+            "budget_tier": "mid",
+            "month": None,
+            "origin_lat": None,
+            "origin_lon": None,
+            "max_drive_hours": None,
+            "allow_remote": True,
+            "allow_permits": True,
+        },
+    },
+    {
+        "id": "vague_easy_hikes_parents",
+        "notes": "LLM mapping of 'easy hikes with my parents' -> easy, family, hiking, easy_walk.",
+        "profile": {
+            "biomes": [],
+            "tags": ["hiking", "family", "easy_walk"],
+            "difficulty": "easy",
+            "days_needed": "2-3",
+            "crowd_pref": "medium",
+            "budget_tier": "mid",
+            "month": None,
+            "origin_lat": None,
+            "origin_lon": None,
+            "max_drive_hours": None,
+            "allow_remote": False,
+            "allow_permits": True,
+        },
+    },
+    {
+        "id": "tight_drive_from_denver",
+        "notes": "Hard drive filter with a short radius; may return fewer than k.",
+        "profile": {
+            "biomes": ["alpine", "forest"],
+            "tags": ["hiking", "scenic_drive"],
+            "difficulty": "moderate",
+            "days_needed": "2-3",
+            "crowd_pref": "medium",
+            "budget_tier": "mid",
+            "month": 7,
+            "origin_lat": 39.74,
+            "origin_lon": -104.99,
+            "max_drive_hours": 3,
+            "allow_remote": False,
+            "allow_permits": True,
+        },
+    },
+    {
+        "id": "no_remote_no_permits_desert",
+        "notes": "Both hard filters off; desert fall trip.",
+        "profile": {
+            "biomes": ["desert"],
+            "tags": ["hiking", "stargazing"],
+            "difficulty": "easy",
+            "days_needed": "1",
+            "crowd_pref": "low",
+            "budget_tier": "low",
+            "month": 11,
+            "origin_lat": None,
+            "origin_lon": None,
+            "max_drive_hours": None,
+            "allow_remote": False,
+            "allow_permits": False,
+        },
+    },
+    {
+        "id": "month_omitted",
+        "notes": "month null => month_penalty is 0 for every park.",
+        "profile": {
+            "biomes": ["canyon"],
+            "tags": ["hiking", "photography"],
+            "difficulty": "moderate",
+            "days_needed": "2-3",
+            "crowd_pref": "medium",
+            "budget_tier": "mid",
+            "month": None,
+            "origin_lat": None,
+            "origin_lon": None,
+            "max_drive_hours": None,
+            "allow_remote": True,
+            "allow_permits": True,
+        },
+    },
+    {
+        "id": "impossible_drive_filter",
+        "notes": "Drive radius too tight from NYC with no_remote; expect empty results.",
+        "profile": {
+            "biomes": ["desert"],
+            "tags": ["hiking"],
+            "difficulty": "easy",
+            "days_needed": "1",
+            "crowd_pref": "low",
+            "budget_tier": "low",
+            "month": 4,
+            "origin_lat": 40.71,
+            "origin_lon": -74.01,
+            "max_drive_hours": 1,
+            "allow_remote": False,
+            "allow_permits": False,
+        },
+    },
+    {
+        "id": "challenging_backpacking_summer",
+        "notes": "Challenging + backpacking + wilderness; remote allowed.",
+        "profile": {
+            "biomes": ["alpine", "forest"],
+            "tags": ["backpacking", "wilderness", "hiking"],
+            "difficulty": "challenging",
+            "days_needed": "7+",
+            "crowd_pref": "low",
+            "budget_tier": "mid",
+            "month": 8,
+            "origin_lat": None,
+            "origin_lon": None,
+            "max_drive_hours": None,
+            "allow_remote": True,
+            "allow_permits": True,
+        },
+    },
+    {
+        "id": "null_enum_fields_use_defaults",
+        "notes": "Explicit null on all enum fields = omit; uses documented defaults.",
+        "profile": {
+            "biomes": ["desert"],
+            "tags": ["hiking", "stargazing"],
+            "difficulty": None,
+            "days_needed": None,
+            "crowd_pref": None,
+            "budget_tier": None,
+            "month": 11,
+            "origin_lat": None,
+            "origin_lon": None,
+            "max_drive_hours": None,
+            "allow_remote": True,
+            "allow_permits": True,
+        },
+    },
+]
+
+
+def bundle_notes(n_eval: int, n_edge: int) -> list[str]:
+    return [
+        "Parity fixtures for a future TypeScript (or other) port of the ranking engine.",
+        "Generated from the Python ParkRecommender; do not hand-edit scores.",
+        "Regenerate with `python scripts/generate_engine_fixtures.py` after intentional, version-bumped engine changes.",
+        f"Includes the {n_eval} eval profiles plus {n_edge} edge cases. Eval 'relevant' labels are not included.",
+    ]
 SCORE_DP = 6
 DRIVE_DP = 4
 
@@ -126,28 +303,65 @@ def build_output(model: ParkRecommender, profile: dict, k: int, version: str) ->
     }
 
 
-def regenerate(bundle: dict) -> dict:
+def _full_profile(raw: dict) -> dict:
+    unknown = set(raw) - set(PROFILE_ORDER)
+    if unknown:
+        raise ValueError(f"unknown profile fields: {sorted(unknown)}")
+    return {field: raw.get(field) for field in PROFILE_ORDER}
+
+
+def profile_specs(eval_path: Path = EVAL_PROFILES_PATH) -> list[dict]:
+    """id / kind / split / notes / profile for every fixture, in file order."""
+    eval_items = json.loads(eval_path.read_text(encoding="utf-8"))["profiles"]
+    specs = [
+        {
+            "id": item["id"],
+            "kind": "eval",
+            "split": item["split"],
+            "notes": EVAL_NOTES,
+            "profile": _full_profile(item["profile"]),
+        }
+        for item in eval_items
+    ]
+    specs += [
+        {
+            "id": item["id"],
+            "kind": "edge",
+            "split": None,
+            "notes": item["notes"],
+            "profile": _full_profile(item["profile"]),
+        }
+        for item in EDGE_PROFILES
+    ]
+    ids = [spec["id"] for spec in specs]
+    if len(ids) != len(set(ids)):
+        raise ValueError("duplicate fixture profile ids")
+    return specs
+
+
+def build_bundle() -> dict:
     model = ParkRecommender()
     version = engine_version()
-    k = int(bundle["k"])
-    out = dict(bundle)
-    out["engine_version"] = version
-    out["weights"] = {
-        "W_CONTENT": W_CONTENT,
-        "W_DAYS": W_DAYS,
-        "W_DIFF": W_DIFF,
-        "W_BUDGET": W_BUDGET,
-        "CROWD_PENALTY": CROWD_PENALTY,
-        "W_MONTH_PENALTY": W_MONTH_PENALTY,
+    specs = profile_specs()
+    n_eval = sum(spec["kind"] == "eval" for spec in specs)
+    profiles = [
+        {**spec, "output": build_output(model, spec["profile"], K, version)} for spec in specs
+    ]
+    return {
+        "notes": bundle_notes(n_eval, len(specs) - n_eval),
+        "engine_version": version,
+        "weights": {
+            "W_CONTENT": W_CONTENT,
+            "W_DAYS": W_DAYS,
+            "W_DIFF": W_DIFF,
+            "W_BUDGET": W_BUDGET,
+            "CROWD_PENALTY": CROWD_PENALTY,
+            "W_MONTH_PENALTY": W_MONTH_PENALTY,
+        },
+        "tie_epsilon": TIE_EPSILON,
+        "k": K,
+        "profiles": profiles,
     }
-    out["tie_epsilon"] = TIE_EPSILON
-    profiles = []
-    for item in bundle["profiles"]:
-        new_item = dict(item)
-        new_item["output"] = build_output(model, item["profile"], k, version)
-        profiles.append(new_item)
-    out["profiles"] = profiles
-    return out
 
 
 def render(bundle: dict) -> str:
@@ -159,8 +373,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--check", action="store_true", help="exit 1 if the file would change")
     args = parser.parse_args(argv)
 
-    current_text = FIXTURES_PATH.read_text(encoding="utf-8")
-    fresh_text = render(regenerate(json.loads(current_text)))
+    current_text = FIXTURES_PATH.read_text(encoding="utf-8") if FIXTURES_PATH.exists() else ""
+    fresh_text = render(build_bundle())
     if args.check:
         if fresh_text != current_text:
             print(f"{FIXTURES_PATH} is out of date. Run: python scripts/generate_engine_fixtures.py")
