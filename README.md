@@ -55,7 +55,10 @@ pytest
 streamlit run app/streamlit_app.py
 ```
 
-Origins: `san_diego`, `los_angeles`, `phoenix`, `denver`, `seattle`, `salt_lake`, `nyc`.
+Starting point: `--zip 02108` (any 5-digit U.S. ZIP in the table below) or a
+city preset `--origin` (`san_diego`, `los_angeles`, `phoenix`, `denver`,
+`seattle`, `salt_lake`, `nyc`). Passing both is an error. A bad ZIP stops
+with `ZIP not found`. `--max-hours` only applies with a starting point.
 
 ## Metrics
 
