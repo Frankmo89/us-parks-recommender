@@ -51,6 +51,19 @@ _SENTENCE_WORD = {
 STRONG_FRACTION = 0.8
 LOSS_FRACTION = 0.1
 
+# Label settings for the chart's "Contribution to score" axis. Streamlit
+# cannot see the screen width, so these have to work at every width: at most
+# about 3 ticks, overlapping labels dropped, end labels kept inside the plot,
+# a smaller font, and trailing zeros trimmed ("0.1", not "0.10"). On a phone
+# the defaults gave 0.05 steps whose labels ran together ("0.000.05").
+VALUE_AXIS_LABELS = {
+    "tickCount": 3,
+    "labelOverlap": "greedy",
+    "labelFlush": True,
+    "labelFontSize": 10,
+    "format": ".2~f",
+}
+
 
 def match_percent(score: float) -> int:
     """Score as a percentage of the best possible score, for the "Match" badge.
@@ -102,31 +115,44 @@ def why_sentence(breakdown: pd.DataFrame) -> str:
     """One plain sentence: parts near their own ceiling, then the biggest gap.
 
     "Strong fit" is every fit part (terrain, days, effort, budget) at or
-    above `STRONG_FRACTION` of its own maximum. The loss clause names
-    whichever lost more against its own ceiling: the weakest fit part, or
-    the crowd penalty if that gap is bigger. A loss under `LOSS_FRACTION`
-    of its own maximum (that includes an exact 0.00) is not worth a clause,
-    so only the strong-fit half of the sentence is shown.
+    above `STRONG_FRACTION` of its own maximum. The second clause names
+    whichever left the most on the table: the weakest fit part that is not
+    already strong, or a penalty (crowds, season) if that gap is bigger.
+
+    Wording follows the sign of the part, so it never contradicts the chart:
+    only a negative part (a penalty) "lost points"; a fit part that is
+    positive but below the strong cutoff is a "partial match"; a fit part at
+    0.00 is "no match". A gap under `LOSS_FRACTION` of its own maximum (that
+    includes an exact 0.00 penalty) is not worth a clause, so only the
+    strong-fit half of the sentence is shown.
     """
     fits = breakdown[~breakdown["part"].isin(["Crowds", "Season"])].copy()
 
-    strong = fits[fits["value"] >= STRONG_FRACTION * fits["max"]].sort_values("value", ascending=False)
+    is_strong = fits["value"] >= STRONG_FRACTION * fits["max"]
+    strong = fits[is_strong].sort_values("value", ascending=False)
     words = [_SENTENCE_WORD[part] for part in strong["part"]]
     fit_clause = f"Strong fit on {_join_words(words)}" if words else "No strong fit found"
 
-    fits["gap"] = fits["max"] - fits["value"]
-    weakest = fits.sort_values("gap", ascending=False).iloc[0]
-    loss_gap, loss_max, loss_word = float(weakest["gap"]), float(weakest["max"]), _SENTENCE_WORD[weakest["part"]]
+    gap_clause = ""
+    loss_gap, loss_max = 0.0, 0.0
+    partial = fits[~is_strong].copy()
+    if not partial.empty:
+        partial["gap"] = partial["max"] - partial["value"]
+        weakest = partial.sort_values("gap", ascending=False).iloc[0]
+        loss_gap, loss_max = float(weakest["gap"]), float(weakest["max"])
+        word = _SENTENCE_WORD[weakest["part"]]
+        matched = round(float(weakest["value"]), 2) > 0
+        gap_clause = f"partial match on {word}" if matched else f"no match on {word}"
 
     for part, word in (("Crowds", "crowds"), ("Season", "season")):
         row = breakdown.loc[breakdown["part"] == part].iloc[0]
         gap, part_max = -float(row["value"]), float(row["max"])
         if gap > loss_gap:
-            loss_gap, loss_max, loss_word = gap, part_max, word
+            loss_gap, loss_max, gap_clause = gap, part_max, f"lost points for {word}"
 
-    if loss_gap <= 0 or round(loss_gap, 2) == 0 or loss_gap <= LOSS_FRACTION * loss_max:
+    if not gap_clause or round(loss_gap, 2) == 0 or loss_gap <= LOSS_FRACTION * loss_max:
         return f"{fit_clause}."
-    return f"{fit_clause}; lost points for {loss_word}."
+    return f"{fit_clause}; {gap_clause}."
 
 
 def card_meta(row: pd.Series) -> str:

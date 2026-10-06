@@ -1,8 +1,10 @@
 import math
 
+import altair as alt
 import pandas as pd
+import pytest
 
-from app.breakdown import MAX_SCORE, match_percent, score_breakdown, why_sentence
+from app.breakdown import MAX_SCORE, VALUE_AXIS_LABELS, match_percent, score_breakdown, why_sentence
 from src.features import UserProfile
 from src.recommender import W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, ParkRecommender
 
@@ -77,6 +79,83 @@ def test_zero_crowd_penalty_never_in_sentence():
     breakdown = score_breakdown(row)
     assert float(breakdown.loc[breakdown["part"] == "Crowds", "value"].item()) == 0.0
     assert "crowd" not in why_sentence(breakdown).lower()
+
+
+# Desert hike from the quiz: Death Valley's terrain part is its biggest gain
+# (+0.26 of a 0.55 ceiling), so the sentence must not say it "lost points".
+DEATH_VALLEY_PROFILE = UserProfile(
+    biomes=["desert"],
+    tags=["hiking"],
+    difficulty="easy",
+    days_needed="2-3",
+    budget_tier="mid",
+    crowd_pref="medium",
+    month=11,
+)
+
+
+def test_death_valley_terrain_gain_reads_partial_match_not_lost_points():
+    ranked = ParkRecommender().recommend(DEATH_VALLEY_PROFILE, k=63)
+    breakdown = score_breakdown(ranked.loc[ranked["park_code"] == "deva"].iloc[0])
+    values = breakdown.set_index("part")["value"]
+
+    assert round(values["Terrain & activities"], 2) == 0.26
+    assert values["Terrain & activities"] == values.max()  # biggest bar on the chart
+    assert why_sentence(breakdown) == "Strong fit on length and budget; partial match on terrain."
+
+
+def test_positive_fit_below_strong_cutoff_is_partial_match():
+    # The numbers from the bug report: terrain +0.26 of 0.55, effort half.
+    row = _row(content=0.26 / W_CONTENT, days_fit=1.0, diff_fit=0.5, budget_fit=1.0)
+    sentence = why_sentence(score_breakdown(row))
+    assert sentence == "Strong fit on length and budget; partial match on terrain."
+    assert "lost points" not in sentence
+
+
+def test_strong_part_is_never_named_in_the_second_clause():
+    # Terrain is strong (0.83 of its ceiling) but still has the biggest
+    # absolute gap; the clause should name the weak part (effort) instead.
+    row = _row(content=0.83, days_fit=1.0, diff_fit=0.5, budget_fit=1.0)
+    assert why_sentence(score_breakdown(row)) == (
+        "Strong fit on terrain, length, and budget; partial match on effort."
+    )
+
+
+def test_zero_fit_part_reads_no_match():
+    row = _row(content=0.0, days_fit=1.0, diff_fit=1.0, budget_fit=1.0)
+    assert why_sentence(score_breakdown(row)) == (
+        "Strong fit on length, effort, and budget; no match on terrain."
+    )
+
+
+@pytest.mark.parametrize(
+    ("penalties", "word"),
+    [
+        ({"crowd_penalty": 0.24}, "crowds"),
+        ({"month_penalty": 0.35}, "season"),
+        ({"crowd_penalty": 0.24, "content": 0.6}, "crowds"),
+    ],
+)
+def test_negative_parts_still_say_lost_points(penalties, word):
+    row = _row(**penalties)
+    breakdown = score_breakdown(row)
+    part = "Crowds" if word == "crowds" else "Season"
+    assert breakdown.set_index("part")["value"][part] < 0
+    assert why_sentence(breakdown).endswith(f"; lost points for {word}.")
+
+
+def test_value_axis_labels_work_at_any_width():
+    """Chart x-axis: few ticks, overlap removal, short labels (phone widths)."""
+    assert VALUE_AXIS_LABELS["tickCount"] <= 3
+    assert VALUE_AXIS_LABELS["labelOverlap"]
+    assert VALUE_AXIS_LABELS["labelFontSize"] <= 10
+    chart = alt.Chart(pd.DataFrame({"value": [-0.23, 0.26]})).mark_bar().encode(
+        x=alt.X("value:Q", axis=alt.Axis(**VALUE_AXIS_LABELS))
+    )
+    axis = chart.to_dict()["encoding"]["x"]["axis"]  # validates against Vega-Lite
+    assert axis["tickCount"] == VALUE_AXIS_LABELS["tickCount"]
+    assert axis["labelOverlap"] == "greedy"
+    assert axis["format"] == ".2~f"
 
 
 def test_badge_order_matches_ranking_order():
