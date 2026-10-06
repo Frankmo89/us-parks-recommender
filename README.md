@@ -32,7 +32,10 @@ The last term is `W_MONTH_PENALTY * (month_distance / 6)` with
 hard filters.
 
 Drive time is `great_circle_miles × 1.25 / 65 mph`. That is a highway sketch,
-not Google Maps. `permit_likely` is a coarse 2026-09 snapshot and will go stale.
+not Google Maps. Each park has an `access` value (`road`, `boat`, `flight`).
+With a drive limit, parks you can only fly to drop out, and boat parks show
+the drive to the port as "~Xh drive + boat". With no drive limit, results say
+"flight needed" or "boat needed". `permit_likely` is a coarse 2026-09 snapshot and will go stale.
 
 ## Setup
 
