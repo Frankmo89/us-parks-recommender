@@ -8,6 +8,8 @@ already computed.
 
 from __future__ import annotations
 
+import html
+
 import pandas as pd
 
 from src.features import CROWD_RANK
@@ -197,19 +199,32 @@ def why_sentence(breakdown: pd.DataFrame) -> str:
     return f"{fit_clause}; {gap_clause}."
 
 
+def _meta_bits(row: pd.Series) -> list[str]:
+    bits = [", ".join(code.strip() for code in str(row["states"]).split(","))]
+    travel = access_label(row.get("access"), row.get("drive_hours"))
+    if travel:
+        bits.append(travel)
+    return bits
+
+
 def card_meta(row: pd.Series) -> str:
-    """States plus the travel note shown next to the Match badge.
+    """States plus the travel note shown under the Match badge.
 
     Multi-state parks read "WY, MT, ID" (the catalog stores "WY,MT,ID").
 
     Same label the engine puts at the end of `why` (src.recommender.access_label):
     "~Xh drive", "~Xh drive + boat", "boat needed", "flight needed", or none.
     """
-    bits = [", ".join(code.strip() for code in str(row["states"]).split(","))]
-    travel = access_label(row.get("access"), row.get("drive_hours"))
-    if travel:
-        bits.append(travel)
-    return " · ".join(bits)
+    return " · ".join(_meta_bits(row))
+
+
+# No-break spaces on both sides, so a wrapped line never starts or ends with "·".
+META_SEPARATOR = "\u00a0·\u00a0"
+
+
+def card_meta_html(row: pd.Series) -> str:
+    """`card_meta` for HTML: escaped, with separators that cannot wrap."""
+    return META_SEPARATOR.join(html.escape(bit) for bit in _meta_bits(row))
 
 
 def nps_url(park_code: str) -> str:

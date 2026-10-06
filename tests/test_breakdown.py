@@ -265,3 +265,28 @@ def test_card_meta_road_park_with_drive_limit():
 
     row = _ranked_row(PROFILE, "jotr")
     assert card_meta(row) == f"CA · ~{row['drive_hours']:.1f}h drive"
+
+
+def test_card_meta_html_separators_cannot_wrap_and_text_matches_card_meta():
+    from app.breakdown import META_SEPARATOR, card_meta, card_meta_html
+
+    profile = UserProfile(
+        biomes=["island"], tags=["kayaking"], origin_lat=34.05, origin_lon=-118.24, max_drive_hours=8
+    )
+    row = _ranked_row(profile, "chis")
+    meta = card_meta_html(row)
+    assert meta == f"CA{META_SEPARATOR}~{row['drive_hours']:.1f}h drive + boat"
+    # Every "·" is glued to its neighbors with no-break spaces, so no line
+    # can start or end with a dot; breaks can only fall inside the parts.
+    for i, char in enumerate(meta):
+        if char == "·":
+            assert meta[i - 1] == "\u00a0" and meta[i + 1] == "\u00a0"
+    assert not meta.startswith(("·", " ", "\u00a0")) and not meta.endswith(("·", " ", "\u00a0"))
+    assert meta.replace("\u00a0", " ") == card_meta(row)
+
+
+def test_card_meta_html_single_part_has_no_separator_and_is_escaped():
+    from app.breakdown import card_meta_html
+
+    assert card_meta_html(pd.Series({"states": "WY,MT,ID", "access": "road", "drive_hours": None})) == "WY, MT, ID"
+    assert card_meta_html(pd.Series({"states": "<b>", "access": "road", "drive_hours": None})) == "&lt;b&gt;"

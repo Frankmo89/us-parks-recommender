@@ -6,7 +6,7 @@ from app.breakdown import (
     PART_ORDER,
     ROW_STEP,
     VALUE_AXIS_LABELS,
-    card_meta,
+    card_meta_html,
     match_percent,
     nps_url,
     score_breakdown,
@@ -167,6 +167,7 @@ def inject_base_css() -> None:
           .park-name { color: #f7f1e4; font-weight: 600; font-size: 1rem; margin: 0 0 .4rem; }
           .park-name-lg { font-size: 1.35rem; }
           .park-meta { color: #d7cbb3; font-size: .85rem; }
+          [data-testid="stMarkdownContainer"] p.park-meta { font-size: .85rem; line-height: 1.4; margin: .5rem 0 0; }
           @media (max-width: 480px) {
             /* Five nested paddings left the chart 200 px of a 390 px phone. */
             .st-key-app_shell { padding-left: 0; padding-right: 0; }
@@ -317,7 +318,7 @@ def render_top_card(row: pd.Series) -> None:
         st.markdown(
             f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
             f'<span class="match-caption">A fit score, not a probability.</span>'
-            f'<span class="park-meta"> · {card_meta(row)}</span>',
+            f'<p class="park-meta">{card_meta_html(row)}</p>',
             unsafe_allow_html=True,
         )
         st.link_button("NPS page", nps_url(row["park_code"]))
@@ -330,7 +331,7 @@ def render_small_card(row: pd.Series) -> None:
         st.markdown(
             f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
             f'<span class="match-caption">A fit score, not a probability.</span>'
-            f'<span class="park-meta"> · {card_meta(row)}</span>',
+            f'<p class="park-meta">{card_meta_html(row)}</p>',
             unsafe_allow_html=True,
         )
         st.link_button("NPS page", nps_url(row["park_code"]))
