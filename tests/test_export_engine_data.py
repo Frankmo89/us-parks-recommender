@@ -144,7 +144,11 @@ def recommend_from_export(data: dict, profile: dict, k: int = 5) -> dict:
         days_fit = _closeness(float(ord_days[park["days_needed"]]), days_u, 3.0)
         diff_fit = _closeness(float(ord_diff[park["difficulty"]]), diff_u, 2.0)
         budget_fit = _closeness(float(ord_budget[park["budget_tier"]]), budget_u, 2.0)
-        crowd_gap = max(0.0, float(ord_crowd[park["crowd"]]) - crowd_u)
+        # Month-aware crowd (0.6.0): one level quieter outside peak months.
+        park_crowd = float(ord_crowd[park["crowd"]])
+        if month is not None and str(month) not in park["peak_months"]:
+            park_crowd = max(park_crowd - 1.0, 0.0)
+        crowd_gap = max(0.0, park_crowd - crowd_u)
         crowd_penalty = crowd_gap * float(w["CROWD_PENALTY"])
         if month is None:
             month_penalty = 0.0
@@ -248,7 +252,7 @@ def test_export_has_required_keys(engine_data: dict):
 def test_export_json_only_matches_live_recommend_for_all_fixtures(
     engine_data: dict, fixtures: dict, live_model: ParkRecommender
 ):
-    assert len(fixtures["profiles"]) == 28
+    assert len(fixtures["profiles"]) == 30
     for item in fixtures["profiles"]:
         profile = {key: item["profile"][key] for key in PROFILE_FIELDS}
         live = live_model.recommend(UserProfile(**profile), k=fixtures["k"])

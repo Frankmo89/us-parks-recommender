@@ -77,6 +77,7 @@ def build_export() -> dict:
                 "crowd": str(row["crowd"]),
                 "budget_tier": str(row["budget_tier"]),
                 "best_months": sorted(parse_months(row["best_months"]), key=int),
+                "peak_months": sorted(parse_months(row["peak_months"]), key=int),
                 "remote": bool(int(row["remote"])),
                 "permit_likely": bool(int(row["permit_likely"])),
                 "access": str(row["access"]),

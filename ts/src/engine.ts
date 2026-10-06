@@ -53,6 +53,8 @@ export type ParkRecord = {
   crowd: string;
   budget_tier: string;
   best_months: string[];
+  /** Months with NPS visits >= 0.7 x the busiest month (contract §2). */
+  peak_months: string[];
   remote: boolean;
   permit_likely: boolean;
   access: Access;
@@ -221,6 +223,8 @@ export type ParkFacts = {
   crowd: string;
   budget_tier: string;
   best_months: string[];
+  /** Months with NPS visits >= 0.7 x the busiest month (contract §2). */
+  peak_months: string[];
   remote: boolean;
   permit_likely: boolean;
   access: Access;
@@ -463,6 +467,22 @@ function annotateTies(
 /**
  * Rank parks for a trip profile using only `data` from web/engine_data.json.
  */
+/**
+ * Crowd rank used for the crowd penalty. With a trip month that is not one of
+ * the park's peak months, the park counts one level quieter (high -> medium,
+ * medium -> low; low stays low). No month: the catalog crowd. Mirrors
+ * src/recommender.py effective_crowd_rank.
+ */
+export function effectiveCrowdRank(
+  park: Pick<ParkRecord, "crowd" | "peak_months">,
+  month: number | null,
+  data: EngineData,
+): number {
+  const rank = data.ordinals.crowd[park.crowd]!;
+  if (month === null || park.peak_months.includes(String(month))) return rank;
+  return Math.max(rank - 1, 0);
+}
+
 export function recommend(
   data: EngineData,
   profileInput: TripProfile,
@@ -528,7 +548,7 @@ export function recommend(
     );
     const crowdGap = Math.max(
       0,
-      data.ordinals.crowd[park.crowd]! - crowdU,
+      effectiveCrowdRank(park, profile.month, data) - crowdU,
     );
     const crowd_penalty = crowdGap * w.CROWD_PENALTY;
     const month_penalty =
@@ -605,6 +625,7 @@ export function recommend(
         crowd: row.park.crowd,
         budget_tier: row.park.budget_tier,
         best_months: [...row.park.best_months],
+        peak_months: [...row.park.peak_months],
         remote: row.park.remote,
         permit_likely: row.park.permit_likely,
         access: row.park.access,

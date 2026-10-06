@@ -3,9 +3,9 @@
     "Parity fixtures for a future TypeScript (or other) port of the ranking engine.",
     "Generated from the Python ParkRecommender; do not hand-edit scores.",
     "Regenerate with `python scripts/generate_engine_fixtures.py` after intentional, version-bumped engine changes.",
-    "Includes the 18 eval profiles plus 10 edge cases. Eval 'relevant' labels are not included."
+    "Includes the 18 eval profiles plus 12 edge cases. Eval 'relevant' labels are not included."
   ],
-  "engine_version": "0.5.0",
+  "engine_version": "0.6.0",
   "weights": {
     "W_CONTENT": 0.55,
     "W_DAYS": 0.18,
@@ -44,7 +44,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -92,6 +92,13 @@
               "best_months": [
                 "5",
                 "6",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
                 "9",
                 "10"
               ],
@@ -148,6 +155,14 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -158,6 +173,63 @@
           },
           {
             "rank": 3,
+            "score": 0.635,
+            "match_percent": 67,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.427274,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.235,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "whsa",
+              "name": "White Sands National Park",
+              "states": "NM",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "sand",
+                "photography",
+                "stargazing"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "3",
+                "4",
+                "10",
+                "11"
+              ],
+              "peak_months": [
+                "3",
+                "4"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/whsa/",
+              "why": "desert \u00b7 hiking \u00b7 photography \u00b7 stargazing \u00b7 1 day trip",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 4,
             "score": 0.605407,
             "match_percent": 64,
             "tied_with_neighbors": false,
@@ -201,6 +273,13 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -210,109 +289,59 @@
             }
           },
           {
-            "rank": 4,
-            "score": 0.516713,
-            "match_percent": 54,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.721296,
-              "days": 1.0,
-              "difficulty": 1.0,
-              "budget": 0.5,
-              "crowd_penalty": 0.24,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.396713,
-                "days": 0.18,
-                "difficulty": 0.14,
-                "budget": 0.04,
-                "crowd_penalty": -0.24,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "arch",
-              "name": "Arches National Park",
-              "states": "UT",
-              "biomes": [
-                "desert"
-              ],
-              "tags": [
-                "hiking",
-                "scenic_drive",
-                "family",
-                "stargazing",
-                "photography"
-              ],
-              "difficulty": "easy",
-              "days_needed": "1",
-              "crowd": "high",
-              "budget_tier": "mid",
-              "best_months": [
-                "3",
-                "4",
-                "5",
-                "9",
-                "10",
-                "11"
-              ],
-              "remote": false,
-              "permit_likely": true,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/arch/",
-              "why": "desert \u00b7 hiking \u00b7 photography \u00b7 stargazing \u00b7 1 day trip",
-              "drive_hours": null
-            }
-          },
-          {
             "rank": 5,
-            "score": 0.515,
-            "match_percent": 54,
+            "score": 0.576667,
+            "match_percent": 61,
             "tied_with_neighbors": false,
             "breakdown": {
               "content": 0.427274,
               "days": 1.0,
               "difficulty": 1.0,
               "budget": 1.0,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.058333,
               "weighted": {
                 "content": 0.235,
                 "days": 0.18,
                 "difficulty": 0.14,
                 "budget": 0.08,
-                "crowd_penalty": -0.12,
-                "month_penalty": 0.0
+                "crowd_penalty": 0.0,
+                "month_penalty": -0.058333
               }
             },
             "facts": {
-              "park_code": "whsa",
-              "name": "White Sands National Park",
-              "states": "NM",
+              "park_code": "grsa",
+              "name": "Great Sand Dunes National Park",
+              "states": "CO",
               "biomes": [
                 "desert"
               ],
               "tags": [
                 "hiking",
                 "family",
+                "stargazing",
                 "sand",
-                "photography",
-                "stargazing"
+                "photography"
               ],
               "difficulty": "easy",
               "days_needed": "1",
               "crowd": "medium",
               "budget_tier": "low",
               "best_months": [
-                "3",
-                "4",
-                "10",
-                "11"
+                "5",
+                "6",
+                "9"
+              ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8"
               ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
-              "nps_url": "https://www.nps.gov/whsa/",
+              "nps_url": "https://www.nps.gov/grsa/",
               "why": "desert \u00b7 hiking \u00b7 photography \u00b7 stargazing \u00b7 1 day trip",
               "drive_hours": null
             }
@@ -347,7 +376,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -400,6 +429,11 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -449,6 +483,12 @@
               "crowd": "high",
               "budget_tier": "mid",
               "best_months": [
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "peak_months": [
                 "6",
                 "7",
                 "8",
@@ -505,6 +545,12 @@
                 "6",
                 "9"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -554,6 +600,12 @@
               "crowd": "high",
               "budget_tier": "mid",
               "best_months": [
+                "7",
+                "8",
+                "9"
+              ],
+              "peak_months": [
+                "6",
                 "7",
                 "8",
                 "9"
@@ -614,6 +666,12 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -653,7 +711,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -702,6 +760,13 @@
               "best_months": [
                 "4",
                 "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
                 "9",
                 "10"
               ],
@@ -757,6 +822,13 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -767,6 +839,125 @@
           },
           {
             "rank": 3,
+            "score": 0.44267,
+            "match_percent": 47,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.183643,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.058333,
+              "weighted": {
+                "content": 0.101003,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": -0.058333
+              }
+            },
+            "facts": {
+              "park_code": "cuva",
+              "name": "Cuyahoga Valley National Park",
+              "states": "OH",
+              "biomes": [
+                "forest"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "scenic_drive",
+                "easy_walk",
+                "biking"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/cuva/",
+              "why": "forest \u00b7 hiking \u00b7 scenic_drive \u00b7 1 day trip",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 4,
+            "score": 0.42486,
+            "match_percent": 45,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.151261,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.058333,
+              "weighted": {
+                "content": 0.083194,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": -0.058333
+              }
+            },
+            "facts": {
+              "park_code": "grsa",
+              "name": "Great Sand Dunes National Park",
+              "states": "CO",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "stargazing",
+                "sand",
+                "photography"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "5",
+                "6",
+                "9"
+              ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/grsa/",
+              "why": "desert \u00b7 hiking \u00b7 1 day trip",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 5,
             "score": 0.409173,
             "match_percent": 43,
             "tied_with_neighbors": false,
@@ -810,118 +1001,19 @@
                 "10",
                 "11"
               ],
+              "peak_months": [
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
               "nps_url": "https://www.nps.gov/pefo/",
               "why": "desert \u00b7 hiking \u00b7 scenic_drive \u00b7 1 day trip",
-              "drive_hours": null
-            }
-          },
-          {
-            "rank": 4,
-            "score": 0.403167,
-            "match_percent": 42,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.005759,
-              "days": 1.0,
-              "difficulty": 1.0,
-              "budget": 1.0,
-              "crowd_penalty": 0.0,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.003167,
-                "days": 0.18,
-                "difficulty": 0.14,
-                "budget": 0.08,
-                "crowd_penalty": 0.0,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "cong",
-              "name": "Congaree National Park",
-              "states": "SC",
-              "biomes": [
-                "wetland"
-              ],
-              "tags": [
-                "hiking",
-                "family",
-                "wildlife",
-                "water",
-                "boardwalk"
-              ],
-              "difficulty": "easy",
-              "days_needed": "1",
-              "crowd": "low",
-              "budget_tier": "low",
-              "best_months": [
-                "3",
-                "4",
-                "10",
-                "11"
-              ],
-              "remote": false,
-              "permit_likely": false,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/cong/",
-              "why": "wetland \u00b7 hiking \u00b7 1 day trip \u00b7 low crowds",
-              "drive_hours": null
-            }
-          },
-          {
-            "rank": 5,
-            "score": 0.391929,
-            "match_percent": 41,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.203508,
-              "days": 1.0,
-              "difficulty": 1.0,
-              "budget": 1.0,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.111929,
-                "days": 0.18,
-                "difficulty": 0.14,
-                "budget": 0.08,
-                "crowd_penalty": -0.12,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "sagu",
-              "name": "Saguaro National Park",
-              "states": "AZ",
-              "biomes": [
-                "desert"
-              ],
-              "tags": [
-                "hiking",
-                "family",
-                "stargazing",
-                "easy_walk"
-              ],
-              "difficulty": "easy",
-              "days_needed": "1",
-              "crowd": "medium",
-              "budget_tier": "low",
-              "best_months": [
-                "11",
-                "12",
-                "1",
-                "2",
-                "3",
-                "4"
-              ],
-              "remote": false,
-              "permit_likely": false,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/sagu/",
-              "why": "desert \u00b7 hiking \u00b7 1 day trip",
               "drive_hours": null
             }
           }
@@ -955,7 +1047,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1014,6 +1106,17 @@
                 "11",
                 "12"
               ],
+              "peak_months": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "6",
+                "7",
+                "8",
+                "9",
+                "12"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "flight",
@@ -1065,6 +1168,9 @@
                 "7",
                 "8",
                 "9"
+              ],
+              "peak_months": [
+                "7"
               ],
               "remote": false,
               "permit_likely": false,
@@ -1120,6 +1226,11 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -1169,6 +1280,12 @@
               "best_months": [
                 "5",
                 "6",
+                "9"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
                 "9"
               ],
               "remote": false,
@@ -1224,6 +1341,12 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "4",
+                "7",
+                "9",
+                "10"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "flight",
@@ -1262,7 +1385,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1313,6 +1436,13 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "3",
+                "6",
+                "7",
+                "8",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -1323,22 +1453,22 @@
           },
           {
             "rank": 2,
-            "score": 0.780386,
-            "match_percent": 82,
+            "score": 0.900386,
+            "match_percent": 95,
             "tied_with_neighbors": false,
             "breakdown": {
               "content": 0.909792,
               "days": 1.0,
               "difficulty": 1.0,
               "budget": 1.0,
-              "crowd_penalty": 0.12,
+              "crowd_penalty": 0.0,
               "month_penalty": 0.0,
               "weighted": {
                 "content": 0.500386,
                 "days": 0.18,
                 "difficulty": 0.14,
                 "budget": 0.08,
-                "crowd_penalty": -0.12,
+                "crowd_penalty": 0.0,
                 "month_penalty": 0.0
               }
             },
@@ -1363,6 +1493,9 @@
                 "5",
                 "9",
                 "10"
+              ],
+              "peak_months": [
+                "7"
               ],
               "remote": false,
               "permit_likely": false,
@@ -1416,6 +1549,12 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "3",
+                "4",
+                "6",
+                "7"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -1468,6 +1607,13 @@
                 "5",
                 "9",
                 "10"
+              ],
+              "peak_months": [
+                "3",
+                "4",
+                "6",
+                "7",
+                "8"
               ],
               "remote": false,
               "permit_likely": false,
@@ -1523,6 +1669,11 @@
                 "3",
                 "4"
               ],
+              "peak_months": [
+                "2",
+                "3",
+                "4"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -1562,7 +1713,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1614,6 +1765,11 @@
                 "7",
                 "8",
                 "9"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8"
               ],
               "remote": false,
               "permit_likely": false,
@@ -1671,6 +1827,12 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -1720,6 +1882,12 @@
               "best_months": [
                 "5",
                 "6",
+                "9"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
                 "9"
               ],
               "remote": false,
@@ -1773,6 +1941,9 @@
                 "7",
                 "8",
                 "9"
+              ],
+              "peak_months": [
+                "7"
               ],
               "remote": false,
               "permit_likely": false,
@@ -1828,6 +1999,13 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -1867,7 +2045,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -1918,6 +2096,15 @@
                 "5",
                 "10",
                 "11"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
               ],
               "remote": false,
               "permit_likely": true,
@@ -1973,6 +2160,14 @@
                 "2",
                 "3"
               ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "5",
+                "11",
+                "12"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -2022,6 +2217,13 @@
               "best_months": [
                 "5",
                 "6",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
                 "9",
                 "10"
               ],
@@ -2078,6 +2280,15 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -2131,6 +2342,13 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -2170,7 +2388,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2220,6 +2438,11 @@
               "crowd": "low",
               "budget_tier": "high",
               "best_months": [
+                "6",
+                "7",
+                "8"
+              ],
+              "peak_months": [
                 "6",
                 "7",
                 "8"
@@ -2274,6 +2497,13 @@
                 "7",
                 "8"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
+                "10",
+                "11"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "flight",
@@ -2321,6 +2551,11 @@
               "crowd": "low",
               "budget_tier": "high",
               "best_months": [
+                "6",
+                "7",
+                "8"
+              ],
+              "peak_months": [
                 "6",
                 "7",
                 "8"
@@ -2373,6 +2608,10 @@
               "budget_tier": "high",
               "best_months": [
                 "6",
+                "7",
+                "8"
+              ],
+              "peak_months": [
                 "7",
                 "8"
               ],
@@ -2431,6 +2670,10 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "7",
+                "8"
+              ],
               "remote": true,
               "permit_likely": true,
               "access": "boat",
@@ -2471,7 +2714,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -2522,6 +2765,16 @@
                 "2",
                 "3",
                 "4"
+              ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9"
               ],
               "remote": false,
               "permit_likely": false,
@@ -2577,6 +2830,13 @@
                 "2",
                 "3"
               ],
+              "peak_months": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "12"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -2631,6 +2891,16 @@
                 "3",
                 "4"
               ],
+              "peak_months": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "12"
+              ],
               "remote": true,
               "permit_likely": true,
               "access": "boat",
@@ -2684,6 +2954,16 @@
                 "2",
                 "3",
                 "4"
+              ],
+              "peak_months": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "12"
               ],
               "remote": true,
               "permit_likely": false,
@@ -2741,6 +3021,15 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": true,
               "permit_likely": true,
               "access": "boat",
@@ -2781,7 +3070,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
@@ -2831,6 +3120,11 @@
                 "5",
                 "6",
                 "9"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8"
               ],
               "remote": false,
               "permit_likely": false,
@@ -2882,6 +3176,14 @@
               "best_months": [
                 "5",
                 "6",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8",
                 "9",
                 "10"
               ],
@@ -2937,6 +3239,13 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "3",
+                "6",
+                "7",
+                "8",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -2947,22 +3256,22 @@
           },
           {
             "rank": 4,
-            "score": 0.491575,
-            "match_percent": 52,
+            "score": 0.611575,
+            "match_percent": 64,
             "tied_with_neighbors": false,
             "breakdown": {
               "content": 0.490742,
               "days": 1.0,
               "difficulty": 1.0,
               "budget": 1.0,
-              "crowd_penalty": 0.12,
+              "crowd_penalty": 0.0,
               "month_penalty": 0.058333,
               "weighted": {
                 "content": 0.269908,
                 "days": 0.18,
                 "difficulty": 0.14,
                 "budget": 0.08,
-                "crowd_penalty": -0.12,
+                "crowd_penalty": 0.0,
                 "month_penalty": -0.058333
               }
             },
@@ -2987,6 +3296,9 @@
                 "5",
                 "9",
                 "10"
+              ],
+              "peak_months": [
+                "7"
               ],
               "remote": false,
               "permit_likely": false,
@@ -3027,7 +3339,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3075,6 +3387,13 @@
               "crowd": "medium",
               "budget_tier": "mid",
               "best_months": [
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "peak_months": [
+                "5",
                 "6",
                 "7",
                 "8",
@@ -3129,6 +3448,11 @@
               "budget_tier": "mid",
               "best_months": [
                 "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "peak_months": [
                 "7",
                 "8",
                 "9"
@@ -3191,6 +3515,13 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -3201,6 +3532,70 @@
           },
           {
             "rank": 4,
+            "score": 0.242844,
+            "match_percent": 26,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.032443,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.175,
+              "weighted": {
+                "content": 0.017844,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": -0.175
+              }
+            },
+            "facts": {
+              "park_code": "jotr",
+              "name": "Joshua Tree National Park",
+              "states": "CA",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "climbing",
+                "stargazing",
+                "camping",
+                "family",
+                "photography"
+              ],
+              "difficulty": "easy",
+              "days_needed": "2-3",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "10",
+                "11",
+                "12",
+                "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "11",
+                "12"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/jotr/",
+              "why": "desert \u00b7 hiking \u00b7 family \u00b7 2-3 day trip \u00b7 ~2.6h drive",
+              "drive_hours": 2.6031
+            }
+          },
+          {
+            "rank": 5,
             "score": 0.217181,
             "match_percent": 23,
             "tied_with_neighbors": false,
@@ -3244,65 +3639,21 @@
                 "10",
                 "11"
               ],
-              "remote": false,
-              "permit_likely": true,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/zion/",
-              "why": "canyon \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~7.1h drive",
-              "drive_hours": 7.0712
-            }
-          },
-          {
-            "rank": 5,
-            "score": 0.191646,
-            "match_percent": 20,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.17875,
-              "days": 1.0,
-              "difficulty": 0.5,
-              "budget": 1.0,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.116667,
-              "weighted": {
-                "content": 0.098312,
-                "days": 0.18,
-                "difficulty": 0.07,
-                "budget": 0.08,
-                "crowd_penalty": -0.12,
-                "month_penalty": -0.116667
-              }
-            },
-            "facts": {
-              "park_code": "grca",
-              "name": "Grand Canyon National Park",
-              "states": "AZ",
-              "biomes": [
-                "canyon"
-              ],
-              "tags": [
-                "hiking",
-                "scenic_drive",
-                "family",
-                "photography",
-                "backpacking"
-              ],
-              "difficulty": "moderate",
-              "days_needed": "2-3",
-              "crowd": "high",
-              "budget_tier": "mid",
-              "best_months": [
+              "peak_months": [
                 "4",
                 "5",
+                "6",
+                "7",
+                "8",
                 "9",
                 "10"
               ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
-              "nps_url": "https://www.nps.gov/grca/",
-              "why": "canyon \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~7.2h drive",
-              "drive_hours": 7.1506
+              "nps_url": "https://www.nps.gov/zion/",
+              "why": "canyon \u00b7 hiking \u00b7 family \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~7.1h drive",
+              "drive_hours": 7.0712
             }
           }
         ]
@@ -3335,7 +3686,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3344,6 +3695,66 @@
         "parks": [
           {
             "rank": 1,
+            "score": 0.727074,
+            "match_percent": 77,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.700741,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.058333,
+              "weighted": {
+                "content": 0.385407,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": -0.058333
+              }
+            },
+            "facts": {
+              "park_code": "care",
+              "name": "Capitol Reef National Park",
+              "states": "UT",
+              "biomes": [
+                "canyon",
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "stargazing"
+              ],
+              "difficulty": "easy",
+              "days_needed": "2-3",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "4",
+                "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/care/",
+              "why": "canyon \u00b7 desert \u00b7 stargazing \u00b7 hiking \u00b7 2-3 day trip",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 2,
             "score": 0.687356,
             "match_percent": 72,
             "tied_with_neighbors": false,
@@ -3388,6 +3799,14 @@
                 "2",
                 "3"
               ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "5",
+                "11",
+                "12"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -3397,7 +3816,123 @@
             }
           },
           {
-            "rank": 2,
+            "rank": 3,
+            "score": 0.646466,
+            "match_percent": 68,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.557211,
+              "days": 0.666667,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.306466,
+                "days": 0.12,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "whsa",
+              "name": "White Sands National Park",
+              "states": "NM",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "sand",
+                "photography",
+                "stargazing"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "3",
+                "4",
+                "10",
+                "11"
+              ],
+              "peak_months": [
+                "3",
+                "4"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/whsa/",
+              "why": "desert \u00b7 stargazing \u00b7 hiking \u00b7 photography",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 4,
+            "score": 0.642683,
+            "match_percent": 68,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.550334,
+              "days": 0.666667,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.302683,
+                "days": 0.12,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "sagu",
+              "name": "Saguaro National Park",
+              "states": "AZ",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "stargazing",
+                "easy_walk"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "11",
+                "12",
+                "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "peak_months": [
+                "2",
+                "3",
+                "4"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/sagu/",
+              "why": "desert \u00b7 stargazing \u00b7 hiking",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 5,
             "score": 0.615015,
             "match_percent": 65,
             "tied_with_neighbors": false,
@@ -3440,171 +3975,18 @@
                 "9",
                 "10"
               ],
-              "remote": false,
-              "permit_likely": false,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/blca/",
-              "why": "canyon \u00b7 stargazing \u00b7 hiking \u00b7 photography \u00b7 low crowds",
-              "drive_hours": null
-            }
-          },
-          {
-            "rank": 3,
-            "score": 0.607074,
-            "match_percent": 64,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.700741,
-              "days": 1.0,
-              "difficulty": 1.0,
-              "budget": 1.0,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.058333,
-              "weighted": {
-                "content": 0.385407,
-                "days": 0.18,
-                "difficulty": 0.14,
-                "budget": 0.08,
-                "crowd_penalty": -0.12,
-                "month_penalty": -0.058333
-              }
-            },
-            "facts": {
-              "park_code": "care",
-              "name": "Capitol Reef National Park",
-              "states": "UT",
-              "biomes": [
-                "canyon",
-                "desert"
-              ],
-              "tags": [
-                "hiking",
-                "scenic_drive",
-                "family",
-                "stargazing"
-              ],
-              "difficulty": "easy",
-              "days_needed": "2-3",
-              "crowd": "medium",
-              "budget_tier": "low",
-              "best_months": [
-                "4",
-                "5",
+              "peak_months": [
+                "6",
+                "7",
+                "8",
                 "9",
                 "10"
               ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
-              "nps_url": "https://www.nps.gov/care/",
-              "why": "canyon \u00b7 desert \u00b7 stargazing \u00b7 hiking \u00b7 2-3 day trip",
-              "drive_hours": null
-            }
-          },
-          {
-            "rank": 4,
-            "score": 0.526466,
-            "match_percent": 55,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.557211,
-              "days": 0.666667,
-              "difficulty": 1.0,
-              "budget": 1.0,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.306466,
-                "days": 0.12,
-                "difficulty": 0.14,
-                "budget": 0.08,
-                "crowd_penalty": -0.12,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "whsa",
-              "name": "White Sands National Park",
-              "states": "NM",
-              "biomes": [
-                "desert"
-              ],
-              "tags": [
-                "hiking",
-                "family",
-                "sand",
-                "photography",
-                "stargazing"
-              ],
-              "difficulty": "easy",
-              "days_needed": "1",
-              "crowd": "medium",
-              "budget_tier": "low",
-              "best_months": [
-                "3",
-                "4",
-                "10",
-                "11"
-              ],
-              "remote": false,
-              "permit_likely": false,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/whsa/",
-              "why": "desert \u00b7 stargazing \u00b7 hiking \u00b7 photography",
-              "drive_hours": null
-            }
-          },
-          {
-            "rank": 5,
-            "score": 0.522683,
-            "match_percent": 55,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.550334,
-              "days": 0.666667,
-              "difficulty": 1.0,
-              "budget": 1.0,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.302683,
-                "days": 0.12,
-                "difficulty": 0.14,
-                "budget": 0.08,
-                "crowd_penalty": -0.12,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "sagu",
-              "name": "Saguaro National Park",
-              "states": "AZ",
-              "biomes": [
-                "desert"
-              ],
-              "tags": [
-                "hiking",
-                "family",
-                "stargazing",
-                "easy_walk"
-              ],
-              "difficulty": "easy",
-              "days_needed": "1",
-              "crowd": "medium",
-              "budget_tier": "low",
-              "best_months": [
-                "11",
-                "12",
-                "1",
-                "2",
-                "3",
-                "4"
-              ],
-              "remote": false,
-              "permit_likely": false,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/sagu/",
-              "why": "desert \u00b7 stargazing \u00b7 hiking",
+              "nps_url": "https://www.nps.gov/blca/",
+              "why": "canyon \u00b7 stargazing \u00b7 hiking \u00b7 photography \u00b7 low crowds",
               "drive_hours": null
             }
           }
@@ -3638,7 +4020,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3691,6 +4073,14 @@
                 "2",
                 "3"
               ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "5",
+                "11",
+                "12"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -3741,6 +4131,11 @@
                 "11",
                 "12",
                 "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "peak_months": [
                 "2",
                 "3",
                 "4"
@@ -3802,6 +4197,13 @@
                 "3",
                 "4"
               ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "11",
+                "12"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -3812,76 +4214,22 @@
           },
           {
             "rank": 4,
-            "score": 0.250043,
-            "match_percent": 26,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.036441,
-              "days": 0.666667,
-              "difficulty": 0.5,
-              "budget": 0.5,
-              "crowd_penalty": 0.0,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.020043,
-                "days": 0.12,
-                "difficulty": 0.07,
-                "budget": 0.04,
-                "crowd_penalty": 0.0,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "pinn",
-              "name": "Pinnacles National Park",
-              "states": "CA",
-              "biomes": [
-                "chaparral",
-                "cave"
-              ],
-              "tags": [
-                "hiking",
-                "climbing",
-                "wildlife",
-                "family"
-              ],
-              "difficulty": "moderate",
-              "days_needed": "1",
-              "crowd": "medium",
-              "budget_tier": "low",
-              "best_months": [
-                "2",
-                "3",
-                "4",
-                "10",
-                "11"
-              ],
-              "remote": false,
-              "permit_likely": false,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/pinn/",
-              "why": "chaparral \u00b7 cave \u00b7 hiking \u00b7 family \u00b7 ~6.6h drive",
-              "drive_hours": 6.6394
-            }
-          },
-          {
-            "rank": 5,
-            "score": 0.246768,
-            "match_percent": 26,
+            "score": 0.366768,
+            "match_percent": 39,
             "tied_with_neighbors": false,
             "breakdown": {
               "content": 0.06685,
               "days": 1.0,
               "difficulty": 0.5,
               "budget": 1.0,
-              "crowd_penalty": 0.12,
+              "crowd_penalty": 0.0,
               "month_penalty": 0.0,
               "weighted": {
                 "content": 0.036768,
                 "days": 0.18,
                 "difficulty": 0.07,
                 "budget": 0.08,
-                "crowd_penalty": -0.12,
+                "crowd_penalty": 0.0,
                 "month_penalty": 0.0
               }
             },
@@ -3909,12 +4257,83 @@
                 "10",
                 "11"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
               "nps_url": "https://www.nps.gov/zion/",
               "why": "canyon \u00b7 hiking \u00b7 family \u00b7 2-3 day trip \u00b7 ~7.6h drive",
               "drive_hours": 7.5506
+            }
+          },
+          {
+            "rank": 5,
+            "score": 0.300854,
+            "match_percent": 32,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.053067,
+              "days": 1.0,
+              "difficulty": 0.5,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.058333,
+              "weighted": {
+                "content": 0.029187,
+                "days": 0.18,
+                "difficulty": 0.07,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": -0.058333
+              }
+            },
+            "facts": {
+              "park_code": "grca",
+              "name": "Grand Canyon National Park",
+              "states": "AZ",
+              "biomes": [
+                "canyon"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "photography",
+                "backpacking"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "4",
+                "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": true,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/grca/",
+              "why": "canyon \u00b7 hiking \u00b7 family \u00b7 2-3 day trip \u00b7 ~7.1h drive",
+              "drive_hours": 7.0687
             }
           }
         ]
@@ -3948,7 +4367,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -3997,6 +4416,13 @@
                 "6",
                 "7",
                 "8"
+              ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8",
+                "9"
               ],
               "remote": true,
               "permit_likely": false,
@@ -4050,6 +4476,11 @@
                 "7",
                 "8"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "road",
@@ -4097,6 +4528,10 @@
               "crowd": "low",
               "budget_tier": "high",
               "best_months": [
+                "7",
+                "8"
+              ],
+              "peak_months": [
                 "7",
                 "8"
               ],
@@ -4153,6 +4588,12 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "4",
+                "7",
+                "9",
+                "10"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "flight",
@@ -4206,6 +4647,11 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "road",
@@ -4244,20 +4690,134 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
         "tie_epsilon": 0.001,
-        "tie_groups": [
-          [
-            "cuva",
-            "acad"
-          ]
-        ],
+        "tie_groups": [],
         "parks": [
           {
             "rank": 1,
+            "score": 0.623534,
+            "match_percent": 66,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.479152,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 0.5,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.263534,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.04,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "acad",
+              "name": "Acadia National Park",
+              "states": "ME",
+              "biomes": [
+                "coast",
+                "forest"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "wildlife",
+                "camping"
+              ],
+              "difficulty": "easy",
+              "days_needed": "2-3",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/acad/",
+              "why": "coast \u00b7 forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~7.5h drive",
+              "drive_hours": 7.4562
+            }
+          },
+          {
+            "rank": 2,
+            "score": 0.601344,
+            "match_percent": 63,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.366079,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.201344,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "shen",
+              "name": "Shenandoah National Park",
+              "states": "VA",
+              "biomes": [
+                "forest"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "waterfalls",
+                "camping"
+              ],
+              "difficulty": "easy",
+              "days_needed": "2-3",
+              "crowd": "high",
+              "budget_tier": "low",
+              "best_months": [
+                "4",
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/shen/",
+              "why": "forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~5.3h drive",
+              "drive_hours": 5.302
+            }
+          },
+          {
+            "rank": 3,
             "score": 0.543354,
             "match_percent": 57,
             "tied_with_neighbors": false,
@@ -4301,6 +4861,12 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -4310,10 +4876,10 @@
             }
           },
           {
-            "rank": 2,
+            "rank": 4,
             "score": 0.504336,
             "match_percent": 53,
-            "tied_with_neighbors": true,
+            "tied_with_neighbors": false,
             "breakdown": {
               "content": 0.298794,
               "days": 0.666667,
@@ -4354,55 +4920,7 @@
                 "9",
                 "10"
               ],
-              "remote": false,
-              "permit_likely": false,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/cuva/",
-              "why": "forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 ~7.6h drive",
-              "drive_hours": 7.5943
-            }
-          },
-          {
-            "rank": 3,
-            "score": 0.503534,
-            "match_percent": 53,
-            "tied_with_neighbors": true,
-            "breakdown": {
-              "content": 0.479152,
-              "days": 1.0,
-              "difficulty": 1.0,
-              "budget": 0.5,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.263534,
-                "days": 0.18,
-                "difficulty": 0.14,
-                "budget": 0.04,
-                "crowd_penalty": -0.12,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "acad",
-              "name": "Acadia National Park",
-              "states": "ME",
-              "biomes": [
-                "coast",
-                "forest"
-              ],
-              "tags": [
-                "hiking",
-                "scenic_drive",
-                "family",
-                "wildlife",
-                "camping"
-              ],
-              "difficulty": "easy",
-              "days_needed": "2-3",
-              "crowd": "high",
-              "budget_tier": "mid",
-              "best_months": [
+              "peak_months": [
                 "5",
                 "6",
                 "7",
@@ -4413,63 +4931,9 @@
               "remote": false,
               "permit_likely": false,
               "access": "road",
-              "nps_url": "https://www.nps.gov/acad/",
-              "why": "coast \u00b7 forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~7.5h drive",
-              "drive_hours": 7.4562
-            }
-          },
-          {
-            "rank": 4,
-            "score": 0.481344,
-            "match_percent": 51,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.366079,
-              "days": 1.0,
-              "difficulty": 1.0,
-              "budget": 1.0,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.201344,
-                "days": 0.18,
-                "difficulty": 0.14,
-                "budget": 0.08,
-                "crowd_penalty": -0.12,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "shen",
-              "name": "Shenandoah National Park",
-              "states": "VA",
-              "biomes": [
-                "forest"
-              ],
-              "tags": [
-                "hiking",
-                "scenic_drive",
-                "family",
-                "waterfalls",
-                "camping"
-              ],
-              "difficulty": "easy",
-              "days_needed": "2-3",
-              "crowd": "high",
-              "budget_tier": "low",
-              "best_months": [
-                "4",
-                "5",
-                "6",
-                "9",
-                "10"
-              ],
-              "remote": false,
-              "permit_likely": false,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/shen/",
-              "why": "forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~5.3h drive",
-              "drive_hours": 5.302
+              "nps_url": "https://www.nps.gov/cuva/",
+              "why": "forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 ~7.6h drive",
+              "drive_hours": 7.5943
             }
           }
         ]
@@ -4503,7 +4967,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -4552,6 +5016,13 @@
               "best_months": [
                 "4",
                 "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
                 "9",
                 "10"
               ],
@@ -4608,6 +5079,15 @@
                 "10",
                 "11"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -4660,6 +5140,13 @@
                 "3",
                 "4",
                 "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
                 "9",
                 "10"
               ],
@@ -4717,6 +5204,14 @@
                 "2",
                 "3"
               ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "5",
+                "11",
+                "12"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -4770,6 +5265,15 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -4809,7 +5313,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 2,
         "empty": false,
@@ -4860,6 +5364,10 @@
                 "7",
                 "8",
                 "9"
+              ],
+              "peak_months": [
+                "7",
+                "8"
               ],
               "remote": false,
               "permit_likely": true,
@@ -4914,6 +5422,11 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "7",
+                "8",
+                "9"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -4954,7 +5467,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -4963,6 +5476,60 @@
         "parks": [
           {
             "rank": 1,
+            "score": 0.906227,
+            "match_percent": 95,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.920412,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.506227,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "jeff",
+              "name": "Gateway Arch National Park",
+              "states": "MO",
+              "biomes": [
+                "urban"
+              ],
+              "tags": [
+                "family",
+                "history",
+                "easy_walk"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "high",
+              "budget_tier": "low",
+              "best_months": [
+                "4",
+                "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "7"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/jeff/",
+              "why": "urban \u00b7 family \u00b7 history \u00b7 easy_walk \u00b7 1 day trip",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 2,
             "score": 0.859668,
             "match_percent": 90,
             "tied_with_neighbors": false,
@@ -5005,62 +5572,18 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "3",
+                "6",
+                "7",
+                "8",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
               "nps_url": "https://www.nps.gov/maca/",
               "why": "cave \u00b7 family \u00b7 history \u00b7 easy_walk \u00b7 1 day trip",
-              "drive_hours": null
-            }
-          },
-          {
-            "rank": 2,
-            "score": 0.786227,
-            "match_percent": 83,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.920412,
-              "days": 1.0,
-              "difficulty": 1.0,
-              "budget": 1.0,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.506227,
-                "days": 0.18,
-                "difficulty": 0.14,
-                "budget": 0.08,
-                "crowd_penalty": -0.12,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "jeff",
-              "name": "Gateway Arch National Park",
-              "states": "MO",
-              "biomes": [
-                "urban"
-              ],
-              "tags": [
-                "family",
-                "history",
-                "easy_walk"
-              ],
-              "difficulty": "easy",
-              "days_needed": "1",
-              "crowd": "high",
-              "budget_tier": "low",
-              "best_months": [
-                "4",
-                "5",
-                "9",
-                "10"
-              ],
-              "remote": false,
-              "permit_likely": false,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/jeff/",
-              "why": "urban \u00b7 family \u00b7 history \u00b7 easy_walk \u00b7 1 day trip",
               "drive_hours": null
             }
           },
@@ -5108,6 +5631,13 @@
                 "5",
                 "9",
                 "10"
+              ],
+              "peak_months": [
+                "3",
+                "4",
+                "6",
+                "7",
+                "8"
               ],
               "remote": false,
               "permit_likely": false,
@@ -5160,6 +5690,12 @@
                 "5",
                 "9",
                 "10"
+              ],
+              "peak_months": [
+                "3",
+                "4",
+                "6",
+                "7"
               ],
               "remote": false,
               "permit_likely": false,
@@ -5214,6 +5750,14 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -5246,7 +5790,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5309,6 +5853,13 @@
                 "2",
                 "3"
               ],
+              "peak_months": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "12"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -5363,6 +5914,11 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -5413,6 +5969,13 @@
               "best_months": [
                 "4",
                 "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
                 "9",
                 "10"
               ],
@@ -5476,6 +6039,17 @@
                 "11",
                 "12"
               ],
+              "peak_months": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "6",
+                "7",
+                "8",
+                "9",
+                "12"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "flight",
@@ -5528,6 +6102,9 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "7"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -5564,7 +6141,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -5614,6 +6191,12 @@
                 "5",
                 "9",
                 "10"
+              ],
+              "peak_months": [
+                "3",
+                "4",
+                "6",
+                "7"
               ],
               "remote": false,
               "permit_likely": false,
@@ -5665,6 +6248,11 @@
                 "11",
                 "12",
                 "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "peak_months": [
                 "2",
                 "3",
                 "4"
@@ -5721,6 +6309,13 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "3",
+                "6",
+                "7",
+                "8",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -5772,6 +6367,11 @@
                 "5",
                 "6",
                 "9"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8"
               ],
               "remote": false,
               "permit_likely": false,
@@ -5826,6 +6426,14 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -5864,7 +6472,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 2,
         "empty": false,
@@ -5912,6 +6520,12 @@
               "crowd": "high",
               "budget_tier": "mid",
               "best_months": [
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "peak_months": [
                 "6",
                 "7",
                 "8",
@@ -5969,6 +6583,12 @@
                 "6",
                 "9"
               ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -6006,7 +6626,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6015,22 +6635,22 @@
         "parks": [
           {
             "rank": 1,
-            "score": 0.633275,
-            "match_percent": 67,
+            "score": 0.753275,
+            "match_percent": 79,
             "tied_with_neighbors": false,
             "breakdown": {
               "content": 0.642318,
               "days": 1.0,
               "difficulty": 1.0,
               "budget": 1.0,
-              "crowd_penalty": 0.12,
+              "crowd_penalty": 0.0,
               "month_penalty": 0.0,
               "weighted": {
                 "content": 0.353275,
                 "days": 0.18,
                 "difficulty": 0.14,
                 "budget": 0.08,
-                "crowd_penalty": -0.12,
+                "crowd_penalty": 0.0,
                 "month_penalty": 0.0
               }
             },
@@ -6059,6 +6679,11 @@
                 "3",
                 "4"
               ],
+              "peak_months": [
+                "2",
+                "3",
+                "4"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -6069,22 +6694,22 @@
           },
           {
             "rank": 2,
-            "score": 0.611492,
-            "match_percent": 64,
+            "score": 0.731492,
+            "match_percent": 77,
             "tied_with_neighbors": false,
             "breakdown": {
               "content": 0.817864,
               "days": 0.666667,
               "difficulty": 1.0,
               "budget": 1.0,
-              "crowd_penalty": 0.12,
+              "crowd_penalty": 0.0,
               "month_penalty": 0.058333,
               "weighted": {
                 "content": 0.449825,
                 "days": 0.12,
                 "difficulty": 0.14,
                 "budget": 0.08,
-                "crowd_penalty": -0.12,
+                "crowd_penalty": 0.0,
                 "month_penalty": -0.058333
               }
             },
@@ -6112,6 +6737,13 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -6122,6 +6754,63 @@
           },
           {
             "rank": 3,
+            "score": 0.662578,
+            "match_percent": 70,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.477414,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.262578,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "whsa",
+              "name": "White Sands National Park",
+              "states": "NM",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "sand",
+                "photography",
+                "stargazing"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "3",
+                "4",
+                "10",
+                "11"
+              ],
+              "peak_months": [
+                "3",
+                "4"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/whsa/",
+              "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 1 day trip",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 4,
             "score": 0.579185,
             "match_percent": 61,
             "tied_with_neighbors": false,
@@ -6164,6 +6853,13 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -6173,7 +6869,7 @@
             }
           },
           {
-            "rank": 4,
+            "rank": 5,
             "score": 0.553267,
             "match_percent": 58,
             "tied_with_neighbors": false,
@@ -6218,64 +6914,19 @@
                 "2",
                 "3"
               ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "5",
+                "11",
+                "12"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
               "nps_url": "https://www.nps.gov/deva/",
               "why": "desert \u00b7 hiking \u00b7 stargazing",
-              "drive_hours": null
-            }
-          },
-          {
-            "rank": 5,
-            "score": 0.542578,
-            "match_percent": 57,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.477414,
-              "days": 1.0,
-              "difficulty": 1.0,
-              "budget": 1.0,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.262578,
-                "days": 0.18,
-                "difficulty": 0.14,
-                "budget": 0.08,
-                "crowd_penalty": -0.12,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "whsa",
-              "name": "White Sands National Park",
-              "states": "NM",
-              "biomes": [
-                "desert"
-              ],
-              "tags": [
-                "hiking",
-                "family",
-                "sand",
-                "photography",
-                "stargazing"
-              ],
-              "difficulty": "easy",
-              "days_needed": "1",
-              "crowd": "medium",
-              "budget_tier": "low",
-              "best_months": [
-                "3",
-                "4",
-                "10",
-                "11"
-              ],
-              "remote": false,
-              "permit_likely": false,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/whsa/",
-              "why": "desert \u00b7 hiking \u00b7 stargazing \u00b7 1 day trip",
               "drive_hours": null
             }
           }
@@ -6308,7 +6959,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6360,6 +7011,15 @@
                 "10",
                 "11"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -6409,6 +7069,13 @@
               "best_months": [
                 "5",
                 "6",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
                 "9",
                 "10"
               ],
@@ -6465,6 +7132,15 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -6518,6 +7194,14 @@
                 "1",
                 "2",
                 "3"
+              ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "5",
+                "11",
+                "12"
               ],
               "remote": false,
               "permit_likely": false,
@@ -6579,6 +7263,17 @@
                 "11",
                 "12"
               ],
+              "peak_months": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "6",
+                "7",
+                "8",
+                "9",
+                "12"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "flight",
@@ -6615,7 +7310,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 0,
         "empty": true,
@@ -6652,7 +7347,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6706,6 +7401,11 @@
                 "7",
                 "8"
               ],
+              "peak_months": [
+                "6",
+                "7",
+                "8"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "flight",
@@ -6755,6 +7455,13 @@
                 "6",
                 "7",
                 "8"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
+                "10",
+                "11"
               ],
               "remote": true,
               "permit_likely": false,
@@ -6811,6 +7518,10 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "7",
+                "8"
+              ],
               "remote": true,
               "permit_likely": true,
               "access": "boat",
@@ -6858,6 +7569,11 @@
               "crowd": "low",
               "budget_tier": "high",
               "best_months": [
+                "6",
+                "7",
+                "8"
+              ],
+              "peak_months": [
                 "6",
                 "7",
                 "8"
@@ -6913,6 +7629,10 @@
                 "7",
                 "8"
               ],
+              "peak_months": [
+                "7",
+                "8"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "road",
@@ -6950,7 +7670,7 @@
         "states": null
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -6959,6 +7679,71 @@
         "parks": [
           {
             "rank": 1,
+            "score": 0.783267,
+            "match_percent": 82,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.805941,
+              "days": 0.666667,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.443267,
+                "days": 0.12,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "arch",
+              "name": "Arches National Park",
+              "states": "UT",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "stargazing",
+                "photography"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "3",
+                "4",
+                "5",
+                "9",
+                "10",
+                "11"
+              ],
+              "peak_months": [
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": true,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/arch/",
+              "why": "desert \u00b7 hiking \u00b7 stargazing",
+              "drive_hours": null
+            }
+          },
+          {
+            "rank": 2,
             "score": 0.773267,
             "match_percent": 81,
             "tied_with_neighbors": false,
@@ -7003,6 +7788,14 @@
                 "2",
                 "3"
               ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "5",
+                "11",
+                "12"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -7012,7 +7805,7 @@
             }
           },
           {
-            "rank": 2,
+            "rank": 3,
             "score": 0.751492,
             "match_percent": 79,
             "tied_with_neighbors": false,
@@ -7056,66 +7849,18 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
               "nps_url": "https://www.nps.gov/care/",
               "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 stargazing \u00b7 2-3 day trip",
-              "drive_hours": null
-            }
-          },
-          {
-            "rank": 3,
-            "score": 0.663267,
-            "match_percent": 70,
-            "tied_with_neighbors": false,
-            "breakdown": {
-              "content": 0.805941,
-              "days": 0.666667,
-              "difficulty": 1.0,
-              "budget": 1.0,
-              "crowd_penalty": 0.12,
-              "month_penalty": 0.0,
-              "weighted": {
-                "content": 0.443267,
-                "days": 0.12,
-                "difficulty": 0.14,
-                "budget": 0.08,
-                "crowd_penalty": -0.12,
-                "month_penalty": 0.0
-              }
-            },
-            "facts": {
-              "park_code": "arch",
-              "name": "Arches National Park",
-              "states": "UT",
-              "biomes": [
-                "desert"
-              ],
-              "tags": [
-                "hiking",
-                "scenic_drive",
-                "family",
-                "stargazing",
-                "photography"
-              ],
-              "difficulty": "easy",
-              "days_needed": "1",
-              "crowd": "high",
-              "budget_tier": "mid",
-              "best_months": [
-                "3",
-                "4",
-                "5",
-                "9",
-                "10",
-                "11"
-              ],
-              "remote": false,
-              "permit_likely": true,
-              "access": "road",
-              "nps_url": "https://www.nps.gov/arch/",
-              "why": "desert \u00b7 hiking \u00b7 stargazing",
               "drive_hours": null
             }
           },
@@ -7161,6 +7906,11 @@
                 "11",
                 "12",
                 "1",
+                "2",
+                "3",
+                "4"
+              ],
+              "peak_months": [
                 "2",
                 "3",
                 "4"
@@ -7220,6 +7970,10 @@
                 "10",
                 "11"
               ],
+              "peak_months": [
+                "3",
+                "4"
+              ],
               "remote": true,
               "permit_likely": false,
               "access": "road",
@@ -7261,7 +8015,7 @@
         ]
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 5,
         "empty": false,
@@ -7315,6 +8069,13 @@
               "best_months": [
                 "4",
                 "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
                 "9",
                 "10"
               ],
@@ -7373,6 +8134,13 @@
                 "9",
                 "10"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
@@ -7428,6 +8196,16 @@
                 "10",
                 "11"
               ],
+              "peak_months": [
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -7478,6 +8256,14 @@
               "best_months": [
                 "5",
                 "6",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8",
                 "9",
                 "10"
               ],
@@ -7534,6 +8320,15 @@
                 "10",
                 "11"
               ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -7577,7 +8372,7 @@
         ]
       },
       "output": {
-        "engine_version": "0.5.0",
+        "engine_version": "0.6.0",
         "k": 5,
         "n_returned": 4,
         "empty": false,
@@ -7627,6 +8422,10 @@
                 "7",
                 "8",
                 "9"
+              ],
+              "peak_months": [
+                "7",
+                "8"
               ],
               "remote": true,
               "permit_likely": false,
@@ -7681,6 +8480,10 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "7",
+                "8"
+              ],
               "remote": false,
               "permit_likely": true,
               "access": "road",
@@ -7733,6 +8536,10 @@
                 "7",
                 "8",
                 "9"
+              ],
+              "peak_months": [
+                "7",
+                "8"
               ],
               "remote": false,
               "permit_likely": false,
@@ -7787,12 +8594,643 @@
                 "8",
                 "9"
               ],
+              "peak_months": [
+                "7",
+                "8",
+                "9"
+              ],
               "remote": false,
               "permit_likely": false,
               "access": "road",
               "nps_url": "https://www.nps.gov/olym/",
               "why": "rainforest \u00b7 coast \u00b7 hiking",
               "drive_hours": null
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "near_tie_no_month",
+      "kind": "edge",
+      "split": null,
+      "notes": "beginner_family_east inputs without a month: cuva and acad land within TIE_EPSILON but not equal (near-tie coverage; with month 5 the month-aware crowd separates them).",
+      "profile": {
+        "biomes": [
+          "forest"
+        ],
+        "tags": [
+          "family",
+          "hiking",
+          "scenic_drive"
+        ],
+        "difficulty": "easy",
+        "days_needed": "2-3",
+        "crowd_pref": "medium",
+        "budget_tier": "low",
+        "month": null,
+        "origin_lat": 40.71,
+        "origin_lon": -74.01,
+        "max_drive_hours": 10,
+        "allow_remote": false,
+        "allow_permits": true,
+        "states": null
+      },
+      "output": {
+        "engine_version": "0.6.0",
+        "k": 5,
+        "n_returned": 4,
+        "empty": false,
+        "tie_epsilon": 0.001,
+        "tie_groups": [
+          [
+            "cuva",
+            "acad"
+          ]
+        ],
+        "parks": [
+          {
+            "rank": 1,
+            "score": 0.543354,
+            "match_percent": 57,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.387917,
+              "days": 1.0,
+              "difficulty": 0.5,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.213354,
+                "days": 0.18,
+                "difficulty": 0.07,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "neri",
+              "name": "New River Gorge National Park",
+              "states": "WV",
+              "biomes": [
+                "forest"
+              ],
+              "tags": [
+                "hiking",
+                "climbing",
+                "water",
+                "scenic_drive",
+                "family"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/neri/",
+              "why": "forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~8.1h drive",
+              "drive_hours": 8.0598
+            }
+          },
+          {
+            "rank": 2,
+            "score": 0.504336,
+            "match_percent": 53,
+            "tied_with_neighbors": true,
+            "breakdown": {
+              "content": 0.298794,
+              "days": 0.666667,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.164336,
+                "days": 0.12,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "cuva",
+              "name": "Cuyahoga Valley National Park",
+              "states": "OH",
+              "biomes": [
+                "forest"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "scenic_drive",
+                "easy_walk",
+                "biking"
+              ],
+              "difficulty": "easy",
+              "days_needed": "1",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/cuva/",
+              "why": "forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 ~7.6h drive",
+              "drive_hours": 7.5943
+            }
+          },
+          {
+            "rank": 3,
+            "score": 0.503534,
+            "match_percent": 53,
+            "tied_with_neighbors": true,
+            "breakdown": {
+              "content": 0.479152,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 0.5,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.263534,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.04,
+                "crowd_penalty": -0.12,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "acad",
+              "name": "Acadia National Park",
+              "states": "ME",
+              "biomes": [
+                "coast",
+                "forest"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "wildlife",
+                "camping"
+              ],
+              "difficulty": "easy",
+              "days_needed": "2-3",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "6",
+                "7",
+                "8",
+                "9"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/acad/",
+              "why": "coast \u00b7 forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~7.5h drive",
+              "drive_hours": 7.4562
+            }
+          },
+          {
+            "rank": 4,
+            "score": 0.481344,
+            "match_percent": 51,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.366079,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.201344,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": -0.12,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "shen",
+              "name": "Shenandoah National Park",
+              "states": "VA",
+              "biomes": [
+                "forest"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "waterfalls",
+                "camping"
+              ],
+              "difficulty": "easy",
+              "days_needed": "2-3",
+              "crowd": "high",
+              "budget_tier": "low",
+              "best_months": [
+                "4",
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/shen/",
+              "why": "forest \u00b7 family \u00b7 hiking \u00b7 scenic_drive \u00b7 2-3 day trip \u00b7 ~5.3h drive",
+              "drive_hours": 5.302
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "off_peak_crowd_zion_march",
+      "kind": "edge",
+      "split": null,
+      "notes": "Month-aware crowd (0.6.0): March is a best month but not a peak month for Zion (peak 4-10), so Zion counts as medium crowd and passes Death Valley, whose March is a peak month.",
+      "profile": {
+        "biomes": [
+          "canyon",
+          "desert"
+        ],
+        "tags": [
+          "hiking",
+          "photography"
+        ],
+        "difficulty": "moderate",
+        "days_needed": "2-3",
+        "crowd_pref": "low",
+        "budget_tier": "mid",
+        "month": 3,
+        "origin_lat": 33.45,
+        "origin_lon": -112.07,
+        "max_drive_hours": 8,
+        "allow_remote": true,
+        "allow_permits": true,
+        "states": null
+      },
+      "output": {
+        "engine_version": "0.6.0",
+        "k": 5,
+        "n_returned": 5,
+        "empty": false,
+        "tie_epsilon": 0.001,
+        "tie_groups": [],
+        "parks": [
+          {
+            "rank": 1,
+            "score": 0.686486,
+            "match_percent": 72,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.739065,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.406486,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": -0.12,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "zion",
+              "name": "Zion National Park",
+              "states": "UT",
+              "biomes": [
+                "canyon"
+              ],
+              "tags": [
+                "hiking",
+                "family",
+                "photography",
+                "scenic_drive"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "3",
+                "4",
+                "5",
+                "10",
+                "11"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": true,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/zion/",
+              "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 2-3 day trip \u00b7 ~5.2h drive",
+              "drive_hours": 5.2245
+            }
+          },
+          {
+            "rank": 2,
+            "score": 0.585727,
+            "match_percent": 62,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.555867,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.305727,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": -0.12,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "deva",
+              "name": "Death Valley National Park",
+              "states": "CA,NV",
+              "biomes": [
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "stargazing",
+                "photography",
+                "family"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "medium",
+              "budget_tier": "mid",
+              "best_months": [
+                "11",
+                "12",
+                "1",
+                "2",
+                "3"
+              ],
+              "peak_months": [
+                "2",
+                "3",
+                "4",
+                "5",
+                "11",
+                "12"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/deva/",
+              "why": "desert \u00b7 hiking \u00b7 photography \u00b7 2-3 day trip \u00b7 ~6.4h drive",
+              "drive_hours": 6.3683
+            }
+          },
+          {
+            "rank": 3,
+            "score": 0.547758,
+            "match_percent": 58,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.26865,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.0,
+              "weighted": {
+                "content": 0.147758,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": 0.0,
+                "month_penalty": 0.0
+              }
+            },
+            "facts": {
+              "park_code": "cany",
+              "name": "Canyonlands National Park",
+              "states": "UT",
+              "biomes": [
+                "canyon",
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "backpacking",
+                "scenic_drive",
+                "stargazing",
+                "4x4"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "medium",
+              "budget_tier": "mid",
+              "best_months": [
+                "3",
+                "4",
+                "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/cany/",
+              "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 2-3 day trip \u00b7 ~6.7h drive",
+              "drive_hours": 6.7188
+            }
+          },
+          {
+            "rank": 4,
+            "score": 0.544343,
+            "match_percent": 57,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.586685,
+              "days": 1.0,
+              "difficulty": 1.0,
+              "budget": 1.0,
+              "crowd_penalty": 0.12,
+              "month_penalty": 0.058333,
+              "weighted": {
+                "content": 0.322677,
+                "days": 0.18,
+                "difficulty": 0.14,
+                "budget": 0.08,
+                "crowd_penalty": -0.12,
+                "month_penalty": -0.058333
+              }
+            },
+            "facts": {
+              "park_code": "grca",
+              "name": "Grand Canyon National Park",
+              "states": "AZ",
+              "biomes": [
+                "canyon"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "photography",
+                "backpacking"
+              ],
+              "difficulty": "moderate",
+              "days_needed": "2-3",
+              "crowd": "high",
+              "budget_tier": "mid",
+              "best_months": [
+                "4",
+                "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": true,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/grca/",
+              "why": "canyon \u00b7 hiking \u00b7 photography \u00b7 2-3 day trip \u00b7 ~3.5h drive",
+              "drive_hours": 3.4688
+            }
+          },
+          {
+            "rank": 5,
+            "score": 0.521983,
+            "match_percent": 55,
+            "tied_with_neighbors": false,
+            "breakdown": {
+              "content": 0.527848,
+              "days": 1.0,
+              "difficulty": 0.5,
+              "budget": 0.5,
+              "crowd_penalty": 0.0,
+              "month_penalty": 0.058333,
+              "weighted": {
+                "content": 0.290316,
+                "days": 0.18,
+                "difficulty": 0.07,
+                "budget": 0.04,
+                "crowd_penalty": 0.0,
+                "month_penalty": -0.058333
+              }
+            },
+            "facts": {
+              "park_code": "care",
+              "name": "Capitol Reef National Park",
+              "states": "UT",
+              "biomes": [
+                "canyon",
+                "desert"
+              ],
+              "tags": [
+                "hiking",
+                "scenic_drive",
+                "family",
+                "stargazing"
+              ],
+              "difficulty": "easy",
+              "days_needed": "2-3",
+              "crowd": "medium",
+              "budget_tier": "low",
+              "best_months": [
+                "4",
+                "5",
+                "9",
+                "10"
+              ],
+              "peak_months": [
+                "4",
+                "5",
+                "6",
+                "9",
+                "10"
+              ],
+              "remote": false,
+              "permit_likely": false,
+              "access": "road",
+              "nps_url": "https://www.nps.gov/care/",
+              "why": "canyon \u00b7 desert \u00b7 hiking \u00b7 2-3 day trip \u00b7 ~6.4h drive",
+              "drive_hours": 6.3854
             }
           }
         ]
