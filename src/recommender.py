@@ -18,6 +18,7 @@ from .features import (
     month_distance,
     normalize_states,
     parse_biomes,
+    parse_months,
     parse_states,
     parse_tags,
     park_content_vector,
@@ -132,7 +133,14 @@ class ParkRecommender:
         budget_s = frame["budget_tier"].map(BUDGET_ORD).astype(float).map(
             lambda v: closeness(v, budget_u, 2.0)
         )
-        crowd_p = frame["crowd"].map(CROWD_RANK).astype(float)
+        crowd_p = pd.Series(
+            [
+                effective_crowd_rank(crowd, peak, profile.month)
+                for crowd, peak in zip(frame["crowd"], frame["peak_months"])
+            ],
+            index=frame.index,
+            dtype=float,
+        )
         penalty = (crowd_p - crowd_u).clip(lower=0) * CROWD_PENALTY
 
         if profile.month is None:
@@ -216,6 +224,19 @@ class ParkRecommender:
         if access_bit:
             bits.append(access_bit)
         return " · ".join(bits)
+
+
+def effective_crowd_rank(crowd: str, peak_months: object, month: int | None) -> int:
+    """Crowd rank used for the crowd penalty (0 low, 1 medium, 2 high).
+
+    With a trip month that is not one of the park's peak months (NPS visits
+    below 0.7 x the busiest month), the park counts one level quieter:
+    high -> medium, medium -> low; low stays low. No month: catalog crowd.
+    """
+    rank = CROWD_RANK[crowd]
+    if month is None or str(month) in parse_months(peak_months):
+        return rank
+    return max(rank - 1, 0)
 
 
 def has_drive_limit(profile: UserProfile) -> bool:
