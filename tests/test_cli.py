@@ -32,12 +32,19 @@ def test_zip_matches_nearby_city_preset(capsys):
     assert by_zip == by_city
 
 
+def test_zip_plus_four_matches_five_digit_zip(capsys):
+    main(BASE + ["--zip", "92101-1234", "--max-hours", "6"])
+    plus_four = capsys.readouterr().out
+    main(BASE + ["--zip", "92101", "--max-hours", "6"])
+    assert plus_four == capsys.readouterr().out
+
+
 def test_zip_with_leading_zero(capsys):
     main(["--biome", "coast", "--tag", "hiking", "--zip", "02108", "--max-hours", "6"])
     assert "acad" in _codes(capsys.readouterr().out)
 
 
-@pytest.mark.parametrize("bad", ["00000", "2108", "02108-1234", "abcde"])
+@pytest.mark.parametrize("bad", ["00000", "2108", "92101-12", "abcde"])
 def test_bad_zip_exits_with_zip_not_found(capsys, bad):
     with pytest.raises(SystemExit) as info:
         main(BASE + ["--zip", bad])

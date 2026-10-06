@@ -1,14 +1,14 @@
 """Turn the quiz's ZIP box into an origin. Pure helpers, no Streamlit calls.
 
 Empty box = "Anywhere": no origin and no drive limit. A valid 5-digit ZIP in
-the Census ZCTA table gives (lat, lon). Anything else is "ZIP not found".
+the Census ZCTA table (or ZIP+4, first five digits) gives (lat, lon). Anything else is "ZIP not found".
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from src.zipcodes import ZIP_NOT_FOUND, ZipNotFoundError, lookup_zip
+from src.zipcodes import ZIP_NOT_FOUND, ZipNotFoundError, lookup_zip, normalize_zip
 
 ANYWHERE = "anywhere"
 FOUND = "found"
@@ -35,7 +35,7 @@ def zip_origin(raw: str | None) -> ZipOrigin:
         lat, lon = lookup_zip(text)
     except ZipNotFoundError:
         return ZipOrigin(NOT_FOUND, zip_code=text)
-    return ZipOrigin(FOUND, zip_code=text, lat=lat, lon=lon)
+    return ZipOrigin(FOUND, zip_code=normalize_zip(text) or text, lat=lat, lon=lon)
 
 
 def drive_limit(origin: ZipOrigin, max_hours: float) -> float | None:

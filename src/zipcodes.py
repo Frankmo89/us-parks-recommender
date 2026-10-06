@@ -14,11 +14,12 @@ from pathlib import Path
 
 ZCTA_PATH = Path(__file__).resolve().parents[1] / "data" / "zcta_centroids.csv"
 ZIP_NOT_FOUND = "ZIP not found"
-_ZIP_RE = re.compile(r"^\d{5}$")
+# Five digits, optionally ZIP+4 ("92101-1234"); only the first five are used.
+_ZIP_RE = re.compile(r"^(\d{5})(?:-\d{4})?$")
 
 
 class ZipNotFoundError(ValueError):
-    """Raised for a ZIP that is not 5 digits or is not in the table."""
+    """Raised for a ZIP that is not 5 digits / ZIP+4 or is not in the table."""
 
     def __init__(self, raw: object) -> None:
         super().__init__(f"{ZIP_NOT_FOUND}: {raw!r}")
@@ -32,19 +33,19 @@ def load_zip_table(path: Path = ZCTA_PATH) -> dict[str, tuple[float, float]]:
 
 
 def normalize_zip(raw: object) -> str | None:
-    """Stripped 5-digit string, or None if the input is not exactly 5 digits."""
+    """The 5-digit ZIP from "02108" or ZIP+4 "02108-1234"; None if malformed."""
     if raw is None:
         return None
-    text = str(raw).strip()
-    return text if _ZIP_RE.match(text) else None
+    match = _ZIP_RE.match(str(raw).strip())
+    return match.group(1) if match else None
 
 
 def lookup_zip(raw: object) -> tuple[float, float]:
-    """(lat, lon) for a 5-digit ZIP; raises ZipNotFoundError otherwise.
+    """(lat, lon) for a 5-digit ZIP or ZIP+4; raises ZipNotFoundError otherwise.
 
-    Input must be exactly five digits after trimming spaces ("02108", not
-    "2108" or "02108-1234"), so a dropped leading zero is reported, not
-    guessed.
+    After trimming spaces, input must be five digits, optionally followed by
+    "-" and four digits ("02108" or "02108-1234"; the +4 part is ignored).
+    "2108" is rejected, so a dropped leading zero is reported, not guessed.
     """
     code = normalize_zip(raw)
     if code is None:

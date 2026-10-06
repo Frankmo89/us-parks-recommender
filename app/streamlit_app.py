@@ -565,7 +565,7 @@ with st.container(key="app_shell"):
                 key="origin_zip",
                 max_chars=10,
                 placeholder="e.g. 02108 (leave empty for Anywhere)",
-                help="Any 5-digit U.S. ZIP code. Leave it empty for Anywhere: no drive limit, "
+                help="Any 5-digit U.S. ZIP code (ZIP+4 works too). Leave it empty for Anywhere: no drive limit, "
                 "and parks you need to fly to stay in.",
             )
             origin = zip_origin(st.session_state.origin_zip)

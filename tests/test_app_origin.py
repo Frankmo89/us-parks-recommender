@@ -25,7 +25,14 @@ def test_valid_zip_sets_coordinates_and_drive_limit():
     assert drive_limit(origin, 8) == 8.0
 
 
-@pytest.mark.parametrize("raw", ["123", "2108", "02108-1234", "abcde", "00000"])
+def test_zip_plus_four_resolves_to_five_digit_zip():
+    origin = zip_origin("02108-1234")
+    assert origin.status == FOUND
+    assert origin.zip_code == "02108"
+    assert (origin.lat, origin.lon) == (zip_origin("02108").lat, zip_origin("02108").lon)
+
+
+@pytest.mark.parametrize("raw", ["123", "2108", "92101-12", "abcde", "00000"])
 def test_bad_zip_says_zip_not_found_and_has_no_drive_limit(raw):
     origin = zip_origin(raw)
     assert origin.status == NOT_FOUND

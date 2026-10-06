@@ -1,6 +1,6 @@
 """CLI: python -m src.cli --biome desert --month 11 --days 2-3
 
-Starting point: --origin <city preset> or --zip <5-digit ZIP> (not both).
+Starting point: --origin <city preset> or --zip <5-digit ZIP or ZIP+4> (not both).
 --max-hours only applies when one of them is set.
 """
 
@@ -27,7 +27,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--month", type=int, default=None)
     start = parser.add_mutually_exclusive_group()
     start.add_argument("--origin", choices=sorted(ORIGINS), default=None, help="city preset")
-    start.add_argument("--zip", default=None, help="5-digit U.S. ZIP code, e.g. 02108")
+    start.add_argument("--zip", default=None, help="5-digit U.S. ZIP code or ZIP+4, e.g. 02108")
     parser.add_argument(
         "--max-hours", type=float, default=None, help="drive limit; needs --origin or --zip"
     )

@@ -10,8 +10,9 @@
   leading zeros; coordinates are the ZCTA internal points as printed by the
   Census (a leading "+" on Guam / CNMI longitudes is dropped).
 - `src/zipcodes.py` `lookup_zip()` returns `(lat, lon)` or raises
-  `ZipNotFoundError` ("ZIP not found") for input that is not exactly five
-  digits or is not in the table.
+  `ZipNotFoundError` ("ZIP not found") for input that is not five digits
+  (or ZIP+4 like `92101-1234`, which uses the first five) or is not in the
+  table. Malformed input such as `2108`, `abcde` or `92101-12` is rejected.
 - App: the city list is replaced by a "Starting ZIP code" box. Empty means
   Anywhere (no origin, no drive limit). The Max drive hours slider shows and
   applies only for a valid ZIP. Bad input shows "ZIP not found" and disables
