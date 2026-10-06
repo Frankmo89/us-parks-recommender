@@ -494,8 +494,7 @@
                 "hiking",
                 "wildlife",
                 "scenic_drive",
-                "family",
-                "low_crowd"
+                "family"
               ],
               "difficulty": "easy",
               "days_needed": "2-3",
@@ -1161,8 +1160,7 @@
                 "hiking",
                 "wildlife",
                 "scenic_drive",
-                "family",
-                "low_crowd"
+                "family"
               ],
               "difficulty": "easy",
               "days_needed": "2-3",
@@ -1713,8 +1711,7 @@
                 "hiking",
                 "wildlife",
                 "scenic_drive",
-                "family",
-                "low_crowd"
+                "family"
               ],
               "difficulty": "easy",
               "days_needed": "2-3",
@@ -1909,8 +1906,7 @@
                 "hiking",
                 "family",
                 "photography",
-                "scenic_drive",
-                "permits"
+                "scenic_drive"
               ],
               "difficulty": "moderate",
               "days_needed": "2-3",
@@ -2217,8 +2213,7 @@
               "tags": [
                 "backpacking",
                 "wildlife",
-                "wilderness",
-                "remote"
+                "wilderness"
               ],
               "difficulty": "challenging",
               "days_needed": "7+",
@@ -2267,7 +2262,6 @@
               ],
               "tags": [
                 "wilderness",
-                "remote",
                 "wildlife",
                 "backpacking"
               ],
@@ -2320,7 +2314,6 @@
                 "wildlife",
                 "wilderness",
                 "water",
-                "remote",
                 "backpacking"
               ],
               "difficulty": "challenging",
@@ -2371,7 +2364,6 @@
               "tags": [
                 "wilderness",
                 "backpacking",
-                "remote",
                 "glacier",
                 "wildlife"
               ],
@@ -3239,8 +3231,7 @@
                 "hiking",
                 "family",
                 "photography",
-                "scenic_drive",
-                "permits"
+                "scenic_drive"
               ],
               "difficulty": "moderate",
               "days_needed": "2-3",
@@ -3905,8 +3896,7 @@
                 "hiking",
                 "family",
                 "photography",
-                "scenic_drive",
-                "permits"
+                "scenic_drive"
               ],
               "difficulty": "moderate",
               "days_needed": "2-3",
@@ -3997,8 +3987,7 @@
                 "wildlife",
                 "boat",
                 "water",
-                "photography",
-                "remote"
+                "photography"
               ],
               "difficulty": "moderate",
               "days_needed": "2-3",
@@ -4101,8 +4090,7 @@
                 "wildlife",
                 "bears",
                 "boat",
-                "photography",
-                "remote"
+                "photography"
               ],
               "difficulty": "moderate",
               "days_needed": "2-3",
@@ -4610,8 +4598,7 @@
                 "hiking",
                 "family",
                 "photography",
-                "scenic_drive",
-                "permits"
+                "scenic_drive"
               ],
               "difficulty": "moderate",
               "days_needed": "2-3",
@@ -6363,8 +6350,7 @@
                 "hiking",
                 "family",
                 "photography",
-                "scenic_drive",
-                "permits"
+                "scenic_drive"
               ],
               "difficulty": "moderate",
               "days_needed": "2-3",
@@ -6712,8 +6698,7 @@
               "tags": [
                 "backpacking",
                 "wildlife",
-                "wilderness",
-                "remote"
+                "wilderness"
               ],
               "difficulty": "challenging",
               "days_needed": "7+",
@@ -6762,7 +6747,6 @@
               ],
               "tags": [
                 "wilderness",
-                "remote",
                 "wildlife",
                 "backpacking"
               ],
@@ -6870,7 +6854,6 @@
                 "wildlife",
                 "wilderness",
                 "water",
-                "remote",
                 "backpacking"
               ],
               "difficulty": "challenging",
@@ -6921,7 +6904,6 @@
               "tags": [
                 "wilderness",
                 "backpacking",
-                "remote",
                 "glacier",
                 "wildlife"
               ],
@@ -7542,8 +7524,7 @@
                 "hiking",
                 "family",
                 "photography",
-                "scenic_drive",
-                "permits"
+                "scenic_drive"
               ],
               "difficulty": "moderate",
               "days_needed": "2-3",
@@ -7638,7 +7619,6 @@
               "tags": [
                 "hiking",
                 "backpacking",
-                "low_crowd",
                 "photography",
                 "wildlife"
               ],
