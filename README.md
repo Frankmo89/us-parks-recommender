@@ -6,7 +6,7 @@ choosing which park to visit.
 
 **Live demo:** https://us-national-parks-recommender.streamlit.app
 
-![Live demo: the trip quiz and ranked park cards](docs/demo.png)
+![Live demo: the last quiz step (starting ZIP, states, remote parks, permits)](docs/demo.png)
 
 ## How it works
 
