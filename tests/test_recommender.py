@@ -144,10 +144,10 @@ def test_tie_groups_gaar_kova_exact_tie():
 
 
 def test_tie_groups_cuva_acad_near_tie():
-    """beginner_family_east: cuva and acad within TIE_EPSILON, not equal."""
+    """near_tie_no_month: cuva and acad within TIE_EPSILON, not equal."""
     from src.recommender import TIE_EPSILON
 
-    ranked = ParkRecommender().recommend(_profile_from_fixture("beginner_family_east"), k=5)
+    ranked = ParkRecommender().recommend(_profile_from_fixture("near_tie_no_month"), k=5)
     assert ranked.attrs["tie_groups"] == [["cuva", "acad"]]
     by_code = ranked.set_index("park_code")
     assert bool(by_code.loc["cuva", "tied_with_neighbors"])
