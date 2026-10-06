@@ -51,6 +51,19 @@ _SENTENCE_WORD = {
 STRONG_FRACTION = 0.8
 LOSS_FRACTION = 0.1
 
+# Label settings for the chart's "Contribution to score" axis. Streamlit
+# cannot see the screen width, so these have to work at every width: at most
+# about 3 ticks, overlapping labels dropped, end labels kept inside the plot,
+# a smaller font, and trailing zeros trimmed ("0.1", not "0.10"). On a phone
+# the defaults gave 0.05 steps whose labels ran together ("0.000.05").
+VALUE_AXIS_LABELS = {
+    "tickCount": 3,
+    "labelOverlap": "greedy",
+    "labelFlush": True,
+    "labelFontSize": 10,
+    "format": ".2~f",
+}
+
 
 def match_percent(score: float) -> int:
     """Score as a percentage of the best possible score, for the "Match" badge.

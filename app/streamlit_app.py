@@ -2,7 +2,15 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-from app.breakdown import PART_ORDER, card_meta, match_percent, nps_url, score_breakdown, why_sentence
+from app.breakdown import (
+    PART_ORDER,
+    VALUE_AXIS_LABELS,
+    card_meta,
+    match_percent,
+    nps_url,
+    score_breakdown,
+    why_sentence,
+)
 from app.origin import FOUND, NOT_FOUND, drive_limit, zip_origin
 from app.states import state_choices, state_label, states_filter
 from src.evaluate import run as run_evaluation
@@ -256,7 +264,7 @@ def why_chart(breakdown: pd.DataFrame) -> alt.Chart:
                 titleColor="#8fa393",
                 gridColor="#2a3a30",
                 domain=False,
-                tickCount=4,
+                **VALUE_AXIS_LABELS,
             ),
         ),
     )

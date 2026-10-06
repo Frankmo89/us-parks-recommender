@@ -1,9 +1,10 @@
 import math
 
+import altair as alt
 import pandas as pd
 import pytest
 
-from app.breakdown import MAX_SCORE, match_percent, score_breakdown, why_sentence
+from app.breakdown import MAX_SCORE, VALUE_AXIS_LABELS, match_percent, score_breakdown, why_sentence
 from src.features import UserProfile
 from src.recommender import W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, ParkRecommender
 
@@ -141,6 +142,20 @@ def test_negative_parts_still_say_lost_points(penalties, word):
     part = "Crowds" if word == "crowds" else "Season"
     assert breakdown.set_index("part")["value"][part] < 0
     assert why_sentence(breakdown).endswith(f"; lost points for {word}.")
+
+
+def test_value_axis_labels_work_at_any_width():
+    """Chart x-axis: few ticks, overlap removal, short labels (phone widths)."""
+    assert VALUE_AXIS_LABELS["tickCount"] <= 3
+    assert VALUE_AXIS_LABELS["labelOverlap"]
+    assert VALUE_AXIS_LABELS["labelFontSize"] <= 10
+    chart = alt.Chart(pd.DataFrame({"value": [-0.23, 0.26]})).mark_bar().encode(
+        x=alt.X("value:Q", axis=alt.Axis(**VALUE_AXIS_LABELS))
+    )
+    axis = chart.to_dict()["encoding"]["x"]["axis"]  # validates against Vega-Lite
+    assert axis["tickCount"] == VALUE_AXIS_LABELS["tickCount"]
+    assert axis["labelOverlap"] == "greedy"
+    assert axis["format"] == ".2~f"
 
 
 def test_badge_order_matches_ranking_order():
