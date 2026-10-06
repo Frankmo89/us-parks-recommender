@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-10-05 — demo screenshot: results card (docs only)
+
+- `docs/demo.png` now shows a live-app results card after #24/#25 (Arches
+  National Park, Match 63%, ~11.1h drive, the "Why this park" chart and
+  sentence) instead of the last quiz step with the old low-contrast button.
+- Source screenshot 1206 × 1603 (already cropped: no browser bars, no
+  "Manage app" button, no "More picks"). Cropped from the heading "These
+  parks fit the trip." to the Arches card's bottom border with an even 24 px
+  margin, box (161, 1)–(1045, 1592) = 884 × 1591, then scaled up 1.8% to
+  900 × 1620 and saved as a 256-color PNG with libimagequant (211 KB).
+  Pillow's median-cut palette turned the red "Loss" legend swatch gray, so
+  it was not used.
+- README alt text updated to describe the new image.
+- No code or engine change; metrics unchanged (train 0.685 / 0.739, holdout
+  0.794 / 0.842, unedited).
+
 ## 2026-10-05 — README top for a quick read (docs only)
 
 - New README top: one-sentence summary, live demo link and screenshot
