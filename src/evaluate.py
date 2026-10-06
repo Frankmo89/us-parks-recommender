@@ -19,7 +19,10 @@ import math
 import random
 from pathlib import Path
 
-from .features import CROWD_RANK, UserProfile
+from functools import lru_cache
+
+from . import visits
+from .features import UserProfile
 from .recommender import ParkRecommender, _cosine_rows
 
 PROFILES_PATH = Path(__file__).resolve().parents[1] / "data" / "eval_profiles.json"
@@ -93,13 +96,24 @@ def _without_filter_only(block: dict) -> dict:
     return _aggregate(kept, block["k"])
 
 
+@lru_cache(maxsize=1)
+def _annual_visits(codes: tuple[str, ...]) -> dict[str, float]:
+    """Average annual NPS recreation visits, 2023-2025 (src.visits rules)."""
+    return visits.annual_visits(visits.load_monthly(list(codes)))
+
+
 def popularity_rank(model: ParkRecommender, profile: UserProfile, k: int = 5) -> list[str]:
-    """Rank hard-filtered parks by crowd high→low, then park_code ascending."""
+    """Rank hard-filtered parks by average annual NPS visits, then park_code.
+
+    Visits are the 2023-2025 average, with Oct/Nov 2025 (federal shutdown)
+    taken from 2023-2024 only; see src/visits.py.
+    """
     frame = model.candidates(profile)
     if frame.empty:
         return []
-    ranked = frame.assign(_crowd=frame["crowd"].map(CROWD_RANK)).sort_values(
-        ["_crowd", "park_code"],
+    annual = _annual_visits(tuple(model.parks["park_code"].astype(str)))
+    ranked = frame.assign(_visits=frame["park_code"].map(annual)).sort_values(
+        ["_visits", "park_code"],
         ascending=[False, True],
         kind="stable",
     )

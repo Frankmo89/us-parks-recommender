@@ -58,3 +58,19 @@ def test_known_peak_months():
     assert visits.peak_months(monthly["yose"]) == [6, 7, 8, 9, 10]
     assert visits.peak_months(monthly["zion"]) == [4, 5, 6, 7, 8, 9, 10]
     assert visits.peak_months(monthly["dena"]) == [6, 7, 8]
+
+
+def test_popularity_baseline_ranks_by_average_annual_nps_visits():
+    from src.evaluate import popularity_rank
+    from src.features import UserProfile
+    from src.recommender import ParkRecommender
+
+    model = ParkRecommender()
+    annual = visits.annual_visits(visits.load_monthly(CODES))
+    expected = sorted(CODES, key=lambda code: (-annual[code], code))[:5]
+    assert popularity_rank(model, UserProfile(biomes=[], tags=[]), k=5) == expected
+    assert expected[0] == "grsm"
+    # Hard filters still apply first.
+    utah = popularity_rank(model, UserProfile(biomes=[], tags=[], states=["UT"]), k=5)
+    assert utah == sorted(utah, key=lambda code: -annual[code])
+    assert set(utah) == {"arch", "brca", "cany", "care", "zion"}
