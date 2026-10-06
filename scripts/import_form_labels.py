@@ -507,6 +507,11 @@ def pick_filter_reasons(profile: UserProfile, park_row) -> list[str]:
         and profile.origin_lon is not None
         and profile.max_drive_hours is not None
     ):
+        # Flight-access parks cannot be driven to at all, so any drive limit
+        # excludes them (same rule as ParkRecommender.candidates()).
+        if getattr(park_row, "access", "road") == "flight":
+            reasons.append("drive")
+            return reasons
         hours = drive_hours(
             profile.origin_lat,
             profile.origin_lon,

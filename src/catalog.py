@@ -17,10 +17,16 @@ from .features import BIOMES, TAG_VOCAB, parse_biomes, parse_months, parse_tags
 KNOWN_TAGS = set(TAG_VOCAB) | set(BIOMES) | {"low_crowd", "permits", "remote"}
 KNOWN_BIOMES = set(BIOMES)
 
+# How a traveler from the U.S. mainland reaches the park:
+#   road   - drive all the way in
+#   boat   - drive to a port, then a ferry/boat (drive filter uses park coords)
+#   flight - needs a flight (Hawaii, territories, fly-in Alaska parks)
+ACCESS_VALUES = ("road", "boat", "flight")
+
 
 def validate_parks(parks: pd.DataFrame) -> None:
     """Raise ValueError naming the bad park_code if a row is invalid."""
-    required = {"park_code", "biomes", "tags", "best_months"}
+    required = {"park_code", "biomes", "tags", "best_months", "access"}
     missing = required - set(parks.columns)
     if missing:
         raise ValueError(f"parks catalog missing columns: {sorted(missing)}")
@@ -44,6 +50,12 @@ def validate_parks(parks: pd.DataFrame) -> None:
         for tag in tags:
             if tag not in KNOWN_TAGS:
                 raise ValueError(f"Park {code}: unknown tag {tag!r}")
+
+        access = getattr(row, "access", None)
+        if not isinstance(access, str) or access not in ACCESS_VALUES:
+            raise ValueError(
+                f"Park {code}: access must be one of {list(ACCESS_VALUES)}, got {access!r}"
+            )
 
         raw_months = getattr(row, "best_months", "")
         tokens = parse_months(raw_months)

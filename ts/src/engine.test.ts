@@ -40,6 +40,8 @@ type FixturePark = {
   };
   facts: {
     park_code: string;
+    access: string;
+    why: string;
     drive_hours: number | null;
   };
 };
@@ -117,6 +119,9 @@ describe("TS engine parity with Python fixtures", () => {
             `weighted.${key} ${g.facts.park_code}`,
           ).toBe(true);
         }
+
+        expect(g.facts.access, `access ${g.facts.park_code}`).toBe(e.facts.access);
+        expect(g.facts.why, `why ${g.facts.park_code}`).toBe(e.facts.why);
 
         if (e.facts.drive_hours === null) {
           expect(g.facts.drive_hours).toBeNull();

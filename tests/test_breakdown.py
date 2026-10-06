@@ -86,3 +86,36 @@ def test_badge_order_matches_ranking_order():
 
     percents = [match_percent(row["score"]) for _, row in ranked.iterrows()]
     assert percents == sorted(percents, reverse=True)
+
+
+def _ranked_row(profile: UserProfile, code: str) -> pd.Series:
+    model = ParkRecommender()
+    ranked = model.recommend(profile, k=len(model.parks))
+    return ranked.loc[ranked["park_code"] == code].iloc[0]
+
+
+def test_card_meta_boat_park_with_drive_limit_from_la():
+    from app.breakdown import card_meta
+
+    profile = UserProfile(
+        biomes=["island"], tags=["kayaking"], origin_lat=34.05, origin_lon=-118.24, max_drive_hours=8
+    )
+    row = _ranked_row(profile, "chis")
+    assert card_meta(row) == f"CA · ~{row['drive_hours']:.1f}h drive + boat"
+
+
+def test_card_meta_no_drive_limit_flight_and_boat_needed():
+    from app.breakdown import card_meta
+
+    profile = UserProfile(biomes=["volcano", "island"], tags=["hiking"])
+    assert card_meta(_ranked_row(profile, "havo")).endswith(" · flight needed")
+    assert card_meta(_ranked_row(profile, "chis")).endswith(" · boat needed")
+    # Road park with no drive limit: states only.
+    assert card_meta(_ranked_row(profile, "yell")) == str(_ranked_row(profile, "yell")["states"])
+
+
+def test_card_meta_road_park_with_drive_limit():
+    from app.breakdown import card_meta
+
+    row = _ranked_row(PROFILE, "jotr")
+    assert card_meta(row) == f"CA · ~{row['drive_hours']:.1f}h drive"

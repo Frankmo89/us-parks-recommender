@@ -1,6 +1,6 @@
 {
-  "engine_version": "0.2.0",
-  "content_hash": "60db29d69bacc28a47e8070ee70f2bace63281806ae119f0206b5d65f393cf7d",
+  "engine_version": "0.3.0",
+  "content_hash": "13b158b78aec8a58a878869f4da5526cee853aea2d31d99e5503830b72b35dfc",
   "weights": {
     "W_CONTENT": 0.55,
     "W_DAYS": 0.18,
@@ -157,6 +157,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 44.35,
       "lon": -68.21,
       "nps_url": "https://www.nps.gov/acad/"
@@ -187,6 +188,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "flight",
       "lat": -14.26,
       "lon": -170.68,
       "nps_url": "https://www.nps.gov/npsa/"
@@ -219,6 +221,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 38.68,
       "lon": -109.57,
       "nps_url": "https://www.nps.gov/arch/"
@@ -250,6 +253,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 43.75,
       "lon": -102.5,
       "nps_url": "https://www.nps.gov/badl/"
@@ -282,6 +286,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "road",
       "lat": 29.25,
       "lon": -103.25,
       "nps_url": "https://www.nps.gov/bibe/"
@@ -312,6 +317,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 25.65,
       "lon": -80.08,
       "nps_url": "https://www.nps.gov/bisc/"
@@ -341,6 +347,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 38.57,
       "lon": -107.72,
       "nps_url": "https://www.nps.gov/blca/"
@@ -371,6 +378,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 37.59,
       "lon": -112.19,
       "nps_url": "https://www.nps.gov/brca/"
@@ -403,6 +411,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 38.2,
       "lon": -109.93,
       "nps_url": "https://www.nps.gov/cany/"
@@ -433,6 +442,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 38.2,
       "lon": -111.17,
       "nps_url": "https://www.nps.gov/care/"
@@ -462,6 +472,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 32.17,
       "lon": -104.44,
       "nps_url": "https://www.nps.gov/cave/"
@@ -495,6 +506,7 @@
       ],
       "remote": true,
       "permit_likely": true,
+      "access": "boat",
       "lat": 34.01,
       "lon": -119.42,
       "nps_url": "https://www.nps.gov/chis/"
@@ -525,6 +537,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 33.78,
       "lon": -80.78,
       "nps_url": "https://www.nps.gov/cong/"
@@ -555,6 +568,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 42.94,
       "lon": -122.1,
       "nps_url": "https://www.nps.gov/crla/"
@@ -585,6 +599,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 41.24,
       "lon": -81.55,
       "nps_url": "https://www.nps.gov/cuva/"
@@ -616,6 +631,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 36.24,
       "lon": -116.82,
       "nps_url": "https://www.nps.gov/deva/"
@@ -646,6 +662,7 @@
       ],
       "remote": true,
       "permit_likely": true,
+      "access": "road",
       "lat": 63.33,
       "lon": -150.5,
       "nps_url": "https://www.nps.gov/dena/"
@@ -677,6 +694,7 @@
       ],
       "remote": true,
       "permit_likely": true,
+      "access": "boat",
       "lat": 24.63,
       "lon": -82.87,
       "nps_url": "https://www.nps.gov/drto/"
@@ -708,6 +726,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 25.32,
       "lon": -80.93,
       "nps_url": "https://www.nps.gov/ever/"
@@ -736,6 +755,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "flight",
       "lat": 67.78,
       "lon": -153.3,
       "nps_url": "https://www.nps.gov/gaar/"
@@ -764,6 +784,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 38.63,
       "lon": -90.19,
       "nps_url": "https://www.nps.gov/jeff/"
@@ -794,6 +815,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 48.76,
       "lon": -113.79,
       "nps_url": "https://www.nps.gov/glac/"
@@ -823,6 +845,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "flight",
       "lat": 58.5,
       "lon": -137.0,
       "nps_url": "https://www.nps.gov/glba/"
@@ -853,6 +876,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 36.06,
       "lon": -112.14,
       "nps_url": "https://www.nps.gov/grca/"
@@ -884,6 +908,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 43.73,
       "lon": -110.8,
       "nps_url": "https://www.nps.gov/grte/"
@@ -914,6 +939,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "road",
       "lat": 38.98,
       "lon": -114.3,
       "nps_url": "https://www.nps.gov/grba/"
@@ -943,6 +969,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 37.73,
       "lon": -105.51,
       "nps_url": "https://www.nps.gov/grsa/"
@@ -975,6 +1002,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 35.68,
       "lon": -83.53,
       "nps_url": "https://www.nps.gov/grsm/"
@@ -1003,6 +1031,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "road",
       "lat": 31.92,
       "lon": -104.87,
       "nps_url": "https://www.nps.gov/gumo/"
@@ -1040,6 +1069,7 @@
       ],
       "remote": true,
       "permit_likely": true,
+      "access": "flight",
       "lat": 20.72,
       "lon": -156.17,
       "nps_url": "https://www.nps.gov/hale/"
@@ -1077,6 +1107,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "flight",
       "lat": 19.38,
       "lon": -155.2,
       "nps_url": "https://www.nps.gov/havo/"
@@ -1107,6 +1138,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 34.51,
       "lon": -93.05,
       "nps_url": "https://www.nps.gov/hosp/"
@@ -1136,6 +1168,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 41.65,
       "lon": -87.07,
       "nps_url": "https://www.nps.gov/indu/"
@@ -1168,6 +1201,7 @@
       ],
       "remote": true,
       "permit_likely": true,
+      "access": "boat",
       "lat": 48.1,
       "lon": -88.55,
       "nps_url": "https://www.nps.gov/isro/"
@@ -1202,6 +1236,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 33.79,
       "lon": -115.9,
       "nps_url": "https://www.nps.gov/jotr/"
@@ -1230,6 +1265,7 @@
       ],
       "remote": true,
       "permit_likely": true,
+      "access": "flight",
       "lat": 58.5,
       "lon": -155.0,
       "nps_url": "https://www.nps.gov/katm/"
@@ -1259,6 +1295,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "road",
       "lat": 59.92,
       "lon": -149.65,
       "nps_url": "https://www.nps.gov/kefj/"
@@ -1290,6 +1327,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 36.8,
       "lon": -118.55,
       "nps_url": "https://www.nps.gov/kica/"
@@ -1318,6 +1356,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "flight",
       "lat": 67.55,
       "lon": -159.28,
       "nps_url": "https://www.nps.gov/kova/"
@@ -1347,6 +1386,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "flight",
       "lat": 60.97,
       "lon": -153.42,
       "nps_url": "https://www.nps.gov/lacl/"
@@ -1376,6 +1416,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 40.49,
       "lon": -121.51,
       "nps_url": "https://www.nps.gov/lavo/"
@@ -1405,6 +1446,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 37.18,
       "lon": -86.1,
       "nps_url": "https://www.nps.gov/maca/"
@@ -1435,6 +1477,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 37.18,
       "lon": -108.49,
       "nps_url": "https://www.nps.gov/meve/"
@@ -1465,6 +1508,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 46.85,
       "lon": -121.75,
       "nps_url": "https://www.nps.gov/mora/"
@@ -1495,6 +1539,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 38.07,
       "lon": -81.08,
       "nps_url": "https://www.nps.gov/neri/"
@@ -1525,6 +1570,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "road",
       "lat": 48.7,
       "lon": -121.2,
       "nps_url": "https://www.nps.gov/noca/"
@@ -1555,6 +1601,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 47.8,
       "lon": -123.7,
       "nps_url": "https://www.nps.gov/olym/"
@@ -1585,6 +1632,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 35.07,
       "lon": -109.78,
       "nps_url": "https://www.nps.gov/pefo/"
@@ -1616,6 +1664,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 36.48,
       "lon": -121.16,
       "nps_url": "https://www.nps.gov/pinn/"
@@ -1647,6 +1696,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 41.3,
       "lon": -124.0,
       "nps_url": "https://www.nps.gov/redw/"
@@ -1678,6 +1728,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 40.4,
       "lon": -105.58,
       "nps_url": "https://www.nps.gov/romo/"
@@ -1709,6 +1760,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 32.25,
       "lon": -110.5,
       "nps_url": "https://www.nps.gov/sagu/"
@@ -1739,6 +1791,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 36.49,
       "lon": -118.56,
       "nps_url": "https://www.nps.gov/seki/"
@@ -1770,6 +1823,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 38.53,
       "lon": -78.35,
       "nps_url": "https://www.nps.gov/shen/"
@@ -1799,6 +1853,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 46.97,
       "lon": -103.45,
       "nps_url": "https://www.nps.gov/thro/"
@@ -1830,6 +1885,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "flight",
       "lat": 18.33,
       "lon": -64.73,
       "nps_url": "https://www.nps.gov/viis/"
@@ -1860,6 +1916,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "road",
       "lat": 48.5,
       "lon": -92.88,
       "nps_url": "https://www.nps.gov/voya/"
@@ -1890,6 +1947,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 32.78,
       "lon": -106.17,
       "nps_url": "https://www.nps.gov/whsa/"
@@ -1919,6 +1977,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 43.57,
       "lon": -103.48,
       "nps_url": "https://www.nps.gov/wica/"
@@ -1948,6 +2007,7 @@
       ],
       "remote": true,
       "permit_likely": false,
+      "access": "road",
       "lat": 61.0,
       "lon": -142.0,
       "nps_url": "https://www.nps.gov/wrst/"
@@ -1981,6 +2041,7 @@
       ],
       "remote": false,
       "permit_likely": false,
+      "access": "road",
       "lat": 44.6,
       "lon": -110.5,
       "nps_url": "https://www.nps.gov/yell/"
@@ -2016,6 +2077,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 37.75,
       "lon": -119.6,
       "nps_url": "https://www.nps.gov/yose/"
@@ -2047,6 +2109,7 @@
       ],
       "remote": false,
       "permit_likely": true,
+      "access": "road",
       "lat": 37.3,
       "lon": -113.05,
       "nps_url": "https://www.nps.gov/zion/"

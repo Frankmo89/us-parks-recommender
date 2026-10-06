@@ -11,7 +11,15 @@ from __future__ import annotations
 import pandas as pd
 
 from src.features import CROWD_RANK
-from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, W_MONTH_PENALTY
+from src.recommender import (
+    CROWD_PENALTY,
+    W_BUDGET,
+    W_CONTENT,
+    W_DAYS,
+    W_DIFF,
+    W_MONTH_PENALTY,
+    access_label,
+)
 
 PART_ORDER = ["Terrain & activities", "Days", "Effort", "Budget", "Crowds", "Season"]
 
@@ -119,6 +127,19 @@ def why_sentence(breakdown: pd.DataFrame) -> str:
     if loss_gap <= 0 or round(loss_gap, 2) == 0 or loss_gap <= LOSS_FRACTION * loss_max:
         return f"{fit_clause}."
     return f"{fit_clause}; lost points for {loss_word}."
+
+
+def card_meta(row: pd.Series) -> str:
+    """States plus the travel note shown next to the Match badge.
+
+    Same label the engine puts at the end of `why` (src.recommender.access_label):
+    "~Xh drive", "~Xh drive + boat", "boat needed", "flight needed", or none.
+    """
+    bits = [str(row["states"])]
+    travel = access_label(row.get("access"), row.get("drive_hours"))
+    if travel:
+        bits.append(travel)
+    return " · ".join(bits)
 
 
 def nps_url(park_code: str) -> str:

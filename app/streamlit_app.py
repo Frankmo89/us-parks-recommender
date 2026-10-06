@@ -2,7 +2,7 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 
-from app.breakdown import PART_ORDER, match_percent, nps_url, score_breakdown, why_sentence
+from app.breakdown import PART_ORDER, card_meta, match_percent, nps_url, score_breakdown, why_sentence
 from src.evaluate import run as run_evaluation
 from src.features import DRIVE_DETOUR, DRIVE_MPH, UserProfile, parse_biomes
 from src.origins import ORIGINS
@@ -304,20 +304,13 @@ def _why_expander(row: pd.Series) -> None:
         st.markdown(f'<p class="why-sentence">{why_sentence(breakdown)}</p>', unsafe_allow_html=True)
 
 
-def _card_meta(row: pd.Series) -> str:
-    bits = [str(row["states"])]
-    if pd.notna(row.get("drive_hours")):
-        bits.append(f"~{row['drive_hours']:.1f}h drive")
-    return " · ".join(bits)
-
-
 def render_top_card(row: pd.Series) -> None:
     with st.container(border=True):
         st.markdown(f'<p class="park-name park-name-lg">{row["name"]}</p>', unsafe_allow_html=True)
         st.markdown(
             f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
             f'<span class="match-caption">A fit score, not a probability.</span>'
-            f'<span class="park-meta"> · {_card_meta(row)}</span>',
+            f'<span class="park-meta"> · {card_meta(row)}</span>',
             unsafe_allow_html=True,
         )
         st.link_button("NPS page", nps_url(row["park_code"]))
@@ -330,7 +323,7 @@ def render_small_card(row: pd.Series) -> None:
         st.markdown(
             f'<span class="match-badge">Match {match_percent(row["score"])}%</span>'
             f'<span class="match-caption">A fit score, not a probability.</span>'
-            f'<span class="park-meta"> · {_card_meta(row)}</span>',
+            f'<span class="park-meta"> · {card_meta(row)}</span>',
             unsafe_allow_html=True,
         )
         st.link_button("NPS page", nps_url(row["park_code"]))
@@ -382,7 +375,11 @@ def render_how_it_works(model: ParkRecommender) -> None:
         "allow them.</li>"
         f"<li><b>Drive hours</b> drops parks outside your radius. Drive time is estimated as "
         f"straight-line distance &times; {DRIVE_DETOUR:g} detour factor, at {DRIVE_MPH:g} mph "
-        "&mdash; a highway sketch, not turn-by-turn directions.</li>"
+        "&mdash; a highway sketch, not turn-by-turn directions. Parks you can only fly to "
+        "drop out when you set a drive limit. Boat parks (Channel Islands, Dry Tortugas, "
+        "Isle Royale) show the drive to the park area plus &ldquo;+ boat&rdquo;.</li>"
+        "<li><b>Anywhere</b> keeps every park; cards say &ldquo;flight needed&rdquo; or "
+        "&ldquo;boat needed&rdquo; when a car alone will not get you there.</li>"
         "</ul>",
         unsafe_allow_html=True,
     )

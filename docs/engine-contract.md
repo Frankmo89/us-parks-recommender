@@ -8,7 +8,7 @@ This document is the API contract. It does not change scoring. A future
 TypeScript (or other) port must match the Python behavior pinned in
 `data/engine_fixtures.json`.
 
-Current `engine_version`: **`0.2.0`** (same as `pyproject.toml`).
+Current `engine_version`: **`0.3.0`** (same as `pyproject.toml`).
 
 ---
 
@@ -28,9 +28,9 @@ Python today; consumers should not send them.
 | `crowd_pref` | `string` | `low`, `medium`, `high` | `"medium"` | no | Parks busier than this pay a crowd penalty. |
 | `budget_tier` | `string` | `low`, `mid`, `high` | `"mid"` | no | Travel cost to reach + stay (not entrance fee). |
 | `month` | `integer` \| `null` | `1`–`12`, or omit/`null` | `null` | no | Soft season penalty vs park `best_months`. `null` → no season penalty. |
-| `origin_lat` | `number` \| `null` | WGS84 latitude | `null` | no | With `origin_lon` + `max_drive_hours`, enables drive hard filter. |
+| `origin_lat` | `number` \| `null` | WGS84 latitude | `null` | no | With `origin_lon` + `max_drive_hours`, enables the drive hard filter (which also drops flight-access parks; see Park access). |
 | `origin_lon` | `number` \| `null` | WGS84 longitude | `null` | no | |
-| `max_drive_hours` | `number` \| `null` | positive hours | `null` | no | Hard filter. Drive model: great-circle miles × 1.25 / 65 mph. |
+| `max_drive_hours` | `number` \| `null` | positive hours | `null` | no | Hard filter. Drive model: great-circle miles × 1.25 / 65 mph. Flight parks never pass; boat parks are measured to the park's coordinates (the drive to the port). |
 | `allow_remote` | `boolean` | `true` / `false` | `true` | no | `false` drops parks with `remote=1` (AK, HI, ferry, etc.). |
 | `allow_permits` | `boolean` | `true` / `false` | `true` | no | `false` drops parks with `permit_likely=1`. |
 
@@ -76,6 +76,29 @@ Optional top-level request fields (not part of the score input):
 | Field | Type | Default | Notes |
 |---|---|---|---|
 | `k` | `integer` | `5` | Max parks to return after ranking. |
+
+### Park access (catalog)
+
+Every catalog row has an `access` value: how a traveler from the U.S.
+mainland gets there. It is a catalog attribute, not a profile field.
+
+| `access` | Meaning | Parks (as of 0.3.0) |
+|---|---|---|
+| `road` | Drive all the way in | every park not listed below |
+| `boat` | Drive to a port, then a ferry / boat | `chis`, `drto`, `isro` |
+| `flight` | Needs a flight | `hale`, `havo`, `npsa`, `viis`, `gaar`, `glba`, `katm`, `kova`, `lacl` |
+
+`src/catalog.py` rejects a missing value or anything other than these three.
+`access` is independent of `remote`: every boat and flight park is also
+`remote=1`, but some `remote=1` parks are `road` (e.g. `dena`, `wrst`).
+
+How access interacts with the drive limit (origin + `max_drive_hours` set):
+
+| `access` | Drive limit set | No drive limit |
+|---|---|---|
+| `road` | Drive filter on park coords; `why` ends "~Xh drive" | Kept; no travel label |
+| `boat` | Drive filter on park coords (= drive to the port); `why` ends "~Xh drive + boat" | Kept; `why` says "boat needed" |
+| `flight` | **Dropped** (cannot be driven to) | Kept; `why` says "flight needed" |
 
 ### Biome vocabulary
 
@@ -123,7 +146,8 @@ while filling the profile.
    month). If timing is unknown, omit (`null`) so season does not penalize.
 8. **Origin / drive** — only when the user gives a city or "within N hours of
    …". Resolve to lat/lon (named origins in `src/origins.py` are fine). If they
-   say "fly anywhere", leave origin fields null.
+   say "fly anywhere", leave origin fields null. A drive limit already drops
+   flight-access parks, so do not add one just to mean "no flights".
 9. **Remote / permits** — "no flights / lower 48 only" → `allow_remote: false`.
    "no timed entry / no permits" → `allow_permits: false`. Default both `true`.
 10. **Do not invent constraints** the user did not imply. Prefer defaults over
@@ -138,7 +162,7 @@ Every successful response includes `engine_version` and a `parks` array
 
 ```json
 {
-  "engine_version": "0.2.0",
+  "engine_version": "0.3.0",
   "k": 5,
   "n_returned": 5,
   "empty": false,
@@ -179,8 +203,9 @@ Every successful response includes `engine_version` and a `parks` array
         "best_months": ["11", "12", "1", "2", "3"],
         "remote": false,
         "permit_likely": false,
+        "access": "road",
         "nps_url": "https://www.nps.gov/deva/",
-        "why": "desert · hiking · stargazing · 2-3 day trip · low crowds",
+        "why": "desert · hiking · stargazing · 2-3 day trip · low crowds · ~4.2h drive",
         "drive_hours": 4.2
       }
     }
@@ -214,6 +239,15 @@ clamped to 0–100. It does not change order.
 
 `drive_hours` appears on each park when origin + `max_drive_hours` were set;
 otherwise `null`. It is the same highway sketch used for the hard filter.
+For `access="boat"` parks it is the drive to the park's coordinates, read as
+the drive to the port; the boat leg is not included. `access="flight"` parks
+never carry `drive_hours`: under a drive limit they are filtered out, and
+without one every park's `drive_hours` is `null`.
+
+`facts.access` (`road` / `boat` / `flight`, added in 0.3.0) is copied from
+the catalog. `facts.why` ends with a travel label built from `access` and
+`drive_hours`: "~Xh drive", "~Xh drive + boat", "boat needed",
+"flight needed", or nothing (road park, no drive limit).
 
 ### Safe to show users vs internal
 
@@ -222,7 +256,8 @@ otherwise `null`. It is the same highway sketch used for the hard filter.
 | `facts.name`, `facts.park_code`, `facts.states`, `facts.nps_url` | **Safe** — primary identity |
 | `facts.biomes`, `facts.tags`, `facts.difficulty`, `facts.days_needed`, `facts.crowd`, `facts.budget_tier`, `facts.best_months` | **Safe** — catalog attributes the user can understand (label plainly; note budget is travel cost, not entrance fee) |
 | `facts.why` | **Safe** — short human blurb already used in the CLI/UI |
-| `facts.drive_hours` | **Safe** when present — say it is an estimate, not Google Maps |
+| `facts.drive_hours` | **Safe** when present — say it is an estimate, not Google Maps; for boat parks it is the drive to the port only |
+| `facts.access` | **Safe** — say plainly when a boat or flight is needed |
 | `facts.remote`, `facts.permit_likely` | **Safe with care** — explain in plain language; `permit_likely` is a coarse snapshot and may be stale |
 | `match_percent` | **Safe** — always caption as a fit score, not a probability |
 | `rank`, `score` | **Internal / optional** — rank order is fine to imply ("top pick"); raw score is for debugging and the concierge's citations, not a user-facing grade |
@@ -242,7 +277,8 @@ otherwise `null`. It is the same highway sketch used for the hard filter.
 2. **Hard filters** — A returned park always satisfies:
    - `allow_remote=false` ⇒ `remote=0`
    - `allow_permits=false` ⇒ `permit_likely=0`
-   - origin + `max_drive_hours` set ⇒ `drive_hours ≤ max_drive_hours`
+   - origin + `max_drive_hours` set ⇒ `drive_hours ≤ max_drive_hours` and
+     `access ≠ "flight"` (boat parks are measured to the park coordinates)
    Soft signals (month, crowds) never remove a park; they only change score.
 3. **Ties** — Parks whose scores differ by at most `tie_epsilon` (**0.001**
    absolute) are reported in `tie_groups` (on the result attrs) with
@@ -252,6 +288,8 @@ otherwise `null`. It is the same highway sketch used for the hard filter.
 
 Empty `parks` is a valid outcome when filters leave no candidates. Clients
 should ask the user to loosen drive radius, remote/permit flags, or constraints.
+A drive limit also excludes flight-access parks; if the user is willing to
+fly, drop the drive limit.
 
 ---
 
@@ -265,7 +303,7 @@ should ask the user to loosen drive radius, remote/permit flags, or constraints.
   - Renaming/removing profile fields or breakdown keys
   - Changing `tie_epsilon` semantics
   - Catalog edits that change which parks pass filters or their scored features
-    for the same codes
+    for the same codes (this includes a park's `access` value)
 - **Non-breaking**:
   - New optional profile fields with defaults that preserve old scores when omitted
   - New output fields that old clients can ignore
@@ -273,8 +311,20 @@ should ask the user to loosen drive radius, remote/permit flags, or constraints.
   - Adding parks only if fixture regeneration and version bump are intentional
     product releases
 
-Any breaking change regenerates `data/engine_fixtures.json` and records
-before/after metrics in `CHANGELOG.md` per `CLAUDE.md`.
+Any breaking change regenerates `data/engine_fixtures.json` with
+`python scripts/generate_engine_fixtures.py` and records before/after metrics
+in `CHANGELOG.md` per `CLAUDE.md`. `tests/test_generate_engine_fixtures.py`
+fails if the committed fixtures drift from the live engine.
+
+Version notes:
+
+- **0.3.0** (breaking): catalog `access` column. Under a drive limit, flight
+  parks drop out of the hard filter; boat parks stay in it and get a
+  "~Xh drive + boat" label. Without a drive limit, `why` says
+  "flight needed" / "boat needed". New output field `facts.access`. Scores
+  and the score formula are unchanged.
+- **0.2.0** (breaking, retroactive): portable `park_code` tie-break and
+  explicit `null` enum fields use defaults (see `CHANGELOG.md`).
 
 CI enforces this: the `engine-version` job runs
 `scripts/check_engine_version_bump.py`, which compares
@@ -296,8 +346,8 @@ stamps and `notes`) against the PR's base branch. If the fixtures differ,
    exposes `recommend(data, profile, k)`. Pure functions; no framework.
    Vitest asserts all 26 fixture profiles against the Python snapshot.
 3. **CI parity** — The `typescript` CI job runs `npm ci && npm test` in `ts/`.
-   Fixture checks cover park order, scores, breakdown, drive hours, and
-   `tie_groups`.
+   Fixture checks cover park order, scores, breakdown, drive hours,
+   `facts.access`, `facts.why`, and `tie_groups`.
 
 Python `ParkRecommender.recommend` remains the source of truth for regenerating
 exports and fixtures.
@@ -316,7 +366,9 @@ exports and fixtures.
 4. **Live facts → NPS** — For closures, fees, alerts, weather, road status,
    timed-entry availability, or anything that changes day to day, say
    **check nps.gov** (use `facts.nps_url`). The engine catalog is not live.
-5. **Drive times** — Quote as approximate highway estimates only.
+5. **Drive times** — Quote as approximate highway estimates only. For boat
+   parks it is the drive to the port; say a boat is needed. Never quote a
+   drive time for a flight-access park.
 6. **No trail picks** — Stay at park level (see below).
 
 ---

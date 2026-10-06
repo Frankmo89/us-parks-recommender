@@ -119,6 +119,10 @@ def recommend_from_export(data: dict, profile: dict, k: int = 5) -> dict:
             continue
         drive = None
         if origin_lat is not None and origin_lon is not None and max_drive_hours is not None:
+            # A drive limit drops parks you can only fly to; boat parks keep
+            # the drive filter (drive to the port = drive to park coords).
+            if park["access"] == "flight":
+                continue
             drive = _drive_hours(
                 float(origin_lat),
                 float(origin_lon),
@@ -276,3 +280,35 @@ def test_export_json_only_matches_live_recommend_for_all_fixtures(
                 assert math.isnan(float(live_row["drive_hours"])) or live_row["drive_hours"] is None
             else:
                 assert abs(float(row["drive_hours"]) - float(live_row["drive_hours"])) <= TOL
+
+
+ACCESS_PROFILES = [
+    # LA with a long drive limit: flight parks (havo ~47.7h) must drop out.
+    {"biomes": ["volcano"], "tags": ["hiking"], "origin_lat": 34.05, "origin_lon": -118.24,
+     "max_drive_hours": 60},
+    # LA with a short limit: Channel Islands (boat) stays in the drive filter.
+    {"biomes": ["island", "coast"], "tags": ["kayaking", "wildlife"], "origin_lat": 34.05,
+     "origin_lon": -118.24, "max_drive_hours": 8},
+    # Seattle, huge limit: every flight park out, every boat park in.
+    {"biomes": [], "tags": [], "origin_lat": 47.61, "origin_lon": -122.33,
+     "max_drive_hours": 10000},
+]
+
+
+@pytest.mark.parametrize("profile", ACCESS_PROFILES)
+def test_export_json_only_applies_access_filter_like_live(
+    engine_data: dict, live_model: ParkRecommender, profile: dict
+):
+    full = {key: profile.get(key) for key in PROFILE_FIELDS}
+    full = {key: value for key, value in full.items() if value is not None}
+    k = 63
+    live = live_model.recommend(UserProfile(**full), k=k)
+    exported = recommend_from_export(engine_data, full, k=k)
+    assert [row["park_code"] for row in exported["parks"]] == live["park_code"].tolist()
+    flight = {park["park_code"] for park in engine_data["catalog"] if park["access"] == "flight"}
+    assert flight.isdisjoint(live["park_code"])
+
+
+def test_export_catalog_carries_access(engine_data: dict):
+    values = {park["access"] for park in engine_data["catalog"]}
+    assert values == {"road", "boat", "flight"}

@@ -1,5 +1,49 @@
 # Changelog
 
+## 2026-10-05 — park access: no drive times for parks you cannot drive to
+
+- Why: the drive filter treated every park as drivable. From Los Angeles,
+  Channel Islands showed "~1.3h drive" though you need a boat, and with
+  `max_drive_hours=60` Hawaii Volcanoes passed as "~47.7h drive".
+- Added an `access` column to `data/parks.csv` (`road` / `boat` / `flight`:
+  how a traveler from the U.S. mainland gets there, checked against NPS
+  Directions). flight: hale, havo, npsa, viis, gaar, glba, katm, kova, lacl.
+  boat: chis, drto, isro. All others: road. `src/catalog.py` requires it and
+  rejects any other value.
+- With a drive limit (origin + `max_drive_hours`), `candidates()` drops flight
+  parks. Boat parks keep the drive filter on park coordinates (drive to the
+  port) and `why` says "~Xh drive + boat". With no drive limit, flight and
+  boat parks stay and `why` says "flight needed" / "boat needed".
+- Hypothesis (stated before coding): content / days / difficulty / budget /
+  crowd / month scores do not change; only hard-filter membership (flight
+  parks under a drive limit) and the `why` text change. Metrics move only if
+  a drive-limited eval profile had a flight park among its candidates.
+- Result: no eval profile changed. All six drive-limited profiles
+  (midwest_easy, sierra_weekend_from_la, desert_weekend_from_sd,
+  beginner_family_east, canyon_from_phoenix, washington_alpine) set
+  `allow_remote=false`, and every flight park is `remote=1`, so none was a
+  candidate before. Profiles without a drive limit keep the same lists and
+  scores; only their `why` gains "flight needed" / "boat needed".
+- Metrics before / after (unedited, identical):
+  - model train: R-Prec **0.708**, nDCG@5 **0.764** → **0.708** / **0.764**
+  - model holdout: R-Prec **0.794**, nDCG@5 **0.813** → **0.794** / **0.813**
+  - model all: **0.737** / **0.781** → **0.737** / **0.781**
+  - popularity, random and content-only baselines also unchanged.
+- The label importer marks a flight park picked under a drive limit as
+  unreachable with reason `drive`.
+- Breaking change, `engine_version` 0.2.0 → 0.3.0 (`pyproject.toml`,
+  `ts/package.json` + lockfile, fixture stamps, `web/engine_data.json`,
+  `docs/engine-contract.md`). New `scripts/generate_engine_fixtures.py`
+  regenerates `data/engine_fixtures.json` (it reproduced the 0.2.0 file byte
+  for byte first). Fixture diff: no park order, score, tie group or
+  drive_hours changed in the 26 profiles; 7 profiles without a drive limit
+  gain "flight needed" / "boat needed" in `why`, and every park gains
+  `facts.access`. The TS engine mirrors the filter and labels; TS parity now
+  also checks `why` and `access`. The export carries `access` per park.
+- The Streamlit result card shows the same travel note next to the state:
+  "~Xh drive + boat", "boat needed" or "flight needed".
+
+
 ## 2026-10-05 — Apps Script generator for the label form
 
 - Added `scripts/build_form_script.py`, which writes
