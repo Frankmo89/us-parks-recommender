@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-10-08 — label form: clearer description and a response target (form text only)
+
+- Form description now says labelers don't need to have visited the parks,
+  that it takes about 3 minutes, and that no names or emails are collected.
+  Why: people who think they must know a park tend to pick only famous ones,
+  and a stated time and privacy line make strangers more likely to finish.
+  Changed in `FORM_DESCRIPTION` (`scripts/import_form_labels.py`); the Apps
+  Script was regenerated with `scripts/build_form_script.py`.
+- `docs/label-form.md` gains "How many responses": target about 120, from a
+  paired-test power estimate on the current per-profile spread (a 0.05 nDCG@5
+  gap needs ~95 profiles; 0.10 needs ~25).
+- No question, choice or importer column changed. Metrics unchanged.
+
 ## 2026-10-08 — evaluation: bootstrap ranges and paired tests (evaluation only)
 
 - Why: 18 hand-written profiles is a small sample. Before tuning weights or

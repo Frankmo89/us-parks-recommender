@@ -196,7 +196,8 @@ REQUIRED_COLUMNS = [
 FORM_TITLE = "Help me test a national park recommender"
 FORM_DESCRIPTION = (
     "Picture one trip you would really take. Answer for that trip, then pick "
-    "the 3 parks that fit it best."
+    "the 3 parks that fit it best. You don't need to have visited them. "
+    "About 3 minutes. No names or emails are collected."
 )
 BUDGET_HELP_TEXT = (
     "Your total travel cost: gas or flights, lodging and food. Not the entrance fee."

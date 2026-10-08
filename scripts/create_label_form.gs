@@ -28,7 +28,7 @@
 
 function createLabelForm() {
   var form = FormApp.create("Help me test a national park recommender");
-  form.setDescription("Picture one trip you would really take. Answer for that trip, then pick the 3 parks that fit it best.");
+  form.setDescription("Picture one trip you would really take. Answer for that trip, then pick the 3 parks that fit it best. You don't need to have visited them. About 3 minutes. No names or emails are collected.");
   form.setCollectEmail(false);
 
   // 1. Terrains you want
