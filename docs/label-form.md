@@ -16,7 +16,7 @@ the `.gs` file for first-time run steps).
 ### Form description (paste at the top of the Google Form)
 
 ```text
-Picture one trip you would really take. Answer for that trip, then pick the 3 parks that fit it best.
+Picture one trip you would really take. Answer for that trip, then pick the 3 parks that fit it best. You don't need to have visited them. About 3 minutes. No names or emails are collected.
 ```
 
 ## Form questions (exact choices)
@@ -251,6 +251,23 @@ Use these exact names (catalog `name` column):
    - Yellowstone National Park
    - Yosemite National Park
    - Zion National Park
+
+## How many responses
+
+Target: **about 120 responses.** Estimated from the per-profile spread of
+the current 18 profiles (`python -m src.evaluate`, Uncertainty section), for
+a paired test at 95% confidence with 80% power:
+
+| Model vs baseline gap in nDCG@5 | Profiles needed |
+|---|---|
+| 0.10 | ~25 |
+| 0.05 | ~95 |
+| 0.02 | ~575 |
+
+120 leaves room for rows the importer skips (no pick passes the hard
+filters). At 120 profiles the model's nDCG@5 range narrows from about ±0.09
+(18 profiles) to about ±0.035. Gaps under 0.05 need several hundred
+responses; treat them as noise until then.
 
 ## CSV columns expected by the importer
 
