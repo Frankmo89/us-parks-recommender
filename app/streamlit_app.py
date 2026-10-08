@@ -22,35 +22,15 @@ from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, 
 
 st.set_page_config(page_title="Find your park", page_icon="🌲", layout="wide", initial_sidebar_state="collapsed")
 
+# Background photos are my own, in app/static (served by Streamlit static serving).
 BACKGROUNDS = {
-    "welcome": {
-        "image": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1920&q=80",
-        "video": "https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_30fps.mp4",
-    },
-    "terrain": {
-        "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80",
-        "video": "https://videos.pexels.com/video-files/857251/857251-hd_1920_1080_30fps.mp4",
-    },
-    "vibe": {
-        "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1920&q=80",
-        "video": "https://videos.pexels.com/video-files/2169880/2169880-hd_1920_1080_30fps.mp4",
-    },
-    "pace": {
-        "image": "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?auto=format&fit=crop&w=1920&q=80",
-        "video": "https://videos.pexels.com/video-files/1093662/1093662-hd_1920_1080_25fps.mp4",
-    },
-    "when": {
-        "image": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80",
-        "video": "https://videos.pexels.com/video-files/857195/857195-hd_1920_1080_30fps.mp4",
-    },
-    "from": {
-        "image": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1920&q=80",
-        "video": "https://videos.pexels.com/video-files/1542006/1542006-hd_1920_1080_24fps.mp4",
-    },
-    "results": {
-        "image": "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=1920&q=80",
-        "video": "https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_30fps.mp4",
-    },
+    "welcome": "joshua-tree-sunset",
+    "terrain": "joshua-tree-arch",
+    "vibe": "yosemite-forest",
+    "pace": "grand-canyon-trail",
+    "when": "yosemite-el-capitan",
+    "from": "grand-canyon-tree",
+    "results": "joshua-tree-sunset",
 }
 
 # Display labels for biomes present in the catalog. Options themselves are
@@ -134,7 +114,7 @@ def inject_base_css() -> None:
         <style>
           .stApp { background: transparent; }
           #park-bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
-          #park-bg video, #park-bg img {
+          #park-bg img {
             width: 100%; height: 100%; object-fit: cover; filter: saturate(1.05);
           }
           #park-bg::after {
@@ -198,14 +178,11 @@ def inject_base_css() -> None:
 
 
 def paint_background(step: str) -> None:
-    bg = BACKGROUNDS.get(step, BACKGROUNDS["welcome"])
+    photo = BACKGROUNDS.get(step, BACKGROUNDS["welcome"])
     st.html(
         f"""
         <div id="park-bg">
-          <img src="{bg["image"]}" alt="" />
-          <video autoplay muted loop playsinline poster="{bg["image"]}">
-            <source src="{bg["video"]}" type="video/mp4" />
-          </video>
+          <img src="/app/static/{photo}.jpg" alt="" />
         </div>
         """
     )

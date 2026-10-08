@@ -265,5 +265,6 @@ app/streamlit_app.py
 
 ## License
 
-MIT. Park names are used descriptively. NPS logos and photography are not bundled.
+MIT. Park names are used descriptively. NPS logos and NPS photography are not bundled.
+The quiz background photos in `app/static` were taken by the author.
 This repo does not copy editorial content from any product site.
