@@ -1,5 +1,24 @@
 # Changelog
 
+## 2026-10-08 — evaluation: bootstrap ranges and paired tests (evaluation only)
+
+- Why: 18 hand-written profiles is a small sample. Before tuning weights or
+  adding features, we need to know which metric gaps are real and which are
+  noise.
+- New `src/uncertainty.py`: a 95% bootstrap range for each mean (10,000
+  resamples of profiles, seed 0) and a paired test for two methods on the
+  same profiles (bootstrap range of the mean difference plus an exact
+  sign-flip p-value over all 2^n sign patterns). numpy, deterministic.
+- `src.evaluate` prints a new "Uncertainty" section after the existing
+  output and adds `result["uncertainty"]`, for train + holdout with and
+  without filter-only profiles. Every earlier output line is unchanged.
+- Finding: model vs content-only is +0.065 R-Prec (range −0.053 to +0.194,
+  p=0.398) and −0.017 nDCG@5 (range −0.092 to +0.061, p=0.678): not
+  distinguishable. Model vs popularity and vs random: p<0.001 on both
+  metrics. README gains an Uncertainty section with these numbers.
+- Metrics (unedited, unchanged): train R-Prec 0.685 / nDCG@5 0.739, holdout
+  0.794 / 0.842, all 0.721 / 0.773. No weight, feature or label changed.
+
 ## 2026-10-08 — app: own background photos (app only)
 
 - Replaced the stock Unsplash photos and Pexels videos behind the quiz with six
