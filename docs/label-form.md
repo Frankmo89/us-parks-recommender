@@ -29,7 +29,7 @@ side is the engine token the importer stores.
 
 **Question:** `Terrains you want`
 
-Select all that apply. Empty is allowed (activities alone can drive content match).
+**Helper text:** `Pick up to 3.` The form allows at most 3 (same limit as the app). Empty is allowed (activities alone can drive content match).
 
    - Mountains / alpine  → `alpine`
    - Canyon  → `canyon`
@@ -50,7 +50,7 @@ Select all that apply. Empty is allowed (activities alone can drive content matc
 
 **Question:** `Activities you want`
 
-Prefer 2–4. Empty is allowed.
+**Helper text:** `Pick up to 4: the ones that matter most for this trip.` The form allows at most 4. Empty is allowed.
 
    - 4x4 / off-road  → `4x4`
    - Archaeology  → `archaeology`
@@ -143,6 +143,8 @@ Single choice, or leave blank for no season preference:
 
 **Question:** `Starting city`
 
+**Helper text:** `Where you would drive from. Choose Anywhere if you would fly.`
+
 Single choice:
 
    - San Diego  → `san_diego`
@@ -160,6 +162,8 @@ Single choice:
 
 Short answer, positive number (e.g. `8`).
 
+**Helper text:** `Max driving hours, one way (e.g. 8). If you would fly there, choose Anywhere as starting city and leave this blank.`
+
 - Required when Starting city is **not** Anywhere.
 - Leave blank when Starting city is Anywhere (no drive hard filter).
 
@@ -175,6 +179,8 @@ Single choice:
 ### 11. Allow parks that likely need timed entry or a permit?
 
 **Question:** `Allow parks that need permits`
+
+**Helper text:** `Some parks need a timed-entry reservation in peak season (e.g. Zion, Yosemite, Arches, Rocky Mountain, Glacier). Choose Yes unless you would skip those parks.`
 
 Single choice:
 

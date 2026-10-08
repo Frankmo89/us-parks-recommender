@@ -108,6 +108,17 @@ def render_apps_script(form_spec: dict | None = None) -> str:
                     '.setHelpText("Pick exactly 3 parks.")'
                     ".build());"
                 )
+            elif validation and validation.startswith("at_most_"):
+                limit = int(validation.removeprefix("at_most_"))
+                lines.append(
+                    f"  {var_name}.setValidation("
+                    "FormApp.createCheckboxValidation()"
+                    f".requireSelectAtMost({limit})"
+                    f'.setHelpText("Pick up to {limit}.")'
+                    ".build());"
+                )
+            elif validation:
+                raise ValueError(f"unknown checkbox validation: {validation!r}")
         elif qtype == "multiple_choice":
             lines.append(f"  var {var_name} = form.addMultipleChoiceItem();")
             lines.append(f"  {var_name}.setTitle({_js_string(qtitle)});")

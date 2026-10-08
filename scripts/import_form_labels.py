@@ -203,8 +203,19 @@ BUDGET_HELP_TEXT = (
     "Your total travel cost: gas or flights, lodging and food. Not the entrance fee."
 )
 HOURS_HELP_TEXT = (
-    "Positive number of hours (e.g. 8). Leave blank when Starting city is Anywhere."
+    "Max driving hours, one way (e.g. 8). If you would fly there, choose "
+    "Anywhere as starting city and leave this blank."
 )
+CITY_HELP_TEXT = "Where you would drive from. Choose Anywhere if you would fly."
+PERMITS_HELP_TEXT = (
+    "Some parks need a timed-entry reservation in peak season (e.g. Zion, "
+    "Yosemite, Arches, Rocky Mountain, Glacier). Choose Yes unless you would "
+    "skip those parks."
+)
+MAX_TERRAINS = 3
+MAX_ACTIVITIES = 4
+TERRAINS_HELP_TEXT = f"Pick up to {MAX_TERRAINS}."
+ACTIVITIES_HELP_TEXT = f"Pick up to {MAX_ACTIVITIES}: the ones that matter most for this trip."
 
 # Ordered plain-English choices shown on the form (must map via *_FROM_LABEL).
 BIOME_FORM_CHOICES = [
@@ -325,12 +336,16 @@ def get_form_spec() -> dict:
                 "type": "checkbox",
                 "required": False,
                 "choices": list(BIOME_FORM_CHOICES),
+                "help": TERRAINS_HELP_TEXT,
+                "validation": f"at_most_{MAX_TERRAINS}",
             },
             {
                 "title": COL_ACTIVITIES,
                 "type": "checkbox",
                 "required": False,
                 "choices": list(TAG_FORM_CHOICES),
+                "help": ACTIVITIES_HELP_TEXT,
+                "validation": f"at_most_{MAX_ACTIVITIES}",
             },
             {
                 "title": COL_DIFFICULTY,
@@ -368,6 +383,7 @@ def get_form_spec() -> dict:
                 "type": "multiple_choice",
                 "required": True,
                 "choices": list(ORIGIN_FORM_CHOICES),
+                "help": CITY_HELP_TEXT,
             },
             {
                 "title": COL_HOURS,
@@ -387,6 +403,7 @@ def get_form_spec() -> dict:
                 "type": "multiple_choice",
                 "required": True,
                 "choices": list(YES_NO_FORM_CHOICES),
+                "help": PERMITS_HELP_TEXT,
             },
             {
                 "title": COL_TOP3,

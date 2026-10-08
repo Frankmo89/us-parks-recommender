@@ -93,3 +93,13 @@ def test_generated_gs_contains_createLabelForm_and_links():
     assert "Form public link" in text
     assert "Responses sheet" in text
     assert "How to run this (first time with Apps Script)" in text
+
+
+def test_terrain_and_activity_limits_and_filter_help_text():
+    text = (ROOT / "scripts" / "create_label_form.gs").read_text(encoding="utf-8")
+    assert "q1.setValidation(FormApp.createCheckboxValidation().requireSelectAtMost(3)" in text
+    assert "q2.setValidation(FormApp.createCheckboxValidation().requireSelectAtMost(4)" in text
+    # Early responses mixed up drive hours and permits with the parks they picked.
+    assert "If you would fly there, choose Anywhere" in text
+    assert "Choose Anywhere if you would fly." in text
+    assert "timed-entry reservation in peak season" in text
