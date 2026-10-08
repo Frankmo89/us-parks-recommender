@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-10-08 — app: own background photos (app only)
+
+- Replaced the stock Unsplash photos and Pexels videos behind the quiz with six
+  photos taken by the author: Joshua Tree (sunset path, arch), Yosemite
+  (El Capitan, forest) and Grand Canyon (trail, tree). Welcome and results
+  share the sunset photo. The app no longer loads media from other sites.
+- The photos sit in `app/static` (1440 × 1920 JPEG, 250-700 KB each, EXIF
+  removed so no GPS data ships). `.streamlit/config.toml` turns on
+  `enableStaticServing`.
+- Dropped the looping videos: there are no author videos, and a photo is
+  lighter on phones.
+- `tests/test_app_backgrounds.py` checks each step has its file, the files
+  carry no EXIF data, static serving is on, and no stock-site link is left.
+- No engine change. `src.evaluate` output and the fixtures are identical.
+
 ## 2026-10-08 — app: quiz keeps its answers (app only)
 
 - Bug: Streamlit deletes a widget's key once the widget is not drawn, and

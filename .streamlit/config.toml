@@ -8,3 +8,6 @@ borderColor = "#3a4a3e"
 
 [client]
 toolbarMode = "minimal"
+
+[server]
+enableStaticServing = true
