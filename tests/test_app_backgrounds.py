@@ -37,3 +37,10 @@ def test_static_serving_is_on():
 def test_no_remote_media_in_the_app():
     source = (APP_DIR / "streamlit_app.py").read_text()
     assert "unsplash" not in source and "pexels" not in source
+
+
+def test_photo_url_is_relative():
+    # Streamlit Cloud serves the app under /~/+/; a leading "/" escapes that.
+    source = (APP_DIR / "streamlit_app.py").read_text()
+    assert 'src="app/static/{photo}.jpg"' in source
+    assert 'src="/app/static/' not in source

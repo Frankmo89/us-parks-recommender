@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-10-08 — app: fix background photos on Streamlit Cloud (app only)
+
+- Bug: after the own-photos change, the live app showed no background.
+  Streamlit Cloud serves the app under `/~/+/`, and the image URL started
+  with `/` (`/app/static/...`), so the browser asked the Cloud page instead
+  of the app and got HTML, not a JPEG. Locally there is no `/~/+/`, so it
+  worked there.
+- Fix: the URL is relative (`app/static/...`). Checked in Chromium with
+  `--server.baseUrlPath "~/+"`: the old URL loads 0 px, the new one 1440 px;
+  at the plain root both work. A test keeps the URL relative.
+
 ## 2026-10-08 — label form: clearer description and a response target (form text only)
 
 - Form description now says labelers don't need to have visited the parks,
