@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-10-08 — app: quiz keeps its answers (app only)
+
+- Bug: Streamlit deletes a widget's key once the widget is not drawn, and
+  `init_state` then restored the default. Answers to terrain, activities,
+  pace and month were lost on the next step, so the results page always ranked
+  the defaults (desert, hiking, easy, 2-3 days, medium crowds, mid budget,
+  November). Only the last step's answers (ZIP, states, toggles) survived.
+- Fix: `keep_answers` saves every answer again on each run. The widgets no
+  longer pass `default=`/`value=` next to a session key.
+- New `tests/test_app_quiz_answers.py` walks the whole quiz with Streamlit's
+  AppTest and a non-default answer on every step (forest, wildlife,
+  challenging, 4-7 days, low crowds, high budget, July, ZIP 98101). It checks
+  that the results match those answers. It fails on main without the fix.
+- No engine change. `src.evaluate` output and the fixtures are identical.
+
 ## 2026-10-05 — app: results card polish (app only)
 
 Measured in Chrome at 390 px wide (phone), before → after:

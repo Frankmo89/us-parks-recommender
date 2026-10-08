@@ -234,6 +234,16 @@ def init_state() -> None:
             st.session_state[key] = value
 
 
+def keep_answers() -> None:
+    """Save every answer again on each run.
+
+    Streamlit deletes a widget's key once the widget is not drawn. Without this,
+    each answer would fall back to its default after the next step.
+    """
+    for key in DEFAULT_ANSWERS:
+        st.session_state[key] = st.session_state[key]
+
+
 def go(step: str) -> None:
     st.session_state.step = step
     st.rerun()
@@ -443,6 +453,7 @@ def render_how_it_works(model: ParkRecommender) -> None:
 
 
 init_state()
+keep_answers()
 model = load_model()
 step = st.session_state.step
 inject_base_css()
@@ -476,7 +487,6 @@ with st.container(key="app_shell"):
                 options=[code for code, _ in terrain],
                 format_func=terrain_labels.get,
                 selection_mode="multi",
-                default=st.session_state.biomes_pills,
                 key="biomes_pills",
                 label_visibility="collapsed",
             )
@@ -502,7 +512,6 @@ with st.container(key="app_shell"):
                 options=[code for code, _ in VIBES],
                 format_func=dict(VIBES).get,
                 selection_mode="multi",
-                default=st.session_state.tags_pills,
                 key="tags_pills",
                 label_visibility="collapsed",
             )
@@ -526,18 +535,16 @@ with st.container(key="app_shell"):
             st.segmented_control(
                 "Effort",
                 ["easy", "moderate", "challenging"],
-                default=st.session_state.difficulty,
                 key="difficulty",
                 required=True,
                 format_func=str.title,
             )
             st.segmented_control(
-                "Days", ["1", "2-3", "4-7", "7+"], default=st.session_state.days, key="days", required=True
+                "Days", ["1", "2-3", "4-7", "7+"], key="days", required=True
             )
             st.segmented_control(
                 "Crowds",
                 ["low", "medium", "high"],
-                default=st.session_state.crowd,
                 key="crowd",
                 required=True,
                 format_func=str.title,
@@ -545,7 +552,6 @@ with st.container(key="app_shell"):
             st.segmented_control(
                 "Budget",
                 ["low", "mid", "high"],
-                default=st.session_state.budget,
                 key="budget",
                 required=True,
                 format_func=str.title,
@@ -561,7 +567,6 @@ with st.container(key="app_shell"):
             st.pills(
                 "Month",
                 MONTH_LABELS,
-                default=st.session_state.month_pills,
                 key="month_pills",
                 required=True,
                 label_visibility="collapsed",
@@ -576,7 +581,6 @@ with st.container(key="app_shell"):
             st.markdown('<p class="quiz-title">Are you driving, or is anywhere fine?</p>', unsafe_allow_html=True)
             st.text_input(
                 "Starting ZIP code",
-                value=st.session_state.origin_zip,
                 key="origin_zip",
                 max_chars=10,
                 placeholder="e.g. 02108 (leave empty for Anywhere)",
@@ -588,7 +592,7 @@ with st.container(key="app_shell"):
                 st.error(origin.message)
             elif origin.status == FOUND:
                 st.caption(f"Driving from ZIP {origin.zip_code}.")
-                st.slider("Max drive hours", 2, 16, value=st.session_state.max_hours, key="max_hours")
+                st.slider("Max drive hours", 2, 16, key="max_hours")
             else:
                 st.caption("Anywhere: no starting point, no drive limit.")
             st.multiselect(
@@ -601,12 +605,11 @@ with st.container(key="app_shell"):
             )
             st.toggle(
                 "Include remote parks",
-                value=st.session_state.allow_remote,
                 key="allow_remote",
                 help="Hard-to-reach parks with few roads or services. "
                 "Results say when a park needs a boat or a flight.",
             )
-            st.toggle("OK with timed entry / permits", value=st.session_state.allow_permits, key="allow_permits")
+            st.toggle("OK with timed entry / permits", key="allow_permits")
             c1, c2 = st.columns(2)
             if c1.button("Back", width="stretch"):
                 go("when")
