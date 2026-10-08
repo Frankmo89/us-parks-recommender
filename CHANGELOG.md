@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-10-08 — label form: clearer drive and permit questions, pick limits (form text only)
+
+- Finding from the first 5 real responses (dry run, not imported): 9 of 15
+  picked parks fail the respondent's own hard filters. People set short
+  drives (5–6 h from San Diego) and picked Yosemite or Everglades, or said
+  No to permits and picked Zion or Rocky Mountain. One row lost all 3 picks
+  and would be skipped. Respondents also ticked 6 to 19 activities.
+  This is a form-wording problem, not a model result.
+- Form changes (`get_form_spec`, Apps Script regenerated):
+  - Max drive hours help: "one way", and choose Anywhere if you would fly.
+  - Starting city help: choose Anywhere if you would fly.
+  - Permits help names parks that need timed entry in peak season.
+  - Terrains: at most 3 (same as the app). Activities: at most 4.
+    New `at_most_N` checkbox validation in `scripts/build_form_script.py`.
+- No title or choice changed, so earlier responses still import. The
+  importer does not enforce the new limits, for the same reason.
+- No model change. Metrics unchanged.
+
 ## 2026-10-08 — evaluation: label popularity bias check (no model change)
 
 - Why: form respondents may pick parks they have heard of rather than parks

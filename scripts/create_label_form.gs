@@ -36,12 +36,16 @@ function createLabelForm() {
   q1.setTitle("Terrains you want");
   q1.setChoiceValues(["Mountains / alpine", "Canyon", "Cave", "Chaparral / scrub", "Coast", "Desert", "Forest", "Island", "Prairie / grassland", "Rainforest", "Tundra", "Urban", "Volcano", "Wetland"]);
   q1.setRequired(false);
+  q1.setValidation(FormApp.createCheckboxValidation().requireSelectAtMost(3).setHelpText("Pick up to 3.").build());
+  q1.setHelpText("Pick up to 3.");
 
   // 2. Activities you want
   var q2 = form.addCheckboxItem();
   q2.setTitle("Activities you want");
   q2.setChoiceValues(["4x4 / off-road", "Archaeology", "Backpacking", "Beach", "Bears", "Biking", "Birding", "Boardwalk", "Boat", "Camping", "Climbing", "Easy walk", "Family-friendly", "Fishing", "Geothermal", "Giant trees", "Glacier", "Hiking", "History", "Hot springs", "Kayak", "Paleontology", "Photography", "Sand dunes", "Scenic drive", "Snorkeling", "Stargazing", "Sunrise / sunset views", "Water / lakes", "Waterfalls", "Wilderness", "Wildflowers", "Wildlife", "Winter activities"]);
   q2.setRequired(false);
+  q2.setValidation(FormApp.createCheckboxValidation().requireSelectAtMost(4).setHelpText("Pick up to 4.").build());
+  q2.setHelpText("Pick up to 4: the ones that matter most for this trip.");
 
   // 3. Difficulty
   var q3 = form.addMultipleChoiceItem();
@@ -79,13 +83,14 @@ function createLabelForm() {
   q8.setTitle("Starting city");
   q8.setChoiceValues(["San Diego", "Los Angeles", "Phoenix", "Denver", "Seattle", "Salt Lake City", "New York City", "Anywhere"]);
   q8.setRequired(true);
+  q8.setHelpText("Where you would drive from. Choose Anywhere if you would fly.");
 
   // 9. Max drive hours
   var q9 = form.addTextItem();
   q9.setTitle("Max drive hours");
   q9.setRequired(false);
   q9.setValidation(FormApp.createTextValidation().requireNumberGreaterThan(0).setHelpText("Enter a number greater than 0, or leave blank.").build());
-  q9.setHelpText("Positive number of hours (e.g. 8). Leave blank when Starting city is Anywhere.");
+  q9.setHelpText("Max driving hours, one way (e.g. 8). If you would fly there, choose Anywhere as starting city and leave this blank.");
 
   // 10. Allow remote parks
   var q10 = form.addMultipleChoiceItem();
@@ -98,6 +103,7 @@ function createLabelForm() {
   q11.setTitle("Allow parks that need permits");
   q11.setChoiceValues(["Yes", "No"]);
   q11.setRequired(true);
+  q11.setHelpText("Some parks need a timed-entry reservation in peak season (e.g. Zion, Yosemite, Arches, Rocky Mountain, Glacier). Choose Yes unless you would skip those parks.");
 
   // 12. Top 3 parks
   var q12 = form.addCheckboxItem();
