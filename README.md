@@ -67,7 +67,9 @@ different from content-only; see [Uncertainty](#uncertainty). Train/holdout spli
   people describe a trip and pick their top 3 parks. These become the
   `external` split, used only for testing.
 - Fit the score weights from labeled data instead of setting them by hand,
-  then test them on the outside labels.
+  then test them on the outside labels. The fitting code exists
+  (`python -m src.learn_weights`, see [Learned weights](#learned-weights-experiment));
+  it waits on the external split.
 - Goal: beat content-only on nDCG@5, which the hand-set weights do not do today.
 
 ## Score
@@ -225,6 +227,36 @@ model's own nDCG@5 range is 0.687 to 0.858. A change to weights or features
 that moves a mean by a few hundredths is within that range and is not, on its
 own, evidence of a better model. More labeled profiles (the external split)
 are what will narrow it.
+
+### Learned weights (experiment)
+
+`python -m src.learn_weights` learns the six score weights from the labels
+with pairwise logistic regression (L2 = 0.1, set before the first run): in
+each profile, every relevant park should outscore every other candidate. It
+never changes the weights the app uses. Train is scored with
+leave-one-profile-out; holdout is scored once with weights fit on all of
+train.
+
+| Part | Hand | Learned (train, scaled to the same total) |
+|---|---|---|
+| content | 0.55 | 0.52 |
+| days_fit | 0.18 | 0.14 |
+| diff_fit | 0.14 | 0.11 |
+| budget_fit | 0.08 | 0.23 |
+| crowd (penalty) | 0.12 | −0.12 |
+| month (penalty) | 0.35 | 0.30 |
+
+| Split | Learned nDCG@5 | Hand nDCG@5 | Learned minus hand | p |
+|---|---|---|---|---|
+| Train (leave-one-out, n=12) | 0.824 | 0.739 | +0.085 (−0.030 to +0.204) | 0.219 |
+| Holdout (n=6, scored once) | 0.840 | 0.842 | −0.002 (−0.014 to +0.007) | 1.000 |
+
+**Finding:** learning keeps content as the largest weight, gives budget more
+say, and flips the crowd penalty: on these labels, pushing busy parks down
+hurts the order. That matches the crowd finding above. Neither gap is
+significant, and holdout has only 6 profiles (2 filter-only). The external
+split will decide; the script scores it as soon as form responses are
+imported.
 
 ## External labels
 
