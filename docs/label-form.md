@@ -269,6 +269,27 @@ filters). At 120 profiles the model's nDCG@5 range narrows from about ±0.09
 (18 profiles) to about ±0.035. Gaps under 0.05 need several hundred
 responses; treat them as noise until then.
 
+## Check for popularity bias
+
+Respondents may pick famous parks instead of parks that fit the trip. Check
+before trusting the external split:
+
+```bash
+python scripts/label_bias.py                       # labels already imported
+python scripts/label_bias.py --csv form_export.csv # responses not imported yet (writes nothing)
+```
+
+Among the parks that pass each trip's hard filters, it reports where the
+picks sit by NPS visits (pick popularity) and by terrain + activity match
+(pick fit), as percentiles where random picks average 0.50, plus the share of
+picks in the 10 most visited parks. Each comes with a 95% bootstrap range.
+
+The 18 hand-written profiles give pick popularity 0.48 (0.40 to 0.57) and
+pick fit 0.82 (0.74 to 0.90): no lean toward famous parks. If the external
+split shows popularity well above 0.5 and fit well below 0.82, its labels
+partly measure fame. Report that next to any external result rather than
+editing labels.
+
 ## CSV columns expected by the importer
 
 Google Forms exports one column per question title, plus `Timestamp`.

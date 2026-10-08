@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-10-08 — evaluation: label popularity bias check (no model change)
+
+- Why: form respondents may pick parks they have heard of rather than parks
+  that fit the trip. Then the external split would reward fame, and a model
+  that finds a lesser-known, better-fitting park would look wrong.
+- New `scripts/label_bias.py`: among the parks that pass each trip's hard
+  filters, the percentile of each pick by NPS visits (pick popularity) and
+  by content match (pick fit), and the share of picks in the 10 most visited
+  parks, each with a 95% bootstrap range. `--csv` checks a form export with
+  the importer's rules and writes nothing.
+- Baseline (hand-written train + holdout, n=18): pick popularity 0.48 (0.40
+  to 0.57), pick fit 0.82 (0.74 to 0.90), top-10 share 0.18. No lean toward
+  famous parks.
+- `docs/label-form.md` gains "Check for popularity bias".
+- No weight, feature, filter or label changed. Metrics unchanged.
 ## 2026-10-08 — evaluation: learned weights experiment (no model change)
 
 - Why: the hand-set weights are the README's stated weak spot. Before the
