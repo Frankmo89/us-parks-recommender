@@ -1,5 +1,27 @@
 # Changelog
 
+## 2026-10-08 — evaluation: learned weights experiment (no model change)
+
+- Why: the hand-set weights are the README's stated weak spot. Before the
+  form labels arrive, build and check the code that learns them, so the
+  external split can test it the day it lands.
+- New `src/learn_weights.py` (`python -m src.learn_weights`): pairwise
+  logistic regression (Newton's method, numpy, deterministic) on the six
+  score parts the model already computes. Each profile counts equally. L2 =
+  0.1, fixed before the first run. With hand weights, its ranking matches
+  `recommend()` on all 18 profiles (tested).
+- Protocol: iterated on train only (leave-one-profile-out). Holdout scored
+  once with weights fit on all of train. External is scored with weights
+  fit on train + holdout once it exists.
+- Results (unedited): train LOO nDCG@5 learned 0.824 vs hand 0.739 (+0.085,
+  p=0.219), R-Prec 0.686 vs 0.685. Holdout nDCG@5 0.840 vs 0.842 (−0.002,
+  p=1.000), R-Prec 0.794 both. Learned crowd weight is negative (−0.12
+  scaled); budget rises from 0.08 to 0.23.
+- On train, L2 = 0.01 looked better (+0.137, p=0.047). Not used: picking it
+  after seeing that result would overstate the gain.
+- No weight, feature, filter or label changed. `src.evaluate` output is
+  identical.
+
 ## 2026-10-08 — app: fix background photos on Streamlit Cloud (app only)
 
 - Bug: after the own-photos change, the live app showed no background.
