@@ -21,7 +21,7 @@ from pathlib import Path
 
 from functools import lru_cache
 
-from . import visits
+from . import uncertainty, visits
 from .features import UserProfile
 from .recommender import ParkRecommender, _cosine_rows
 
@@ -240,6 +240,33 @@ def external_unreachable_counts(profiles: list[dict]) -> dict[str, int]:
     return counts
 
 
+BASELINES = ("content_only", "popularity", "random")
+METRICS = (("r_precision", "R-Prec"), ("ndcg_at_k", "nDCG@5"))
+
+
+def _scores(block: dict, metric: str) -> list[float]:
+    return [row[metric] for row in block["profiles"]]
+
+
+def uncertainty_report(blocks: dict[str, dict]) -> dict:
+    """95% bootstrap ranges per method and paired tests of model vs each baseline.
+
+    ``blocks`` maps method -> one scored block (same profiles, same order).
+    """
+    summary = {
+        method: {metric: uncertainty.metric_summary(_scores(block, metric)) for metric, _ in METRICS}
+        for method, block in blocks.items()
+    }
+    paired = {
+        baseline: {
+            metric: uncertainty.paired_test(_scores(blocks["model"], metric), _scores(blocks[baseline], metric))
+            for metric, _ in METRICS
+        }
+        for baseline in BASELINES
+    }
+    return {"summary": summary, "model_vs": paired}
+
+
 def run(k: int = 5) -> dict:
     bundle = load_bundle()
     model = ParkRecommender()
@@ -286,6 +313,14 @@ def run(k: int = 5) -> dict:
         },
     }
 
+    methods = {"model": model_blocks, "popularity": popularity, "random": random_blocks, "content_only": content_only}
+    # Train + holdout, the scope the README results use; plus the same scope
+    # without filter-only profiles, where ranking can actually change the score.
+    uncertainty_blocks = {
+        "all": uncertainty_report({m: blocks["all"] for m, blocks in methods.items()}),
+        "all_excl_filter_only": uncertainty_report({m: excl[m]["all"] for m in methods}),
+    }
+
     return {
         # Top-level train/holdout/all stay model-only for Streamlit / existing tests.
         "train": model_blocks["train"],
@@ -298,6 +333,7 @@ def run(k: int = 5) -> dict:
         "excl_filter_only": excl,
         "filter_only_ids": sorted(filter_only_ids),
         "external_unreachable": external_unreachable_counts(external),
+        "uncertainty": uncertainty_blocks,
     }
 
 
@@ -363,6 +399,39 @@ def _print_comparison_table(result: dict) -> None:
     )
 
 
+def _format_p(p: float) -> str:
+    return "p<0.001" if p < 0.001 else f"p={p:.3f}"
+
+
+def _print_uncertainty(result: dict) -> None:
+    labels = {"model": "Model", "content_only": "Content-only", "popularity": "Popularity", "random": "Random"}
+    scopes = (("all", "train+holdout"), ("all_excl_filter_only", "train+holdout, excl. filter-only"))
+    print("Uncertainty: 95% bootstrap range of the mean (10,000 resamples of profiles, seed 0)")
+    for key, title in scopes:
+        report = result["uncertainty"][key]
+        n = report["summary"]["model"]["r_precision"]["n"]
+        print(f"  {title} (n={n})")
+        for method, label in labels.items():
+            parts = []
+            for metric, name in METRICS:
+                s = report["summary"][method][metric]
+                parts.append(f"{name} {s['mean']:.3f} [{s['ci_low']:.3f}, {s['ci_high']:.3f}]")
+            print(f"    {label:<13} " + "   ".join(parts))
+    print()
+    print("Model minus baseline, same profiles (mean diff [95% range], exact sign-flip p, wins/ties/losses)")
+    for key, title in scopes:
+        report = result["uncertainty"][key]
+        print(f"  {title}")
+        for baseline in BASELINES:
+            for metric, name in METRICS:
+                t = report["model_vs"][baseline][metric]
+                print(
+                    f"    vs {labels[baseline]:<13} {name:<7} {t['mean_diff']:+.3f} "
+                    f"[{t['ci_low']:+.3f}, {t['ci_high']:+.3f}]  {_format_p(t['p_value'])}  "
+                    f"{t['wins']}/{t['ties']}/{t['losses']}"
+                )
+
+
 def main() -> None:
     result = run(k=5)
     _print_comparison_table(result)
@@ -374,6 +443,8 @@ def main() -> None:
     _print_block("all (model; train+holdout)", result["all"])
     print()
     _print_block("external (model; test-only)", result["external"])
+    print()
+    _print_uncertainty(result)
 
 
 if __name__ == "__main__":

@@ -39,7 +39,9 @@ On all 18 hand-labeled test profiles (train + holdout), from
 | Random | 0.252 | 0.289 |
 
 The profiles are hand-written, so treat this as a regression suite, not a
-user study. Train/holdout splits and more baselines are in
+user study. With 18 profiles, the model's nDCG@5 could land anywhere from
+0.687 to 0.858 (95% bootstrap range), and the model is not measurably
+different from content-only; see [Uncertainty](#uncertainty). Train/holdout splits and more baselines are in
 [Metrics](#metrics).
 
 ## What I learned
@@ -196,6 +198,33 @@ See `CHANGELOG.md` for the 50 mph drive bug. Those older figures are retired.
 
 Yosemite `best_months` was missing July/August in the catalog; that is a
 data fix, not a label tweak.
+
+### Uncertainty
+
+18 profiles is a small sample, so `python -m src.evaluate` also prints how far
+each mean could move with a different draw of profiles like these (a 95%
+bootstrap range: 10,000 resamples, seed 0), and compares the model with each
+baseline on the same profiles. The p-value is an exact sign-flip test: if the
+two methods were equally good, each profile's difference would be as likely
+to be positive as negative.
+
+Train + holdout, n=18:
+
+| Comparison | Metric | Model minus baseline | 95% range | p | Wins/ties/losses |
+|---|---|---|---|---|---|
+| Model vs Content-only | R-Precision | +0.065 | −0.053 to +0.194 | 0.398 | 5/10/3 |
+| Model vs Content-only | nDCG@5 | −0.017 | −0.092 to +0.061 | 0.678 | 6/6/6 |
+| Model vs Popularity | R-Precision | +0.475 | +0.331 to +0.620 | <0.001 | 15/3/0 |
+| Model vs Popularity | nDCG@5 | +0.507 | +0.354 to +0.657 | <0.001 | 15/3/0 |
+| Model vs Random | R-Precision | +0.470 | +0.345 to +0.594 | <0.001 | 16/2/0 |
+| Model vs Random | nDCG@5 | +0.484 | +0.360 to +0.602 | <0.001 | 16/2/0 |
+
+**Finding:** the model clearly beats popularity and random, but on these
+profiles it cannot be told apart from content-only, on either metric. The
+model's own nDCG@5 range is 0.687 to 0.858. A change to weights or features
+that moves a mean by a few hundredths is within that range and is not, on its
+own, evidence of a better model. More labeled profiles (the external split)
+are what will narrow it.
 
 ## External labels
 
