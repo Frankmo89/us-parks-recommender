@@ -23,6 +23,8 @@ from src.recommender import CROWD_PENALTY, W_BUDGET, W_CONTENT, W_DAYS, W_DIFF, 
 st.set_page_config(page_title="Find your park", page_icon="🌲", layout="wide", initial_sidebar_state="collapsed")
 
 # Background photos are my own, in app/static (served by Streamlit static serving).
+# The URL must stay relative: Streamlit Cloud serves the app under /~/+/, so
+# "/app/static/..." would hit the Cloud page, not the app.
 BACKGROUNDS = {
     "welcome": "joshua-tree-sunset",
     "terrain": "joshua-tree-arch",
@@ -182,7 +184,7 @@ def paint_background(step: str) -> None:
     st.html(
         f"""
         <div id="park-bg">
-          <img src="/app/static/{photo}.jpg" alt="" />
+          <img src="app/static/{photo}.jpg" alt="" />
         </div>
         """
     )
